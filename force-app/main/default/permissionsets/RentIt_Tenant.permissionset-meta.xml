@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Community (Experience Cloud) permission set for tenants. Grants read-only access to their own Tenancy, Room, Property, Notices, and Rent Payment invoices. Allows creation of Cases (Complaints and Maintenance Requests). Assign to Customer Community or Customer Community Plus user licences. Record-level access is enforced by sharing rules that share only the tenant's own records based on Community_User__c matching the logged-in user.</description>
+    <description>Experience Cloud permission set for tenants. Grants read-only access to their own Tenancy, Room, Property, Notices, and Rent Payments. Allows Case creation. Assign to Customer Community users.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>RentIt - Tenant (Community)</label>
     <objectPermissions>
@@ -66,6 +66,15 @@
         <object>Account</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Contact</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
     <!-- Account fields - read landlord ABN/GST for invoice display -->
     <fieldPermissions>
         <editable>false</editable>
@@ -78,21 +87,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <!-- Property__c fields -->
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Property__c.Property_Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Property__c.Street__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Property__c.City__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Property__c.State__c</field>
@@ -116,17 +110,7 @@
     <!-- Room__c fields -->
     <fieldPermissions>
         <editable>false</editable>
-        <field>Room__c.Property__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Room__c.Room_Size__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Room__c.Room_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -141,38 +125,13 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Room__c.Status__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Room__c.Description__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <!-- Tenancy__c fields -->
     <fieldPermissions>
         <editable>false</editable>
-        <field>Tenancy__c.Room__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Tenancy__c.Tenant_Account__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Tenancy__c.Rent_Amount__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Tenancy__c.Rent_Frequency__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Tenancy__c.Rent_Start_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -190,27 +149,7 @@
         <field>Tenancy__c.Next_Due_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Tenancy__c.Status__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <!-- Rent_Payment__c fields - tenants can view their invoices -->
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Rent_Payment__c.Tenancy__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Rent_Payment__c.Invoice_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Rent_Payment__c.Due_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Rent_Payment__c.Period_Start__c</field>
@@ -223,22 +162,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Rent_Payment__c.Amount__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Rent_Payment__c.GST_Amount__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Rent_Payment__c.Total_Amount__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Rent_Payment__c.Status__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -254,27 +183,12 @@
     <!-- Notice__c fields -->
     <fieldPermissions>
         <editable>false</editable>
-        <field>Notice__c.Notice_Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Notice__c.Content__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Notice__c.Effective_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Notice__c.Expiry_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Notice__c.Status__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <!-- Case fields -->

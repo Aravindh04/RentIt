@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Tenancy__c</fullName>
-    <deleteConstraint>SetNull</deleteConstraint>
+    <deleteConstraint>Restrict</deleteConstraint>
     <description>The Tenancy this invoice belongs to. Rent amount, frequency, and tenant details are derived from this record.</description>
     <externalId>false</externalId>
     <label>Tenancy</label>

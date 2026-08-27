@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <active>true</active>
+    <businessProcess>Complaint</businessProcess>  
     <description>Used when a tenant lodges a formal complaint — e.g., noise issues, neighbour disputes, landlord conduct, or breach of tenancy conditions.</description>
+    <fullName>Complaint</fullName>
     <label>Complaint</label>
-    <name>Complaint</name>
 </RecordType>

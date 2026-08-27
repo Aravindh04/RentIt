@@ -4,5 +4,4 @@
     <description>Manage individual rooms within properties.</description>
     <label>Rooms</label>
     <motif>Custom40: Door</motif>
-    <object>Room__c</object>
 </CustomTab>

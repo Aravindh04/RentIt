@@ -4,5 +4,4 @@
     <description>Manage rental properties (houses, apartments, units).</description>
     <label>Properties</label>
     <motif>Custom62: Home</motif>
-    <object>Property__c</object>
 </CustomTab>

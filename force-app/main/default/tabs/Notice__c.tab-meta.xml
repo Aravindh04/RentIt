@@ -4,5 +4,4 @@
     <description>Manage notices sent to tenants via the community portal.</description>
     <label>Notices</label>
     <motif>Custom94: Announcement</motif>
-    <object>Notice__c</object>
 </CustomTab>

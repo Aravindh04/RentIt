@@ -4,5 +4,4 @@
     <description>View and manage rent payment invoices generated per billing cycle.</description>
     <label>Rent Payments</label>
     <motif>Custom73: Money</motif>
-    <object>Rent_Payment__c</object>
 </CustomTab>

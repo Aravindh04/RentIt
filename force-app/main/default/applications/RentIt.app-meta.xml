@@ -12,21 +12,10 @@
     <tabs>Room__c</tabs>
     <tabs>Tenancy__c</tabs>
     <tabs>Notice__c</tabs>
+    <tabs>standard-Account</tabs>
     <tabs>standard-Case</tabs>
     <tabs>standard-Contact</tabs>
     <tabs>standard-Contract</tabs>
     <tabs>Rent_Payment__c</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>
-        <utilityBarComponents>
-            <componentName>standard:recentItems</componentName>
-            <label>Recent Items</label>
-            <minimized>true</minimized>
-            <minimizedLabel>Recent</minimizedLabel>
-            <utilityBarComponentParams>
-                <name>numRecentItems</name>
-                <value>10</value>
-            </utilityBarComponentParams>
-        </utilityBarComponents>
-    </utilityBar>
 </CustomApplication>

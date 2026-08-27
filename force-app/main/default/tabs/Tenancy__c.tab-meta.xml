@@ -4,5 +4,4 @@
     <description>Manage tenancy agreements linking tenants to rooms.</description>
     <label>Tenancies</label>
     <motif>Custom27: People</motif>
-    <object>Tenancy__c</object>
 </CustomTab>
