@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>Property__c</defaultLandingTab>
+    <description>RentIt — Tenant and Property Management Application. Manage properties, rooms, tenancies, notices, and tenant cases from a single Lightning app. Accessible to landlords and property managers via the internal org.</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>RentIt</label>
+    <navType>Standard</navType>
+    <tabs>Property__c</tabs>
+    <tabs>Room__c</tabs>
+    <tabs>Tenancy__c</tabs>
+    <tabs>Notice__c</tabs>
+    <tabs>standard-Case</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Contract</tabs>
+    <tabs>Rent_Payment__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>
+        <utilityBarComponents>
+            <componentName>standard:recentItems</componentName>
+            <label>Recent Items</label>
+            <minimized>true</minimized>
+            <minimizedLabel>Recent</minimizedLabel>
+            <utilityBarComponentParams>
+                <name>numRecentItems</name>
+                <value>10</value>
+            </utilityBarComponentParams>
+        </utilityBarComponents>
+    </utilityBar>
+</CustomApplication>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tenant__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The Contact record representing the tenant. This is the primary person record. The Community_User__c field links to their Salesforce Experience Cloud login account.</description>
+    <label>Tenant (Contact)</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Tenancies</relationshipLabel>
+    <relationshipName>Tenancies</relationshipName>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

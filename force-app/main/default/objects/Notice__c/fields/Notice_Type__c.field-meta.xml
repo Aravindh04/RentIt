@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Notice_Type__c</fullName>
+    <description>Category of the notice. Drives the visual presentation and urgency in the community portal.</description>
+    <label>Notice Type</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>General Information</fullName>
+                <default>true</default>
+                <label>General Information</label>
+            </value>
+            <value>
+                <fullName>Urgent</fullName>
+                <default>false</default>
+                <label>Urgent</label>
+            </value>
+            <value>
+                <fullName>Scheduled Maintenance</fullName>
+                <default>false</default>
+                <label>Scheduled Maintenance</label>
+            </value>
+            <value>
+                <fullName>Rent Increase</fullName>
+                <default>false</default>
+                <label>Rent Increase</label>
+            </value>
+            <value>
+                <fullName>Lease Renewal</fullName>
+                <default>false</default>
+                <label>Lease Renewal</label>
+            </value>
+            <value>
+                <fullName>Eviction Notice</fullName>
+                <default>false</default>
+                <label>Eviction Notice</label>
+            </value>
+            <value>
+                <fullName>Inspection Notice</fullName>
+                <default>false</default>
+                <label>Inspection Notice</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

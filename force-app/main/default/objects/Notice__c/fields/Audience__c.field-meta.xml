@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Audience__c</fullName>
+    <description>Controls who sees this notice. All Tenants = all active tenants in the linked Property. Specific Tenant = only the tenant linked via the Tenancy__c field.</description>
+    <label>Audience</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>All Tenants in Property</fullName>
+                <default>true</default>
+                <label>All Tenants in Property</label>
+            </value>
+            <value>
+                <fullName>Specific Tenant</fullName>
+                <default>false</default>
+                <label>Specific Tenant</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

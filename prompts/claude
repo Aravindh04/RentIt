@@ -1,0 +1,31 @@
+As a Salesforce Developer and Architect, Help me create a new App in Salesforce to host it in the Community
+The app is about Tenants management in a house
+A business user should be able to create a house with number of rooms
+Add specs about the room like room size, facilities and attach pictures
+Rent the rooms to tenants on a weekly rent
+A linking object that manages which user the room is rented to
+What is rent amount, Rent frequency
+Rent start date
+Deposit amount
+When is due
+Roll up number of tenants in a room
+Attach an contract to the rented room
+Create a data model
+Make use of the standard objects avaialable
+The Tentnats must be able to login using Communities later
+Link the Tenants(Community users) to the contact object
+Instead of Profiles, create permission sets and secure the record management using different permission set for the landlord
+Create the Data model and Neccessary data model
+Create the Documentation for the admin and user to understand
+
+
+Use the Account object for using the Business account
+A user can have business or a Person Account
+The user can have registered ABN and GST for the rental business captured in these accounts
+The Property is linked with the business or the person Account
+There should be a link between the account Tenant
+For each rent payment cycle, there should be an invoice generated and the status should change to paid after the rent payment completion
+After it
+
+
+Update the existing document with the changes made recently

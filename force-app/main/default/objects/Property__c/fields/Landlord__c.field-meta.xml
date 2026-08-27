@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Landlord__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The Account (Business or Person Account) representing the landlord/owner of this property. The Account may hold ABN and GST registration details used for invoice generation.</description>
+    <label>Landlord Account</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Properties Owned</relationshipLabel>
+    <relationshipName>Properties_Owned</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>
