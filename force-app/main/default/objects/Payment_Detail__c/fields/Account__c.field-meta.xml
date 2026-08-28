@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account__c</fullName>
+    <label>Account</label>
+    <description>Links this payment detail record to its parent person account via a master-detail relationship.</description>
+    <inlineHelpText>The person account that owns this payment detail record.</inlineHelpText>
+    <type>MasterDetail</type>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Payment Details</relationshipLabel>
+    <relationshipName>Payment_Details</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

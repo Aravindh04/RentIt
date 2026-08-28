@@ -3,7 +3,6 @@
     <fullName>Tenant_Account__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>The Account linked to the tenant Contact. Mirrors Tenant__r.AccountId. Auto-populated by Flow on record creation. Supports both Business Accounts and Person Accounts.</description>
-    <externalId>false</externalId>
     <label>Tenant Account</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Tenancies</relationshipLabel>

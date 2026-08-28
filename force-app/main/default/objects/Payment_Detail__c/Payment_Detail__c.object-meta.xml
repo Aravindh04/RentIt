@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Payment Detail</label>
+    <pluralLabel>Payment Details</pluralLabel>
+    <description>The Payment Detail object captures available payment options for a person account. It records the preferred payment method — Cash, Pay Id, or Bank Transfer — and links to the parent Account via a master-detail relationship. Commonly used for rent collection setup and payment preference management.</description>
+    <nameField>
+        <label>Payment Detail Name</label>
+        <type>AutoNumber</type>
+        <displayFormat>PD-{0000}</displayFormat>
+        <startingNumber>1</startingNumber>
+    </nameField>
+    <sharingModel>ControlledByParent</sharingModel>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <visibility>Public</visibility>
+    <enableSearch>true</enableSearch>
+    <enableReports>true</enableReports>
+    <enableActivities>true</enableActivities>
+    <enableHistory>true</enableHistory>
+</CustomObject>

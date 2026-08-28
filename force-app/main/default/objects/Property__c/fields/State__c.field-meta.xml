@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>State__c</fullName>
     <description>State or territory where the property is located.</description>
+    <externalId>false</externalId>
     <label>State / Territory</label>
     <length>100</length>
     <required>false</required>

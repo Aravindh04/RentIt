@@ -3,13 +3,13 @@
     <fullName>Number_of_Tenants__c</fullName>
     <description>Roll-up summary: number of active tenancies (tenants) currently in this room.</description>
     <label>Number of Active Tenants</label>
-    <summaryForeignKey>Tenancy__c.Room__c</summaryForeignKey>
     <summaryFilterItems>
         <field>Tenancy__c.Status__c</field>
         <operation>equals</operation>
         <value>Active</value>
     </summaryFilterItems>
-    <summaryOperation>COUNT</summaryOperation>
+    <summaryForeignKey>Tenancy__c.Room__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Summary</type>

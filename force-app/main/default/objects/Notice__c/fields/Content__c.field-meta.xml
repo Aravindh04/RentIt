@@ -4,7 +4,6 @@
     <description>Full body text of the notice. Displayed to tenants in the community portal.</description>
     <label>Notice Content</label>
     <length>32768</length>
-    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Html</type>
     <visibleLines>10</visibleLines>

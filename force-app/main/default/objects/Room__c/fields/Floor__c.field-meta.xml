@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Floor__c</fullName>
     <description>Floor level of the room (0 = ground floor, 1 = first floor, etc.).</description>
+    <externalId>false</externalId>
     <label>Floor Level</label>
     <precision>3</precision>
     <required>false</required>

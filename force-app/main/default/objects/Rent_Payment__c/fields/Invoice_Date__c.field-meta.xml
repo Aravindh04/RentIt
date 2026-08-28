@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Invoice_Date__c</fullName>
     <description>The date this invoice was generated. Defaults to the start of the billing period.</description>
-    <externalId>false</externalId>
     <label>Invoice Date</label>
     <required>true</required>
     <trackHistory>false</trackHistory>

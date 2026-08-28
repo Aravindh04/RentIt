@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
-    <description>Current status of the tenancy agreement. Active tenancies are counted in the Room's roll-up summary field Number_of_Tenants__c.</description>
+    <description>Current status of the tenancy agreement. Active tenancies are counted in the Room&apos;s roll-up summary field Number_of_Tenants__c.</description>
     <label>Tenancy Status</label>
     <required>true</required>
     <trackHistory>false</trackHistory>

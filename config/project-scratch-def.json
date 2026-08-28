@@ -4,9 +4,16 @@
   "features": [
     "Communities",
     "ExperienceBundle",
-    "PersonAccounts"
+    "PersonAccounts",
+    "Einstein1AIPlatform"
   ],
   "settings": {
+    "customAddressFieldSettings": {
+      "enableCustomAddressField": true
+    },
+    "orgPreferenceSettings": {
+      "s1EncryptedStoragePref2": false
+    },
     "lightningExperienceSettings": {
       "enableS1DesktopEnabled": true
     },
@@ -15,6 +22,12 @@
     },
     "communitiesSettings": {
       "enableNetworksEnabled": true
+    },
+    "agentPlatformSettings": {
+      "enableAgentPlatform": true
+    },
+    "einsteinGptSettings" : {
+      "enableEinsteinGptPlatform" : true
     }
   }
 }

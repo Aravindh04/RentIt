@@ -8,6 +8,12 @@ package.xml
 **/jsconfig.json
 **/.eslintrc.json
 
+
+#force-app/main/default/objects/Account
+#force-app/main/default/objects/Account/fields
+#force-app/main/default/objects/Case
+force-app/main/default/aiAuthoringBundles
+
 # LWC Jest
 **/__tests__/**
 

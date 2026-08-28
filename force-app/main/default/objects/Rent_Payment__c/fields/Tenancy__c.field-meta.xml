@@ -3,7 +3,6 @@
     <fullName>Tenancy__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>The Tenancy this invoice belongs to. Rent amount, frequency, and tenant details are derived from this record.</description>
-    <externalId>false</externalId>
     <label>Tenancy</label>
     <referenceTo>Tenancy__c</referenceTo>
     <relationshipLabel>Rent Payments</relationshipLabel>

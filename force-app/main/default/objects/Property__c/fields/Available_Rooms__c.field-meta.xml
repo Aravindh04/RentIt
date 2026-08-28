@@ -3,13 +3,13 @@
     <fullName>Available_Rooms__c</fullName>
     <description>Roll-up summary: number of rooms currently available for rent.</description>
     <label>Available Rooms</label>
-    <summaryForeignKey>Room__c.Property__c</summaryForeignKey>
     <summaryFilterItems>
         <field>Room__c.Status__c</field>
         <operation>equals</operation>
         <value>Available</value>
     </summaryFilterItems>
-    <summaryOperation>COUNT</summaryOperation>
+    <summaryForeignKey>Room__c.Property__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Summary</type>

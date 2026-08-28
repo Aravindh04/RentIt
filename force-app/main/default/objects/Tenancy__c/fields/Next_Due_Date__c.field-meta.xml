@@ -6,10 +6,10 @@
   ISBLANK(Rent_Start_Date__c),
   NULL,
   IF(
-    ISPICKVAL(Rent_Frequency__c, "Weekly"),
+    ISPICKVAL(Rent_Frequency__c, &quot;Weekly&quot;),
     Rent_Start_Date__c + (CEILING(MAX(TODAY() - Rent_Start_Date__c, 0) / 7) * 7),
     IF(
-      ISPICKVAL(Rent_Frequency__c, "Fortnightly"),
+      ISPICKVAL(Rent_Frequency__c, &quot;Fortnightly&quot;),
       Rent_Start_Date__c + (CEILING(MAX(TODAY() - Rent_Start_Date__c, 0) / 14) * 14),
       Rent_Start_Date__c + (CEILING(MAX(TODAY() - Rent_Start_Date__c, 0) / 30) * 30)
     )

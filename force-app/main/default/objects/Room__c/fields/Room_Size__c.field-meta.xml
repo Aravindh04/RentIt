@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Room_Size__c</fullName>
     <description>Floor area of the room in square metres (m²).</description>
+    <externalId>false</externalId>
     <label>Room Size (m²)</label>
     <precision>10</precision>
     <required>false</required>
