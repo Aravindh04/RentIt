@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>62.0</apiVersion>
-    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <actionCalls>
         <name>Send_Termination_Email</name>
         <label>Send Termination Email to Tenant</label>
-        <locationX>176</locationX>
-        <locationY>1043</locationY>
+        <locationX>50</locationX>
+        <locationY>1271</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <connector>
@@ -37,12 +35,16 @@
                 <booleanValue>false</booleanValue>
             </value>
         </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
     </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>Check_Contact_Found</name>
         <label>Tenant Contact Has Email?</label>
-        <locationX>176</locationX>
-        <locationY>827</locationY>
+        <locationX>270</locationX>
+        <locationY>1163</locationY>
         <defaultConnectorLabel>No Email - Still Create Notice</defaultConnectorLabel>
         <rules>
             <name>Contact_Has_Email</name>
@@ -78,8 +80,8 @@
     <decisions>
         <name>Check_Room_For_Void</name>
         <label>Room Linked to Tenancy?</label>
-        <locationX>176</locationX>
-        <locationY>611</locationY>
+        <locationX>270</locationX>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>Get_Tenant_Contact</targetReference>
         </defaultConnector>
@@ -103,8 +105,8 @@
     <decisions>
         <name>Check_Tenancy_Found_Void</name>
         <label>Tenancy Found?</label>
-        <locationX>176</locationX>
-        <locationY>395</locationY>
+        <locationX>512</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
         <rules>
             <name>Tenancy_Found_Void</name>
@@ -125,8 +127,8 @@
     <decisions>
         <name>Check_Void_Is_New</name>
         <label>Void Reason Newly Set?</label>
-        <locationX>176</locationX>
-        <locationY>179</locationY>
+        <locationX>765</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Not New - Skip</defaultConnectorLabel>
         <rules>
             <name>Void_Reason_Newly_Set</name>
@@ -136,6 +138,13 @@
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Terminated</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -164,8 +173,8 @@
     <recordCreates>
         <name>Create_Termination_Notice</name>
         <label>Create Contract Termination Notice</label>
-        <locationX>176</locationX>
-        <locationY>1151</locationY>
+        <locationX>270</locationX>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>Audience__c</field>
             <value>
@@ -205,7 +214,7 @@
         <inputAssignments>
             <field>Property__c</field>
             <value>
-                <elementReference>$Record.Property__c</elementReference>
+                <elementReference>$Record.Tenancy__r.Property__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -223,10 +232,33 @@
         <object>Notice__c</object>
     </recordCreates>
     <recordLookups>
+        <name>Get_Tenancy_For_Void</name>
+        <label>Get Related Tenancy</label>
+        <locationX>512</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Tenancy_Found_Void</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contract__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Tenancy__c</elementReference>
+            </value>
+        </filters>
+        <object>Tenancy__c</object>
+        <outputReference>varVoidTenancy</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Room__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Tenant_Contact</name>
         <label>Get Tenant Contact</label>
-        <locationX>176</locationX>
-        <locationY>719</locationY>
+        <locationX>270</locationX>
+        <locationY>1055</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_Contact_Found</targetReference>
@@ -239,7 +271,6 @@
                 <elementReference>varVoidTenancy.Tenant__c</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Contact</object>
         <outputReference>varTenantContact</outputReference>
         <queriedFields>Id</queriedFields>
@@ -247,36 +278,11 @@
         <queriedFields>LastName</queriedFields>
         <queriedFields>Email</queriedFields>
     </recordLookups>
-    <recordLookups>
-        <name>Get_Tenancy_For_Void</name>
-        <label>Get Related Tenancy</label>
-        <locationX>176</locationX>
-        <locationY>287</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Tenancy_Found_Void</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Contract__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Tenancy__c</object>
-        <outputReference>varVoidTenancy</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Status__c</queriedFields>
-        <queriedFields>Room__c</queriedFields>
-        <queriedFields>Tenant__c</queriedFields>
-    </recordLookups>
     <recordUpdates>
         <name>Update_Room_Available_Void</name>
         <label>Set Room to Available</label>
-        <locationX>176</locationX>
-        <locationY>611</locationY>
+        <locationX>138</locationX>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Get_Tenant_Contact</targetReference>
         </connector>
@@ -299,8 +305,8 @@
     <recordUpdates>
         <name>Update_Tenancy_Terminated</name>
         <label>Set Tenancy to Terminated</label>
-        <locationX>176</locationX>
-        <locationY>503</locationY>
+        <locationX>270</locationX>
+        <locationY>647</locationY>
         <connector>
             <targetReference>Check_Room_For_Void</targetReference>
         </connector>
@@ -321,7 +327,7 @@
         <object>Tenancy__c</object>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
+        <locationX>639</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_Void_Is_New</targetReference>

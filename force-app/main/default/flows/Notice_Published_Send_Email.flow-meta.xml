@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>62.0</apiVersion>
-    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <actionCalls>
         <name>Send_Email_All_Tenants</name>
         <label>Send Email to Tenant in Loop</label>
@@ -34,6 +32,7 @@
                 <booleanValue>false</booleanValue>
             </value>
         </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
     </actionCalls>
     <actionCalls>
         <name>Send_Email_Specific_Tenant</name>
@@ -70,7 +69,10 @@
                 <booleanValue>false</booleanValue>
             </value>
         </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
     </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Build_Email_Subject</name>
         <label>Build Email Subject</label>
@@ -245,7 +247,6 @@
                 <stringValue>Active</stringValue>
             </value>
         </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Tenancy__c</object>
         <outputReference>varAllTenancies</outputReference>
         <queriedFields>Id</queriedFields>
@@ -268,9 +269,32 @@
                 <elementReference>Loop_Through_Tenancies.Tenant__c</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Contact</object>
         <outputReference>varLoopContact</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Specific_Contact</name>
+        <label>Get Specific Tenant Contact</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Contact_Has_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varSpecificTenancy.Tenant__c</elementReference>
+            </value>
+        </filters>
+        <object>Contact</object>
+        <outputReference>varSpecificContact</outputReference>
         <queriedFields>Id</queriedFields>
         <queriedFields>FirstName</queriedFields>
         <queriedFields>LastName</queriedFields>
@@ -293,36 +317,10 @@
                 <elementReference>$Record.Tenancy__c</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Tenancy__c</object>
         <outputReference>varSpecificTenancy</outputReference>
         <queriedFields>Id</queriedFields>
         <queriedFields>Tenant__c</queriedFields>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Specific_Contact</name>
-        <label>Get Specific Tenant Contact</label>
-        <locationX>176</locationX>
-        <locationY>611</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Contact_Has_Email</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>varSpecificTenancy.Tenant__c</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Contact</object>
-        <outputReference>varSpecificContact</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>FirstName</queriedFields>
-        <queriedFields>LastName</queriedFields>
-        <queriedFields>Email</queriedFields>
     </recordLookups>
     <recordUpdates>
         <name>Mark_Email_Sent</name>
@@ -338,15 +336,15 @@
             </value>
         </filters>
         <inputAssignments>
-            <field>Email_Sent__c</field>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>Email_Sent_Date__c</field>
             <value>
                 <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputAssignments>
         <object>Notice__c</object>

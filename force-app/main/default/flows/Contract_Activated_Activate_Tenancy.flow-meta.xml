@@ -5,8 +5,8 @@
     <decisions>
         <name>Check_Room_Exists</name>
         <label>Room Linked to Tenancy?</label>
-        <locationX>176</locationX>
-        <locationY>719</locationY>
+        <locationX>182</locationX>
+        <locationY>755</locationY>
         <defaultConnectorLabel>No Room</defaultConnectorLabel>
         <rules>
             <name>Room_Exists</name>
@@ -27,8 +27,8 @@
     <decisions>
         <name>Check_Status_Changed_To_Activated</name>
         <label>Status Changed to Activated?</label>
-        <locationX>176</locationX>
-        <locationY>287</locationY>
+        <locationX>611</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>No Change</defaultConnectorLabel>
         <rules>
             <name>Status_Newly_Activated</name>
@@ -49,8 +49,8 @@
     <decisions>
         <name>Check_Tenancy_Found</name>
         <label>Tenancy Found?</label>
-        <locationX>176</locationX>
-        <locationY>503</locationY>
+        <locationX>380</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
         <rules>
             <name>Tenancy_Found</name>
@@ -88,8 +88,8 @@
     <recordLookups>
         <name>Get_Related_Tenancy</name>
         <label>Get Related Tenancy</label>
-        <locationX>176</locationX>
-        <locationY>395</locationY>
+        <locationX>380</locationX>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_Tenancy_Found</targetReference>
@@ -99,21 +99,20 @@
             <field>Contract__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>$Record.Tenancy__c</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Tenancy__c</object>
         <outputReference>varTenancy</outputReference>
         <queriedFields>Id</queriedFields>
-        <queriedFields>Status__c</queriedFields>
         <queriedFields>Room__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
     </recordLookups>
     <recordUpdates>
         <name>Update_Room_Occupied</name>
         <label>Set Room to Occupied</label>
-        <locationX>176</locationX>
-        <locationY>827</locationY>
+        <locationX>50</locationX>
+        <locationY>863</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -133,8 +132,8 @@
     <recordUpdates>
         <name>Update_Tenancy_Active</name>
         <label>Set Tenancy to Active</label>
-        <locationX>176</locationX>
-        <locationY>611</locationY>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
         <connector>
             <targetReference>Check_Room_Exists</targetReference>
         </connector>
@@ -155,7 +154,7 @@
         <object>Tenancy__c</object>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
+        <locationX>485</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_Status_Changed_To_Activated</targetReference>

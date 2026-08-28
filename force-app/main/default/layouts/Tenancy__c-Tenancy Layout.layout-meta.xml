@@ -20,21 +20,15 @@
                 <field>Rent_a_room__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Room__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>Rent_Amount__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Rent_Frequency__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>Rent_Start_Date__c</field>
             </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Status__c</field>
@@ -43,8 +37,19 @@
                 <behavior>Required</behavior>
                 <field>Tenant__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Room__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>Rent_Frequency__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Rent_End_Date__c</field>
+            </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
@@ -76,6 +81,13 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <relatedLists>
+        <fields>CONTRACT.CONTRACT_NUMBER</fields>
+        <fields>CONTRACT.NAME</fields>
+        <fields>SALES.ACCOUNT.NAME</fields>
+        <fields>CONTRACT.STATUS</fields>
+        <relatedList>Contract.Tenancy__c</relatedList>
+    </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Notice__c.Tenancy__c</relatedList>
