@@ -89,26 +89,6 @@
                 <identifier>RecordRent_a_room_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>required</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Rent_Amount__c</fieldItem>
-                <identifier>RecordRent_Amount_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>required</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Rent_Start_Date__c</fieldItem>
-                <identifier>RecordRent_Start_Date_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-0dc8d553-f934-4265-87a5-2fd9f4991ad5</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -159,33 +139,6 @@
                         <leftValue>{!Record.Rent_a_room__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>true</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>required</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Rent_Frequency__c</fieldItem>
-                <identifier>RecordRent_Frequency_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Rent_End_Date__c</fieldItem>
-                <identifier>RecordRent_End_Date_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Contract__r.Status}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Activated</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>

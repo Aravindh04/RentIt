@@ -242,7 +242,7 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Contract__c</field>
+            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>$Record.Tenancy__c</elementReference>
@@ -253,6 +253,7 @@
         <queriedFields>Id</queriedFields>
         <queriedFields>Room__c</queriedFields>
         <queriedFields>Status__c</queriedFields>
+        <queriedFields>Tenant__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Tenant_Contact</name>

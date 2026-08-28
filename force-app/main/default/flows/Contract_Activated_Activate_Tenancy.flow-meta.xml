@@ -96,7 +96,7 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Contract__c</field>
+            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>$Record.Tenancy__c</elementReference>

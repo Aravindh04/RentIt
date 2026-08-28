@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <actionOverrides>
         <actionName>Accept</actionName>
         <type>Default</type>
@@ -166,8 +166,8 @@
         <searchResultsAdditionalFields>Room__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Tenant__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>Rent_Amount__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>Next_Due_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields xsi:nil="true"></searchResultsAdditionalFields>
+        <searchResultsAdditionalFields xsi:nil="true"></searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
