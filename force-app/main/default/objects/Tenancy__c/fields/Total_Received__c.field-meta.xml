@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Received__c</fullName>
+    <description>Sum of all Paid invoice amounts on this tenancy. Updated automatically when an Invoice is marked Paid (via approved Payment).</description>
+    <label>Total Received</label>
+    <summarizedField>Invoice__c.Amount__c</summarizedField>
+    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
+    <summaryFilterItems>
+        <field>Invoice__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Paid</value>
+    </summaryFilterItems>
+    <summaryOperation>SUM</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -51,6 +51,11 @@
                 <label>Entry Notice</label>
             </value>
             <value>
+                <fullName>Rent Reminder</fullName>
+                <default>false</default>
+                <label>Rent Reminder</label>
+            </value>
+            <value>
                 <fullName>Rent Arrears</fullName>
                 <default>false</default>
                 <label>Rent Arrears</label>

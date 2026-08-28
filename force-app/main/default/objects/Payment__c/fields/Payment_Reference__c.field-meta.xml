@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Payment_Reference__c</fullName>
-    <description>Bank transfer reference, receipt number, or payment gateway transaction ID for reconciliation.</description>
-    <externalId>false</externalId>
+    <description>Bank transaction ID, PayID reference, or receipt number for this payment.</description>
     <label>Payment Reference</label>
     <length>255</length>
     <required>false</required>

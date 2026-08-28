@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent to the tenant when an invoice becomes overdue. References the Invoice__c record.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Rent Invoice Overdue – Arrears Notice</name>
+    <style>none</style>
+    <subject>Urgent: Overdue Rent Invoice – {!Invoice__c.Name}</subject>
+    <textOnly>false</textOnly>
+    <type>custom</type>
+</EmailTemplate>

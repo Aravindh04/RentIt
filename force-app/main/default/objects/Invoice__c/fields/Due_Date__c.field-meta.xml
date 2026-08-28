@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Period_Start__c</fullName>
-    <description>Start date of the rent period this invoice covers.</description>
-    <label>Period Start</label>
-    <required>false</required>
+    <fullName>Due_Date__c</fullName>
+    <description>Date by which rent payment must be made.</description>
+    <label>Due Date</label>
+    <required>true</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Date</type>

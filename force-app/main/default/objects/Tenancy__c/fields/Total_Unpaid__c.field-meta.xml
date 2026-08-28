@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Unpaid__c</fullName>
+    <description>Sum of all Unpaid invoice amounts on this tenancy (due but not yet paid, not yet overdue).</description>
+    <label>Total Unpaid</label>
+    <summarizedField>Invoice__c.Amount__c</summarizedField>
+    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
+    <summaryFilterItems>
+        <field>Invoice__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Unpaid</value>
+    </summaryFilterItems>
+    <summaryOperation>SUM</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

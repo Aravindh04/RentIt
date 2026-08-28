@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent to the landlord / approver when a tenant submits a payment for approval. References the Payment__c record and related Invoice.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Payment – Pending Approval (Landlord)</name>
+    <style>none</style>
+    <subject>Action Required: Rent Payment Awaiting Your Approval – {!Payment__c.Name}</subject>
+    <textOnly>false</textOnly>
+    <type>custom</type>
+</EmailTemplate>

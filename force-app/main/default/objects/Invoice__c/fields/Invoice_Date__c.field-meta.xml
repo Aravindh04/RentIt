@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Due_Date__c</fullName>
-    <description>The date payment is due. Copied from Tenancy__c.Next_Due_Date__c at invoice generation time.</description>
-    <label>Due Date</label>
+    <fullName>Invoice_Date__c</fullName>
+    <description>Date the invoice was generated (typically the date the batch ran).</description>
+    <label>Invoice Date</label>
     <required>true</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

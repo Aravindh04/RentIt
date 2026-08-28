@@ -50,3 +50,22 @@ Update the Notice page layout to reflect the new changes
 Replace "Property" and "Room" in Contract object with the "Tenancy"
 Update the values in RentIt_Landlord.permissionset and Contract-Rental Agreement Layout.layout
 Remove the Contract relation references in "Property" and "Room" Layouts as well
+
+
+Now, Coming to the  login
+Understand the RentIt application Data model
+The Contract has all the information about the rent
+Create custom fields in Tenancy object, where the How much money is owed and who owes it
+The user must be able to see when is upcoming rent, how much is the arrears, automatically send notices if there are any arrears.
+Based on the start date of the contract, a batch class should be scheduled to run on the set frequency of the contract and Create the rent payemnt record in scheduled status if there are no credits or advance rent payemtn on the tenants, 
+These newly created Rent payment records by batch process can be updated by the tenants and submitted for approval
+For every payment made, a rent payment record must be logged and that should update the Total amount, Amount pending, and amount in credit
+The tenants should be able to pay rent in advance
+Create an approval process in the Rent payment object, when the tenant pays the rent, the record status changes to Paid, they must add a comment or upload a screenshot for the payment paid
+The landlord should receive an email about the payment paid, he should be able to approve, reject or request for correction in the approval process
+If Approved, then Rent payment is changed to received and the amount is updated in respective areas
+Send out remiders and notices with 1 day prior to the due date
+The rent payment object can look up to Tenancy or the Contract object as master detail relationship to make use of the rollup
+Create automation to the tenants using the Notice record about the Rent arrers
+
+Update the existing docs\RentIt_Data_Model.md with the current data model and Automation process highlighting the key abilities of the application once the build is completed

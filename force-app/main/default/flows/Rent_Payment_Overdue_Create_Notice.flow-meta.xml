@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Status_Newly_Overdue</name>
+        <label>Status Newly Changed to Overdue?</label>
+        <locationX>380</locationX>
+        <locationY>287</locationY>
+        <defaultConnectorLabel>Not Newly Overdue</defaultConnectorLabel>
+        <rules>
+            <name>Is_Newly_Overdue</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Overdue</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Tenancy</targetReference>
+            </connector>
+            <label>Newly Overdue</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Tenancy_Found</name>
+        <label>Tenancy Found?</label>
+        <locationX>380</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
+        <rules>
+            <name>Has_Tenancy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTenancy.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Tenant_Contact</targetReference>
+            </connector>
+            <label>Tenancy Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Contact_Has_Email</name>
+        <label>Tenant Has Email?</label>
+        <locationX>380</locationX>
+        <locationY>719</locationY>
+        <defaultConnector>
+            <targetReference>Create_Arrears_Notice</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Email – Just Create Notice</defaultConnectorLabel>
+        <rules>
+            <name>Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varContact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Arrears_Email</targetReference>
+            </connector>
+            <label>Has Email</label>
+        </rules>
+    </decisions>
+    <description>When a Rent Payment status changes to Overdue, creates a Rent Arrears Notice on the Tenancy and sends an email to the tenant.</description>
+    <environments>Default</environments>
+    <interviewLabel>Rent Payment Overdue – Create Notice {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Rent Payment Overdue – Create Arrears Notice</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <actionCalls>
+        <name>Send_Arrears_Email</name>
+        <label>Send Arrears Email to Tenant</label>
+        <locationX>176</locationX>
+        <locationY>827</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Create_Arrears_Notice</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>varContact.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Urgent: Overdue Rent Payment – Action Required</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tmplArrearsBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <recordCreates>
+        <name>Create_Arrears_Notice</name>
+        <label>Create Rent Arrears Notice</label>
+        <locationX>380</locationX>
+        <locationY>935</locationY>
+        <inputAssignments>
+            <field>Audience__c</field>
+            <value>
+                <stringValue>Specific Tenant</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Content__c</field>
+            <value>
+                <elementReference>tmplNoticeContent</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Effective_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email_Sent_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>Rent Arrears Notice</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notice_Type__c</field>
+            <value>
+                <stringValue>Rent Arrears</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Published</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Tenancy__c</field>
+            <value>
+                <elementReference>$Record.Tenancy__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Notice__c</object>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Tenancy</name>
+        <label>Get Tenancy</label>
+        <locationX>380</locationX>
+        <locationY>395</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Tenancy_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Tenancy__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Tenancy__c</object>
+        <outputReference>varTenancy</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Tenant__c</queriedFields>
+        <queriedFields>Property__c</queriedFields>
+        <queriedFields>Total_Arrears__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Tenant_Contact</name>
+        <label>Get Tenant Contact</label>
+        <locationX>380</locationX>
+        <locationY>611</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Contact_Has_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varTenancy.Tenant__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <outputReference>varContact</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Status_Newly_Overdue</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Overdue</stringValue>
+            </value>
+        </filters>
+        <object>Invoice__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tmplArrearsBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Dear {!varContact.FirstName} {!varContact.LastName},
+
+Your rent payment ({!$Record.Name}) of ${!$Record.Amount__c} was due on {!$Record.Due_Date__c} and is now overdue.
+
+Total current arrears on your tenancy: ${!varTenancy.Total_Arrears__c}
+
+Please make payment immediately and log into the tenant portal to mark your payment as Paid and submit it for approval.
+
+If you are experiencing financial difficulty, please contact your property manager immediately.
+
+Regards,
+RentIt Property Management</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tmplNoticeContent</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your rent payment of ${!$Record.Amount__c} (Invoice: {!$Record.Name}), due on {!$Record.Due_Date__c}, is now overdue.
+
+Please arrange payment immediately and update your payment record in the portal. Continued non-payment may result in formal breach proceedings.</text>
+    </textTemplates>
+    <variables>
+        <name>varTenancy</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Tenancy__c</objectType>
+    </variables>
+    <variables>
+        <name>varContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+</Flow>

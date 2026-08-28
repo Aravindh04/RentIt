@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f4f6f9; margin:0; padding:0; }
+  .wrapper { max-width:600px; margin:32px auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .header { background:#0070d2; padding:28px 32px; }
+  .header h1 { color:#fff; margin:0; font-size:20px; font-weight:600; }
+  .header p { color:#cce4ff; margin:4px 0 0; font-size:13px; }
+  .badge { display:inline-block; background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; border-radius:20px; padding:6px 16px; font-size:13px; font-weight:600; margin-bottom:20px; }
+  .body { padding:32px; }
+  .body p { color:#333; font-size:15px; line-height:1.6; margin:0 0 16px; }
+  .detail-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; font-size:14px; }
+  .detail-row:last-child { border-bottom:none; }
+  .detail-label { color:#666; }
+  .detail-value { color:#111; font-weight:500; }
+  .footer { background:#f4f6f9; padding:20px 32px; text-align:center; font-size:12px; color:#888; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <h1>Payment Confirmed</h1>
+    <p>RentIt Property Management</p>
+  </div>
+  <div class="body">
+    <span class="badge">&#10003; Approved</span>
+    <p>Great news! Your rent payment has been reviewed and approved. Your tenancy account has been updated.</p>
+    <div class="detail-row"><span class="detail-label">Payment Reference</span><span class="detail-value">{!Payment__c.Name}</span></div>
+    <div class="detail-row"><span class="detail-label">Invoice Number</span><span class="detail-value">{!Payment__c.Invoice__r.Name}</span></div>
+    <div class="detail-row"><span class="detail-label">Amount Received</span><span class="detail-value">${!Payment__c.Amount__c}</span></div>
+    <div class="detail-row"><span class="detail-label">Billing Period</span><span class="detail-value">{!Payment__c.Invoice__r.Period_Start__c} – {!Payment__c.Invoice__r.Period_End__c}</span></div>
+    <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value">Received</span></div>
+    <p style="margin-top:24px;">Please keep this email as your payment receipt. Thank you for paying on time!</p>
+  </div>
+  <div class="footer">
+    RentIt Property Management &bull; This is an automated notification. Please do not reply to this email.
+  </div>
+</div>
+</body>
+</html>

@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Represents a rent invoice generated for each rent payment cycle of a Tenancy. One record is created per payment period (weekly/fortnightly/monthly). Status changes to Paid when the tenant completes the payment.</description>
+    <description>Records an actual payment made by a tenant against an Invoice. Submitted for landlord approval. One or more Payments can exist per Invoice to support partial or split payments.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -153,16 +153,16 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
-    <label>Rent Payment</label>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <label>Payment</label>
     <nameField>
-        <displayFormat>INV-{0000}</displayFormat>
-        <label>Invoice Number</label>
+        <displayFormat>PAY-{0000}</displayFormat>
+        <label>Payment Number</label>
         <trackHistory>false</trackHistory>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Rent Payments</pluralLabel>
+    <pluralLabel>Payments</pluralLabel>
     <searchLayouts></searchLayouts>
-    <sharingModel>Private</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

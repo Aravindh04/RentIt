@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
-    <description>Payment status of this invoice. Transitions: Unpaid → Paid (when payment confirmed) or Unpaid → Overdue (when Due_Date passes without payment) or any → Void (cancelled invoice).</description>
+    <description>Payment lifecycle status. Tenant sets to Paid to submit for approval. Approval process sets Pending Approval, then Received (approved) or Rejected.</description>
     <label>Status</label>
     <required>true</required>
     <trackHistory>true</trackHistory>
@@ -12,24 +12,24 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Unpaid</fullName>
-                <default>true</default>
-                <label>Unpaid</label>
-            </value>
-            <value>
                 <fullName>Paid</fullName>
-                <default>false</default>
+                <default>true</default>
                 <label>Paid</label>
             </value>
             <value>
-                <fullName>Overdue</fullName>
+                <fullName>Pending Approval</fullName>
                 <default>false</default>
-                <label>Overdue</label>
+                <label>Pending Approval</label>
             </value>
             <value>
-                <fullName>Void</fullName>
+                <fullName>Received</fullName>
                 <default>false</default>
-                <label>Void</label>
+                <label>Received</label>
+            </value>
+            <value>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+                <label>Rejected</label>
             </value>
         </valueSetDefinition>
     </valueSet>

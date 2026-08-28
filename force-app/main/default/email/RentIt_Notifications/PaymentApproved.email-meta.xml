@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent to the tenant when their payment has been approved by the landlord. References the Payment__c record.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Payment Approved (Tenant)</name>
+    <style>none</style>
+    <subject>Payment Confirmed: {!Payment__c.Name} Has Been Approved</subject>
+    <textOnly>false</textOnly>
+    <type>custom</type>
+</EmailTemplate>

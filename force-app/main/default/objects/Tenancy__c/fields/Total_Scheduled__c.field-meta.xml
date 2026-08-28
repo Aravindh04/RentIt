@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Scheduled__c</fullName>
+    <description>Sum of upcoming invoice amounts in Scheduled status. Represents future rent obligations created by the batch job but not yet due.</description>
+    <label>Total Scheduled (Upcoming)</label>
+    <summarizedField>Invoice__c.Amount__c</summarizedField>
+    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
+    <summaryFilterItems>
+        <field>Invoice__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Scheduled</value>
+    </summaryFilterItems>
+    <summaryOperation>SUM</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>
