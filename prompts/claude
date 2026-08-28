@@ -29,3 +29,24 @@ After it
 
 
 Update the existing document with the changes made recently
+
+
+Understand the existing object relationships based on Local
+Update the Contract object to create a contract between the property owner and the tenant
+Create new recordtype for the contract, use the standard fields and create custom fields only if required to capture any contract information
+The Contract should capture applicable relavant information in the fields
+Once the Contract is Signed the Tenancy should be active, after the contract ended it should be Expired
+Update the Tenancy to Occupied as long as the contract is active
+Enhance the Notice__c object with proper notice types and emails to be issues to the tenanants by the landlord
+If the contract is void/voilated, Terminate tenancy and send an email to the tenant
+If the contract is void/voilated, Terminate tenancy and send an email to the tenant
+Eviction Notice, Inspection notice and Rent Increase should capture a date
+Create a new Tenancy and update the contract or create new contract for the new Rent
+
+
+Create a new page layout for the contract object to reflect and adopt to the new changes
+Update the Notice page layout to reflect the new changes
+
+Replace "Property" and "Room" in Contract object with the "Tenancy"
+Update the values in RentIt_Landlord.permissionset and Contract-Rental Agreement Layout.layout
+Remove the Contract relation references in "Property" and "Room" Layouts as well

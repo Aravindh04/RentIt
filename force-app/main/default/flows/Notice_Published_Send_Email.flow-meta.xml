@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <actionCalls>
+        <name>Send_Email_All_Tenants</name>
+        <label>Send Email to Tenant in Loop</label>
+        <locationX>440</locationX>
+        <locationY>1151</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>varLoopContact.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>varEmailSubject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tmplNoticeEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_Specific_Tenant</name>
+        <label>Send Email to Specific Tenant</label>
+        <locationX>176</locationX>
+        <locationY>827</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Mark_Email_Sent</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>varSpecificContact.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>varEmailSubject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tmplNoticeEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <assignments>
+        <name>Build_Email_Subject</name>
+        <label>Build Email Subject</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>varEmailSubject</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>tmplEmailSubject</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Audience</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_Audience</name>
+        <label>Audience Type?</label>
+        <locationX>176</locationX>
+        <locationY>395</locationY>
+        <defaultConnectorLabel>All Tenants in Property</defaultConnectorLabel>
+        <rules>
+            <name>Specific_Tenant</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Audience__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Specific Tenant</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Specific_Tenancy</targetReference>
+            </connector>
+            <label>Specific Tenant</label>
+        </rules>
+        <rules>
+            <name>All_Tenants</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Audience__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>All Tenants in Property</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_All_Active_Tenancies</targetReference>
+            </connector>
+            <label>All Tenants in Property</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Contact_Has_Email</name>
+        <label>Contact Has Email?</label>
+        <locationX>176</locationX>
+        <locationY>719</locationY>
+        <defaultConnectorLabel>No Email - Skip</defaultConnectorLabel>
+        <rules>
+            <name>Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varSpecificContact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_Specific_Tenant</targetReference>
+            </connector>
+            <label>Has Email</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Loop_Contact_Has_Email</name>
+        <label>Loop Contact Has Email?</label>
+        <locationX>440</locationX>
+        <locationY>1043</locationY>
+        <defaultConnectorLabel>No Email - Next</defaultConnectorLabel>
+        <rules>
+            <name>Loop_Contact_Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varLoopContact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_All_Tenants</targetReference>
+            </connector>
+            <label>Has Email</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Status_Newly_Published</name>
+        <label>Status Newly Changed to Published?</label>
+        <locationX>176</locationX>
+        <locationY>179</locationY>
+        <defaultConnectorLabel>Already Published - Skip</defaultConnectorLabel>
+        <rules>
+            <name>Newly_Published</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Published</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Build_Email_Subject</targetReference>
+            </connector>
+            <label>Newly Published</label>
+        </rules>
+    </decisions>
+    <description>When a Notice is published, sends an email to the relevant tenant(s) and marks the notice as email-sent. Handles both Specific Tenant and All Tenants in Property audiences.</description>
+    <environments>Default</environments>
+    <interviewLabel>Notice Published - Send Email {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Notice Published - Send Email to Tenant(s)</label>
+    <loops>
+        <name>Loop_Through_Tenancies</name>
+        <label>Loop Through Active Tenancies</label>
+        <locationX>440</locationX>
+        <locationY>719</locationY>
+        <collectionReference>varAllTenancies</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Loop_Contact</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Mark_Email_Sent</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_All_Active_Tenancies</name>
+        <label>Get All Active Tenancies for Property</label>
+        <locationX>440</locationX>
+        <locationY>611</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_Tenancies</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Property__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Property__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Tenancy__c</object>
+        <outputReference>varAllTenancies</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Tenant__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Loop_Contact</name>
+        <label>Get Tenant Contact in Loop</label>
+        <locationX>440</locationX>
+        <locationY>935</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Loop_Contact_Has_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_Through_Tenancies.Tenant__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <outputReference>varLoopContact</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Specific_Tenancy</name>
+        <label>Get Specific Tenancy and Contact</label>
+        <locationX>176</locationX>
+        <locationY>503</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Specific_Contact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Tenancy__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Tenancy__c</object>
+        <outputReference>varSpecificTenancy</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Tenant__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Specific_Contact</name>
+        <label>Get Specific Tenant Contact</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Contact_Has_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varSpecificTenancy.Tenant__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <outputReference>varSpecificContact</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Mark_Email_Sent</name>
+        <label>Mark Notice Email as Sent</label>
+        <locationX>176</locationX>
+        <locationY>935</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Email_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email_Sent_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Notice__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Status_Newly_Published</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Published</stringValue>
+            </value>
+        </filters>
+        <object>Notice__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tmplEmailSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Notice from Your Landlord: {!$Record.Notice_Type__c} - {!$Record.Name}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tmplNoticeEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Dear Tenant,
+
+You have received a notice from your landlord regarding your tenancy.
+
+Notice Type: {!$Record.Notice_Type__c}
+Subject: {!$Record.Name}
+Effective Date: {!$Record.Effective_Date__c}
+
+{!$Record.Content__c}
+
+Please log into the tenant portal to view the full notice details and respond if required.
+
+Regards,
+RentIt Property Management</text>
+    </textTemplates>
+    <variables>
+        <name>varAllTenancies</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Tenancy__c</objectType>
+    </variables>
+    <variables>
+        <name>varEmailSubject</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varLoopContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>varSpecificContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>varSpecificTenancy</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Tenancy__c</objectType>
+    </variables>
+</Flow>

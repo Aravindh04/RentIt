@@ -18,3 +18,4 @@ force-app/main/default/aiAuthoringBundles
 **/__tests__/**
 
 node_modules/
+force-app/main/default/flows/Contract_Expired_Expire_Tenancy.flow-meta.xml

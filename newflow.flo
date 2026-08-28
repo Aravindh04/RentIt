@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_Contract_Still_Active</name>
+        <label>Contract Still Activated?</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <defaultConnectorLabel>Not Active - Skip</defaultConnectorLabel>
+        <rules>
+            <name>Contract_Is_Active</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Activated</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Tenancy_For_Expiry</targetReference>
+            </connector>
+            <label>Still Activated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Room_For_Expiry</name>
+        <label>Room Linked?</label>
+        <locationX>176</locationX>
+        <locationY>719</locationY>
+        <defaultConnectorLabel>No Room</defaultConnectorLabel>
+        <rules>
+            <name>Room_Exists_Expiry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varExpiryTenancy.Room__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Room_Available_Expiry</targetReference>
+            </connector>
+            <label>Room Linked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Tenancy_For_Expiry</name>
+        <label>Tenancy Found?</label>
+        <locationX>176</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
+        <rules>
+            <name>Tenancy_Found_Expiry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varExpiryTenancy.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Tenancy_Expired</targetReference>
+            </connector>
+            <label>Tenancy Found</label>
+        </rules>
+    </decisions>
+    <description>Scheduled path fires on Contract EndDate. If the contract is still Activated, sets the linked Tenancy to Expired and frees the Room to Available.</description>
+    <environments>Default</environments>
+    <interviewLabel>Contract Expired - Expire Tenancy {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract Expired - Expire Tenancy</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Tenancy_For_Expiry</name>
+        <label>Get Related Tenancy</label>
+        <locationX>176</locationX>
+        <locationY>395</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Tenancy_For_Expiry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contract__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Tenancy__c</object>
+        <outputReference>varExpiryTenancy</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Room__c</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Room_Available_Expiry</name>
+        <label>Set Room to Available</label>
+        <locationX>176</locationX>
+        <locationY>827</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varExpiryTenancy.Room__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Available</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Room__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Tenancy_Expired</name>
+        <label>Set Tenancy to Expired</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <connector>
+            <targetReference>Check_Room_For_Expiry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varExpiryTenancy.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Expired</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Tenancy__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>EndDate</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Contract</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Path_On_End_Date</name>
+            <connector>
+                <targetReference>Check_Contract_Still_Active</targetReference>
+            </connector>
+            <label>On Contract End Date</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <timeSource>EndDate</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>varExpiryTenancy</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Tenancy__c</objectType>
+    </variables>
+</Flow>

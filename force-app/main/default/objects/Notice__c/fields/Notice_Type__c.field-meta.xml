@@ -45,6 +45,26 @@
                 <default>false</default>
                 <label>Inspection Notice</label>
             </value>
+            <value>
+                <fullName>Entry Notice</fullName>
+                <default>false</default>
+                <label>Entry Notice</label>
+            </value>
+            <value>
+                <fullName>Rent Arrears</fullName>
+                <default>false</default>
+                <label>Rent Arrears</label>
+            </value>
+            <value>
+                <fullName>Breach of Contract</fullName>
+                <default>false</default>
+                <label>Breach of Contract</label>
+            </value>
+            <value>
+                <fullName>Contract Termination</fullName>
+                <default>false</default>
+                <label>Contract Termination</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

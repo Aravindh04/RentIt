@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <actionCalls>
+        <name>Send_Termination_Email</name>
+        <label>Send Termination Email to Tenant</label>
+        <locationX>176</locationX>
+        <locationY>1043</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Create_Termination_Notice</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>varTenantContact.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Important: Your Tenancy Contract Has Been Terminated</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tmplTerminationEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <decisions>
+        <name>Check_Contact_Found</name>
+        <label>Tenant Contact Has Email?</label>
+        <locationX>176</locationX>
+        <locationY>827</locationY>
+        <defaultConnectorLabel>No Email - Still Create Notice</defaultConnectorLabel>
+        <rules>
+            <name>Contact_Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTenantContact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Termination_Email</targetReference>
+            </connector>
+            <label>Has Email</label>
+        </rules>
+        <rules>
+            <name>No_Email_Skip_To_Notice</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTenantContact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Termination_Notice</targetReference>
+            </connector>
+            <label>No Email - Skip to Notice</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Room_For_Void</name>
+        <label>Room Linked to Tenancy?</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <defaultConnector>
+            <targetReference>Get_Tenant_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Room - Get Contact</defaultConnectorLabel>
+        <rules>
+            <name>Room_Linked</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varVoidTenancy.Room__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Room_Available_Void</targetReference>
+            </connector>
+            <label>Room Linked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Tenancy_Found_Void</name>
+        <label>Tenancy Found?</label>
+        <locationX>176</locationX>
+        <locationY>395</locationY>
+        <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
+        <rules>
+            <name>Tenancy_Found_Void</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varVoidTenancy.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Tenancy_Terminated</targetReference>
+            </connector>
+            <label>Tenancy Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Void_Is_New</name>
+        <label>Void Reason Newly Set?</label>
+        <locationX>176</locationX>
+        <locationY>179</locationY>
+        <defaultConnectorLabel>Not New - Skip</defaultConnectorLabel>
+        <rules>
+            <name>Void_Reason_Newly_Set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Void_Reason__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Tenancy_For_Void</targetReference>
+            </connector>
+            <label>Newly Set</label>
+        </rules>
+    </decisions>
+    <description>When a Contract Void/Termination Reason is set, terminates the linked Tenancy, sets the Room to Available, sends an email to the tenant, and creates a Contract Termination Notice.</description>
+    <environments>Default</environments>
+    <interviewLabel>Contract Voided - Terminate Tenancy {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract Voided - Terminate Tenancy</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Termination_Notice</name>
+        <label>Create Contract Termination Notice</label>
+        <locationX>176</locationX>
+        <locationY>1151</locationY>
+        <inputAssignments>
+            <field>Audience__c</field>
+            <value>
+                <stringValue>Specific Tenant</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Content__c</field>
+            <value>
+                <elementReference>tmplTerminationNoticeContent</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Effective_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>Contract Termination Notice</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notice_Type__c</field>
+            <value>
+                <stringValue>Contract Termination</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Property__c</field>
+            <value>
+                <elementReference>$Record.Property__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Published</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Tenancy__c</field>
+            <value>
+                <elementReference>varVoidTenancy.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Notice__c</object>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Tenant_Contact</name>
+        <label>Get Tenant Contact</label>
+        <locationX>176</locationX>
+        <locationY>719</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Contact_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varVoidTenancy.Tenant__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <outputReference>varTenantContact</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Tenancy_For_Void</name>
+        <label>Get Related Tenancy</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Tenancy_Found_Void</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contract__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Tenancy__c</object>
+        <outputReference>varVoidTenancy</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Room__c</queriedFields>
+        <queriedFields>Tenant__c</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Room_Available_Void</name>
+        <label>Set Room to Available</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <connector>
+            <targetReference>Get_Tenant_Contact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varVoidTenancy.Room__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Available</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Room__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Tenancy_Terminated</name>
+        <label>Set Tenancy to Terminated</label>
+        <locationX>176</locationX>
+        <locationY>503</locationY>
+        <connector>
+            <targetReference>Check_Room_For_Void</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varVoidTenancy.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Terminated</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Tenancy__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Void_Is_New</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Void_Reason__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Contract</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tmplTerminationEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Dear {!varTenantContact.FirstName} {!varTenantContact.LastName},
+
+We are writing to inform you that your tenancy contract (Contract No: {!$Record.ContractNumber}) has been terminated effective {!$Flow.CurrentDate}.
+
+Reason for Termination: {!$Record.Void_Reason__c}
+
+Please ensure all belongings are removed and the property is vacated as soon as possible. Any outstanding rent obligations remain due and payable.
+
+If you have any questions or wish to discuss this matter, please contact your property manager immediately.
+
+Regards,
+RentIt Property Management</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tmplTerminationNoticeContent</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your tenancy contract has been terminated effective {!$Flow.CurrentDate}.
+
+Reason: {!$Record.Void_Reason__c}
+
+Please contact your property manager for further information regarding vacating the property and the return of your security deposit.</text>
+    </textTemplates>
+    <variables>
+        <name>varTenantContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>varVoidTenancy</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Tenancy__c</objectType>
+    </variables>
+</Flow>

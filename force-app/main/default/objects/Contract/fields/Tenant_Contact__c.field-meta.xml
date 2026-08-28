@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tenant_Contact__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The tenant who is a party to this contract. Must be a Contact with the Tenant Contact record type.</description>
+    <label>Tenant Contact</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Contact.RecordType.DeveloperName</field>
+            <operation>equals</operation>
+            <value>Tenant_Contact</value>
+        </filterItems>
+        <infoMessage>Only Tenant Contacts can be selected.</infoMessage>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Contracts (Tenant)</relationshipLabel>
+    <relationshipName>Tenant_Contracts</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>
