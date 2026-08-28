@@ -8,12 +8,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Account.GST_Number__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Account.GST_Registered__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Account.GST_Number__c</field>
+        <field>Account.Same_as_mailing_address__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -134,11 +139,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Room__c.Floor__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Room__c.Number_of_Tenants__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

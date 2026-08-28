@@ -3,10 +3,7 @@
     <fullName>GST_Registered__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates whether this account is registered for GST. When true, rent invoices will include a 10% GST component on the GST_Amount__c field of each Rent_Payment__c record.</description>
-    <externalId>false</externalId>
     <label>GST Registered</label>
     <trackFeedHistory>false</trackFeedHistory>
-    <trackHistory>false</trackHistory>
-    <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>

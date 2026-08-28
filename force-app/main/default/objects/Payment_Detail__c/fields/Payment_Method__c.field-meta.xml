@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Payment_Method__c</fullName>
-    <label>Payment Method</label>
     <description>Specifies the payment method available or preferred for this payment detail record — cash in person, PayID transfer, or direct bank transfer.</description>
     <inlineHelpText>Select how rent payments will be made. Cash for in-person payments, Pay Id for instant bank transfers using a registered ID, or Bank Transfer for direct account-to-account payments.</inlineHelpText>
+    <label>Payment Method</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>

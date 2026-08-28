@@ -4,6 +4,15 @@
     <deleteConstraint>Restrict</deleteConstraint>
     <description>The Contact record representing the tenant. This is the primary person record. The Community_User__c field links to their Salesforce Experience Cloud login account.</description>
     <label>Tenant (Contact)</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Contact.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Tenant Contact</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Tenancies</relationshipLabel>
     <relationshipName>Tenancies</relationshipName>

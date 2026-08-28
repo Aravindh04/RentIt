@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
-    <label>Status</label>
     <description>Indicates the current lifecycle state of the person account — whether they are actively renting, no longer a tenant, or in the onboarding process.</description>
     <inlineHelpText>Select the current status of this person account. Use Active for current tenants, Inactive for former tenants, and Pending for applicants being onboarded.</inlineHelpText>
+    <label>Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>

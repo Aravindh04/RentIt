@@ -42,10 +42,6 @@
                 <behavior>Edit</behavior>
                 <field>Room_Size__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Number_of_Tenants__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
