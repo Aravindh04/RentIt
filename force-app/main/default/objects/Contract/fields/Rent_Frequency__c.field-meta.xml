@@ -4,7 +4,7 @@
     <description>How often rent is payable under this contract.</description>
     <label>Rent Frequency</label>
     <required>false</required>
-    <trackTrending>false</trackTrending>
+    <trackHistory>false</trackHistory>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>

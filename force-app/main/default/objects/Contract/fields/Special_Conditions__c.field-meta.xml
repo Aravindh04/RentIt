@@ -4,7 +4,7 @@
     <description>Any special terms or conditions agreed between the landlord and tenant beyond the standard agreement clauses.</description>
     <label>Special Conditions</label>
     <length>32768</length>
-    <trackTrending>false</trackTrending>
+    <trackHistory>false</trackHistory>
     <type>LongTextArea</type>
     <visibleLines>5</visibleLines>
 </CustomField>

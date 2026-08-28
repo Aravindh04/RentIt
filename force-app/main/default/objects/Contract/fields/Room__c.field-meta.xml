@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Tenancy__c</fullName>
+    <fullName>Room__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <description>The tenancy agreement this contract governs. Links the contract directly to the room, property, and tenant via the Tenancy record.</description>
-    <label>Tenancy</label>
-    <referenceTo>Tenancy__c</referenceTo>
+    <description>The specific room within the property that the tenant is renting.</description>
+    <label>Room</label>
+    <referenceTo>Room__c</referenceTo>
     <relationshipLabel>Contracts</relationshipLabel>
     <relationshipName>Contracts</relationshipName>
     <required>false</required>
