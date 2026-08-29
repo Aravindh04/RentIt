@@ -156,7 +156,7 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Invoice</label>
     <nameField>
-        <displayFormat>INV-{0000}</displayFormat>
+        <displayFormat>INV-{00000}</displayFormat>
         <label>Invoice Number</label>
         <trackHistory>false</trackHistory>
         <type>AutoNumber</type>

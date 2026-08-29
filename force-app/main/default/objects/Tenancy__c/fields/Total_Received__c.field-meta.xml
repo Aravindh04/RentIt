@@ -4,13 +4,13 @@
     <description>Sum of all Paid invoice amounts on this tenancy. Updated automatically when an Invoice is marked Paid (via approved Payment).</description>
     <label>Total Received</label>
     <summarizedField>Invoice__c.Amount__c</summarizedField>
-    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
     <summaryFilterItems>
         <field>Invoice__c.Status__c</field>
         <operation>equals</operation>
         <value>Paid</value>
     </summaryFilterItems>
-    <summaryOperation>SUM</summaryOperation>
+    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Summary</type>

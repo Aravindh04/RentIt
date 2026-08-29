@@ -4,13 +4,13 @@
     <description>Sum of all Received Payment amounts against this invoice. Updated automatically when a Payment is approved.</description>
     <label>Total Paid</label>
     <summarizedField>Payment__c.Amount__c</summarizedField>
-    <summaryForeignKey>Payment__c.Invoice__c</summaryForeignKey>
     <summaryFilterItems>
         <field>Payment__c.Status__c</field>
         <operation>equals</operation>
         <value>Received</value>
     </summaryFilterItems>
-    <summaryOperation>SUM</summaryOperation>
+    <summaryForeignKey>Payment__c.Invoice__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Summary</type>

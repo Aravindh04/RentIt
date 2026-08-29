@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Payment_Reference__c</fullName>
     <description>Bank transaction ID, PayID reference, or receipt number for this payment.</description>
+    <externalId>false</externalId>
     <label>Payment Reference</label>
     <length>255</length>
     <required>false</required>

@@ -3,7 +3,7 @@
     <active>true</active>
     <allowRecall>true</allowRecall>
     <allowedSubmitters>
-        <type>owner</type>
+        <type>creator</type>
     </allowedSubmitters>
     <approvalPageFields>
         <field>Name</field>
@@ -17,12 +17,12 @@
         <allowDelegate>true</allowDelegate>
         <approvalActions>
             <action>
-                <name>Set_Status_Received</name>
-                <type>FieldUpdate</type>
-            </action>
-            <action>
                 <name>Notify_Tenant_Payment_Approved</name>
                 <type>Alert</type>
+            </action>
+            <action>
+                <name>Set_Status_Received</name>
+                <type>FieldUpdate</type>
             </action>
         </approvalActions>
         <assignedApprover>
@@ -34,17 +34,14 @@
         </assignedApprover>
         <label>Landlord Review</label>
         <name>Landlord_Review</name>
-        <rejectBehavior>
-            <type>RejectRequest</type>
-        </rejectBehavior>
         <rejectionActions>
-            <action>
-                <name>Set_Status_Rejected</name>
-                <type>FieldUpdate</type>
-            </action>
             <action>
                 <name>Notify_Tenant_Payment_Rejected</name>
                 <type>Alert</type>
+            </action>
+            <action>
+                <name>Set_Status_Rejected</name>
+                <type>FieldUpdate</type>
             </action>
         </rejectionActions>
     </approvalStep>
@@ -60,23 +57,23 @@
     </entryCriteria>
     <finalApprovalActions>
         <action>
-            <name>Set_Status_Received</name>
-            <type>FieldUpdate</type>
-        </action>
-        <action>
             <name>Notify_Tenant_Payment_Approved</name>
             <type>Alert</type>
+        </action>
+        <action>
+            <name>Set_Status_Received</name>
+            <type>FieldUpdate</type>
         </action>
     </finalApprovalActions>
     <finalApprovalRecordLock>false</finalApprovalRecordLock>
     <finalRejectionActions>
         <action>
-            <name>Set_Status_Rejected</name>
-            <type>FieldUpdate</type>
-        </action>
-        <action>
             <name>Notify_Tenant_Payment_Rejected</name>
             <type>Alert</type>
+        </action>
+        <action>
+            <name>Set_Status_Rejected</name>
+            <type>FieldUpdate</type>
         </action>
     </finalRejectionActions>
     <finalRejectionRecordLock>false</finalRejectionRecordLock>

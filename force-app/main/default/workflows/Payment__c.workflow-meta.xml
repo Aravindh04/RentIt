@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
     <alerts>
-        <description>Notify tenant community user that their payment has been approved and received</description>
         <fullName>Notify_Tenant_Payment_Approved</fullName>
+        <description>Notify tenant community user that their payment has been approved and received</description>
+        <protected>false</protected>
         <recipients>
             <type>owner</type>
         </recipients>
@@ -10,8 +11,9 @@
         <template>RentIt_Notifications/PaymentApproved</template>
     </alerts>
     <alerts>
-        <description>Notify tenant community user that their payment was rejected and needs correction</description>
         <fullName>Notify_Tenant_Payment_Rejected</fullName>
+        <description>Notify tenant community user that their payment was rejected and needs correction</description>
+        <protected>false</protected>
         <recipients>
             <type>owner</type>
         </recipients>

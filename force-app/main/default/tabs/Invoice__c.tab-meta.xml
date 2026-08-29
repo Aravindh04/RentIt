@@ -2,5 +2,5 @@
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <customObject>true</customObject>
     <description>View and manage rent invoices generated for each tenancy period.</description>
-    <motif>Custom26: Piggy Bank</motif>
+    <motif>Custom26: Flag</motif>
 </CustomTab>

@@ -8,4 +8,5 @@
     <subject>Payment Confirmed: {!Payment__c.Name} Has Been Approved</subject>
     <textOnly>false</textOnly>
     <type>custom</type>
+    <uiType>Aloha</uiType>
 </EmailTemplate>

@@ -8,4 +8,5 @@
     <subject>Action Required: Rent Payment Awaiting Your Approval – {!Payment__c.Name}</subject>
     <textOnly>false</textOnly>
     <type>custom</type>
+    <uiType>Aloha</uiType>
 </EmailTemplate>

@@ -8,4 +8,5 @@
     <subject>Reminder: Your Rent Is Due Tomorrow – {!Invoice__c.Name}</subject>
     <textOnly>false</textOnly>
     <type>custom</type>
+    <uiType>Aloha</uiType>
 </EmailTemplate>

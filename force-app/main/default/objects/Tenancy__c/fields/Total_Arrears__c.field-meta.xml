@@ -4,13 +4,13 @@
     <description>Sum of all Overdue invoice amounts on this tenancy. A non-zero value triggers automated arrears notices to the tenant.</description>
     <label>Total Arrears</label>
     <summarizedField>Invoice__c.Amount__c</summarizedField>
-    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
     <summaryFilterItems>
         <field>Invoice__c.Status__c</field>
         <operation>equals</operation>
         <value>Overdue</value>
     </summaryFilterItems>
-    <summaryOperation>SUM</summaryOperation>
+    <summaryForeignKey>Invoice__c.Tenancy__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Summary</type>
