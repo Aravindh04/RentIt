@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Total_Paid__c</fullName>
-    <description>Sum of all Received Payment amounts against this invoice. Updated automatically when a Payment is approved.</description>
+    <description>Sum of all Received payment amounts applied to this invoice. Maintained by PaymentTrigger on Payment insert, update, delete, and undelete.</description>
     <label>Total Paid</label>
-    <summarizedField>Payment__c.Amount__c</summarizedField>
-    <summaryFilterItems>
-        <field>Payment__c.Status__c</field>
-        <operation>equals</operation>
-        <value>Received</value>
-    </summaryFilterItems>
-    <summaryForeignKey>Payment__c.Invoice__c</summaryForeignKey>
-    <summaryOperation>sum</summaryOperation>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
-    <type>Summary</type>
+    <type>Currency</type>
 </CustomField>

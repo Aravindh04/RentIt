@@ -69,3 +69,13 @@ The rent payment object can look up to Tenancy or the Contract object as master 
 Create automation to the tenants using the Notice record about the Rent arrers
 
 Update the existing docs\RentIt_Data_Model.md with the current data model and Automation process highlighting the key abilities of the application once the build is completed
+
+
+
+The Contact can do payments "Create Payments" against the the Invoice__c, Currently the Payment__c and Invoice__c are in Master-Detail relationship.
+But I want the ability for Contact to do Payments against the Tenancy 
+The Payments may be stored as credits in the respective Tenancy. 
+When the Invoice__c is being generated, If there are credits available under the Tenancy__c instead of Scheduling the invoice, deduct the credits from the Tenancy__c and create the invoice as Paid.
+Payment__c against the Invoice__c or Tenancy__c can be differentiated using the Custom Field or Record Type based on what suits well
+The Roll-up summaries on Tenancy__c and Invoice__c objects needs to be updated accordingly
+Create anothre Roll-up summary on PersonAccount to get the summary of Payments Received for all the related Tenancy__c records

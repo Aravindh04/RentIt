@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Credits__c</fullName>
+    <description>Total advance payments received from the tenant that have not yet been applied to an invoice.</description>
+    <label>Total Credits Received</label>
+    <summarizedField>Payment__c.Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>Payment__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Received</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>Payment__c.Payment_Type__c</field>
+        <operation>equals</operation>
+        <value>Rent Payment</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Payment__c.Tenancy__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

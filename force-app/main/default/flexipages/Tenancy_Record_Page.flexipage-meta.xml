@@ -75,8 +75,8 @@
                     <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Property__c</fieldItem>
-                <identifier>RecordProperty_cField</identifier>
+                <fieldItem>Record.Tenant__c</fieldItem>
+                <identifier>RecordTenant_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -109,22 +109,9 @@
                     <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Tenant__c</fieldItem>
-                <identifier>RecordTenant_cField</identifier>
+                <fieldItem>Record.Property__c</fieldItem>
+                <identifier>RecordProperty_cField</identifier>
             </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>flexipage:blankSpace</componentName>
-                <identifier>flexipage_blankSpace</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Rent_a_room__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>

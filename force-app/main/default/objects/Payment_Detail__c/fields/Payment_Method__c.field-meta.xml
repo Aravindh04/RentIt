@@ -10,23 +10,6 @@
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
-        <valueSetDefinition>
-            <sorted>false</sorted>
-            <value>
-                <fullName>Cash</fullName>
-                <default>false</default>
-                <label>Cash</label>
-            </value>
-            <value>
-                <fullName>Pay Id</fullName>
-                <default>false</default>
-                <label>Pay Id</label>
-            </value>
-            <value>
-                <fullName>Bank Transfer</fullName>
-                <default>false</default>
-                <label>Bank Transfer</label>
-            </value>
-        </valueSetDefinition>
+        <valueSetName>Payment_Methods</valueSetName>
     </valueSet>
 </CustomField>

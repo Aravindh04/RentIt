@@ -2,7 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <layoutSections>
         <customLabel>true</customLabel>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Invoice Details</label>
         <layoutColumns>
@@ -49,7 +49,7 @@
     </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Billing Period</label>
         <layoutColumns>
@@ -86,7 +86,7 @@
     </layoutSections>
     <layoutSections>
         <customLabel>false</customLabel>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>System Information</label>
         <layoutColumns>
@@ -119,6 +119,14 @@
         <fields>Due_Date__c</fields>
         <fields>Tenancy__c</fields>
     </miniLayout>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Payment_Type__c</fields>
+        <fields>Amount__c</fields>
+        <fields>Status__c</fields>
+        <fields>Payment_Date__c</fields>
+        <relatedList>Payment__c.Invoice__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>

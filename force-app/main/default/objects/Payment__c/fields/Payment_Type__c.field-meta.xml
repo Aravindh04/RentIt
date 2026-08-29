@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Type__c</fullName>
+    <label>Payment Type</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Invoice Payment</fullName>
+                <default>true</default>
+                <label>Invoice Payment</label>
+            </value>
+            <value>
+                <fullName>Credit Payment</fullName>
+                <default>false</default>
+                <label>Credit Payment</label>
+            </value>
+            <value>
+                <fullName>Rent Payment</fullName>
+                <default>false</default>
+                <label>Rent Payment</label>
+            </value>
+            <value>
+                <fullName>Credit Applied</fullName>
+                <default>false</default>
+                <label>Credit Applied</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

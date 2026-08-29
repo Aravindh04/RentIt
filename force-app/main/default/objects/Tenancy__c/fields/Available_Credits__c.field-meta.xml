@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Available_Credits__c</fullName>
+    <description>Credits available to offset future invoices. Equals Total Credits Received minus Total Credits Applied.</description>
+    <formula>NULLVALUE(Total_Credits__c, 0) - NULLVALUE(Total_Credits_Applied__c, 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Available Credits</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Send_Arrears_Email</name>
         <label>Send Arrears Email to Tenant</label>
-        <locationX>176</locationX>
-        <locationY>827</locationY>
+        <locationX>50</locationX>
+        <locationY>863</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <connector>
@@ -43,8 +43,8 @@
     <decisions>
         <name>Contact_Has_Email</name>
         <label>Tenant Has Email?</label>
-        <locationX>380</locationX>
-        <locationY>719</locationY>
+        <locationX>182</locationX>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>Create_Arrears_Notice</targetReference>
         </defaultConnector>
@@ -68,15 +68,15 @@
     <decisions>
         <name>Status_Newly_Overdue</name>
         <label>Status Newly Changed to Overdue?</label>
-        <locationX>380</locationX>
-        <locationY>287</locationY>
+        <locationX>545</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Not Newly Overdue</defaultConnectorLabel>
         <rules>
             <name>Is_Newly_Overdue</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record__Prior.Status__c</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Overdue</stringValue>
                 </rightValue>
@@ -90,8 +90,8 @@
     <decisions>
         <name>Tenancy_Found</name>
         <label>Tenancy Found?</label>
-        <locationX>380</locationX>
-        <locationY>503</locationY>
+        <locationX>336</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
         <rules>
             <name>Has_Tenancy</name>
@@ -129,8 +129,8 @@
     <recordCreates>
         <name>Create_Arrears_Notice</name>
         <label>Create Rent Arrears Notice</label>
-        <locationX>380</locationX>
-        <locationY>935</locationY>
+        <locationX>182</locationX>
+        <locationY>1055</locationY>
         <inputAssignments>
             <field>Audience__c</field>
             <value>
@@ -190,8 +190,8 @@
     <recordLookups>
         <name>Get_Tenancy</name>
         <label>Get Tenancy</label>
-        <locationX>380</locationX>
-        <locationY>395</locationY>
+        <locationX>336</locationX>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Tenancy_Found</targetReference>
@@ -214,8 +214,8 @@
     <recordLookups>
         <name>Get_Tenant_Contact</name>
         <label>Get Tenant Contact</label>
-        <locationX>380</locationX>
-        <locationY>611</locationY>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Contact_Has_Email</targetReference>
@@ -236,7 +236,7 @@
         <queriedFields>Email</queriedFields>
     </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>419</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Status_Newly_Overdue</targetReference>
@@ -253,7 +253,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <textTemplates>
         <name>tmplArrearsBody</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
