@@ -1,0 +1,54 @@
+<template>
+    <div class="slds-box slds-theme_default">
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Maintenance Request</h2>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={submitSuccess}>
+                <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+                    <lightning-icon icon-name="utility:success" alternative-text="Success"
+                        size="small" class="slds-m-right_x-small">
+                    </lightning-icon>
+                    Your maintenance request has been submitted. Case number: <strong>{submittedCaseNumber}</strong>
+                </div>
+            </template>
+
+            <template if:false={submitSuccess}>
+                <lightning-record-edit-form
+                    object-api-name="Case"
+                    record-type-id={maintenanceRecordTypeId}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}>
+
+                    <lightning-messages></lightning-messages>
+
+                    <lightning-input-field field-name="Subject"></lightning-input-field>
+                    <lightning-input-field field-name="Description"></lightning-input-field>
+                    <lightning-input-field field-name="Property__c"
+                        value={tenancyPropertyId}
+                        disabled>
+                    </lightning-input-field>
+                    <lightning-input-field field-name="Room__c"
+                        value={tenancyRoomId}
+                        disabled>
+                    </lightning-input-field>
+                    <lightning-input-field field-name="Tenancy__c"
+                        value={tenancyId}
+                        disabled>
+                    </lightning-input-field>
+
+                    <div class="slds-m-top_medium">
+                        <lightning-button
+                            type="submit"
+                            label="Submit Request"
+                            variant="brand">
+                        </lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </template>
+        </template>
+    </div>
+</template>

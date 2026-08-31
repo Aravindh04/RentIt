@@ -32,7 +32,7 @@
         <inputParameters>
             <name>sendRichBody</name>
             <value>
-                <booleanValue>false</booleanValue>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -258,17 +258,46 @@ Please ensure payment is made on time. Use the portal to update your payment sta
     </textTemplates>
     <textTemplates>
         <name>tmplReminderBody</name>
-        <isViewedAsPlainText>true</isViewedAsPlainText>
-        <text>Dear {!varReminderContact.FirstName} {!varReminderContact.LastName},
-
-This is a friendly reminder that your rent payment of ${!$Record.Amount__c} (Invoice: {!$Record.Name}) is due tomorrow, {!$Record.Due_Date__c}.
-
-Please ensure payment is made by the due date. Once paid, log into the tenant portal to update your payment record and submit it for approval.
-
-If you have already paid, please disregard this message.
-
-Regards,
-RentIt Property Management</text>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;meta charset="UTF-8"&gt;
+&lt;style&gt;
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6f9;margin:0;padding:0}
+.wrapper{max-width:600px;margin:32px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.header{background:#0070d2;padding:28px 32px}
+.header h1{color:#fff;margin:0;font-size:20px;font-weight:600}
+.header p{color:#cce4ff;margin:4px 0 0;font-size:13px}
+.body{padding:32px}
+.body p{color:#333;font-size:15px;line-height:1.6;margin:0 0 16px}
+.amount-box{background:#f0f7ff;border-left:4px solid #0070d2;border-radius:4px;padding:16px 20px;margin:20px 0}
+.amount-box .lbl{font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.6px}
+.amount-box .val{font-size:28px;font-weight:700;color:#0070d2;margin-top:4px}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
+.row:last-child{border-bottom:none}
+.row-lbl{color:#666}.row-val{color:#111;font-weight:500}
+.footer{background:#f4f6f9;padding:20px 32px;text-align:center;font-size:12px;color:#888}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="wrapper"&gt;
+  &lt;div class="header"&gt;&lt;h1&gt;Rent Due Tomorrow&lt;/h1&gt;&lt;p&gt;RentIt Property Management&lt;/p&gt;&lt;/div&gt;
+  &lt;div class="body"&gt;
+    &lt;p&gt;Hi {!varReminderContact.FirstName} {!varReminderContact.LastName},&lt;/p&gt;
+    &lt;p&gt;This is a friendly reminder that your rent payment is due &lt;strong&gt;tomorrow&lt;/strong&gt;.&lt;/p&gt;
+    &lt;div class="amount-box"&gt;
+      &lt;div class="lbl"&gt;Amount Due&lt;/div&gt;
+      &lt;div class="val"&gt;${!$Record.Amount__c}&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="row"&gt;&lt;span class="row-lbl"&gt;Invoice&lt;/span&gt;&lt;span class="row-val"&gt;{!$Record.Name}&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="row"&gt;&lt;span class="row-lbl"&gt;Due Date&lt;/span&gt;&lt;span class="row-val"&gt;{!$Record.Due_Date__c}&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="row"&gt;&lt;span class="row-lbl"&gt;Period&lt;/span&gt;&lt;span class="row-val"&gt;{!$Record.Period_Start__c} &amp;ndash; {!$Record.Period_End__c}&lt;/span&gt;&lt;/div&gt;
+    &lt;p style="margin-top:24px"&gt;Please ensure payment is made by the due date to avoid late fees. Once paid, log into the portal to create a Payment record and submit it for approval.&lt;/p&gt;
+    &lt;p&gt;If you have already paid, please disregard this message.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="footer"&gt;RentIT Property Management &amp;bull; Automated notification &amp;mdash; do not reply.&lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</text>
     </textTemplates>
     <variables>
         <name>varReminderContact</name>

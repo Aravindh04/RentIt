@@ -1,0 +1,88 @@
+<template>
+    <div class="slds-box slds-theme_default">
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Make a Payment</h2>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={submitSuccess}>
+                <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+                    <span class="slds-assistive-text">success</span>
+                    <lightning-icon icon-name="utility:success" alternative-text="Success" size="small"
+                        class="slds-m-right_x-small">
+                    </lightning-icon>
+                    Payment submitted for approval. Reference: {submittedId}
+                </div>
+            </template>
+
+            <template if:false={submitSuccess}>
+                <!-- Invoice selector -->
+                <lightning-combobox
+                    label="Invoice"
+                    value={selectedInvoiceId}
+                    options={invoiceOptions}
+                    onchange={handleInvoiceChange}
+                    required>
+                </lightning-combobox>
+
+                <!-- Payment fields — only tenant-editable fields are exposed -->
+                <lightning-input
+                    type="number"
+                    label="Amount (AUD)"
+                    value={amount}
+                    onchange={handleAmountChange}
+                    min="0.01"
+                    step="0.01"
+                    required>
+                </lightning-input>
+
+                <lightning-input
+                    type="date"
+                    label="Payment Date"
+                    value={paymentDate}
+                    onchange={handlePaymentDateChange}
+                    required>
+                </lightning-input>
+
+                <lightning-combobox
+                    label="Payment Method"
+                    value={paymentMethod}
+                    options={paymentMethodOptions}
+                    onchange={handleMethodChange}
+                    required>
+                </lightning-combobox>
+
+                <lightning-input
+                    type="text"
+                    label="Payment Reference"
+                    value={paymentReference}
+                    onchange={handleReferenceChange}
+                    maxlength="255">
+                </lightning-input>
+
+                <lightning-input
+                    type="textarea"
+                    label="Comment"
+                    value={comment}
+                    onchange={handleCommentChange}
+                    maxlength="1000">
+                </lightning-input>
+
+                <template if:true={formError}>
+                    <p class="slds-text-color_error slds-m-top_small">{formError}</p>
+                </template>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        label="Submit Payment"
+                        variant="brand"
+                        onclick={handleSubmit}
+                        disabled={isSubmitting}>
+                    </lightning-button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

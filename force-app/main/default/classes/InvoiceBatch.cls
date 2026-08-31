@@ -1,6 +1,6 @@
 public class InvoiceBatch implements Database.Batchable<SObject> {
 
-    private static final Integer LOOKAHEAD_DAYS = 30;
+    private static final Integer LOOKAHEAD_DAYS = 1;
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator([

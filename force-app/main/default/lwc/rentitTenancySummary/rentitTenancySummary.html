@@ -1,0 +1,13 @@
+<template>
+    <template if:true={recordId}>
+        <lightning-record-form
+            record-id={recordId}
+            object-api-name="Tenancy__c"
+            fields={fields}
+            mode="readonly">
+        </lightning-record-form>
+    </template>
+    <template if:false={recordId}>
+        <p class="slds-text-color_error">No tenancy record available.</p>
+    </template>
+</template>

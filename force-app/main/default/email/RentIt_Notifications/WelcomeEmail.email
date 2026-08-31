@@ -1,0 +1,12 @@
+Hi {!Contact.FirstName},
+
+Welcome to the RentIT Portal! Your account has been created successfully.
+
+You can log in to view your tenancy details, invoices, and make payments using the link below:
+
+{!Community_URL}
+
+If you have any questions, please contact your landlord or property manager.
+
+Regards,
+The RentIT Team

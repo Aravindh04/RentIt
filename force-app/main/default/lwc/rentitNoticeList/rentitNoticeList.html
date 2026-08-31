@@ -1,0 +1,42 @@
+<template>
+    <div class="slds-box slds-theme_default">
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Notices</h2>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading notices" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={error}>
+            <p class="slds-text-color_error">{error}</p>
+        </template>
+
+        <template if:true={hasNotices}>
+            <template for:each={notices} for:item="notice">
+                <div key={notice.Id} class="slds-box slds-theme_shade slds-m-bottom_small">
+                    <h3 class="slds-text-heading_small">{notice.Name}</h3>
+                    <p class="slds-text-body_regular slds-m-top_x-small">{notice.Content__c}</p>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                        <template if:true={notice.Expiry_Date__c}>
+                            Expires:&nbsp;
+                            <lightning-formatted-date-time
+                                value={notice.Expiry_Date__c}
+                                year="numeric"
+                                month="short"
+                                day="2-digit">
+                            </lightning-formatted-date-time>
+                        </template>
+                        <template if:false={notice.Expiry_Date__c}>
+                            No expiry
+                        </template>
+                    </p>
+                </div>
+            </template>
+        </template>
+
+        <template if:false={hasNotices}>
+            <template if:false={isLoading}>
+                <p class="slds-text-color_weak">No active notices at this time.</p>
+            </template>
+        </template>
+    </div>
+</template>

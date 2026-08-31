@@ -11,10 +11,11 @@ package.xml
 
 #force-app/main/default/objects/Account
 #force-app/main/default/objects/Account/fields
-force-app/main/default/objects/Case
+#force-app/main/default/objects/Case
 force-app/main/default/objects/Contact
 force-app/main/default/objects/Contract
 force-app/main/default/aiAuthoringBundles
+force-app/main/default/experiences
 
 # LWC Jest
 **/__tests__/**

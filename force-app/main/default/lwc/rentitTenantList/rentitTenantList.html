@@ -1,0 +1,55 @@
+<template>
+    <div class="slds-box slds-theme_default">
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Manage Tenants</h2>
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading tenancies" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={error}>
+            <p class="slds-text-color_error">{error}</p>
+        </template>
+
+        <template if:true={hasTenancies}>
+            <lightning-datatable
+                key-field="Id"
+                data={tenancies}
+                columns={columns}
+                hide-checkbox-column
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </template>
+
+        <template if:false={hasTenancies}>
+            <template if:false={isLoading}>
+                <p class="slds-text-color_weak">No tenancy records found.</p>
+            </template>
+        </template>
+
+        <!-- Inline record form to set Community_User__c -->
+        <template if:true={editingTenancyId}>
+            <section class="slds-modal slds-fade-in-open" role="dialog">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Assign Community User</h2>
+                        <button class="slds-button slds-button_icon slds-modal__close"
+                            onclick={closeModal} title="Close">
+                            <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                        </button>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-record-form
+                            record-id={editingTenancyId}
+                            object-api-name="Tenancy__c"
+                            fields={editFields}
+                            mode="edit"
+                            onsuccess={handleSaveSuccess}
+                            onerror={handleSaveError}>
+                        </lightning-record-form>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>
