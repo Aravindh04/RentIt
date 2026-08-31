@@ -34,12 +34,7 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Parties</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tenant_Contact__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -200,7 +195,6 @@
     </layoutSections>
     <miniLayout>
         <fields>AccountId</fields>
-        <fields>Tenant_Contact__c</fields>
         <fields>Status</fields>
         <fields>StartDate</fields>
         <fields>EndDate</fields>

@@ -156,7 +156,7 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Property</label>
     <nameField>
-        <label>Property Name</label>
+        <label>Property Number</label>
         <trackHistory>false</trackHistory>
         <type>Text</type>
     </nameField>

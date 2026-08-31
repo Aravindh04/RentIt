@@ -15,6 +15,11 @@
         <default>false</default>
         <label>Bank Transfer</label>
     </customValue>
+    <customValue>
+        <fullName>Credit</fullName>
+        <default>false</default>
+        <label>Credit</label>
+    </customValue>
     <description>Available payment methods for payment</description>
     <masterLabel>Payment Methods</masterLabel>
     <sorted>false</sorted>

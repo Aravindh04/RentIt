@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Community_User__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Links this tenancy to the tenant&apos;s Experience Cloud (Community) User account. Used to control what a logged-in community user can see. Populated when the tenant is enabled as a community user. Community components filter Tenancy records using: WHERE Community_User__c = :UserInfo.getUserId().</description>
+    <label>Community User</label>
+    <referenceTo>User</referenceTo>
+    <relationshipLabel>Tenancies</relationshipLabel>
+    <relationshipName>Tenancies</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

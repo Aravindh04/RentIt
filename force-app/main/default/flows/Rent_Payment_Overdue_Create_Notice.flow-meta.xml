@@ -253,7 +253,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <textTemplates>
         <name>tmplArrearsBody</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
@@ -268,7 +268,7 @@ Please make payment immediately and log into the tenant portal to mark your paym
 If you are experiencing financial difficulty, please contact your property manager immediately.
 
 Regards,
-RentIT Property Management</text>
+RentIt Property Management</text>
     </textTemplates>
     <textTemplates>
         <name>tmplNoticeContent</name>

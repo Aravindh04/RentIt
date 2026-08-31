@@ -101,7 +101,7 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
                     creditApplications.add(new Payment__c(
                         Tenancy__c      = inv.Tenancy__c,
                         Invoice__c      = inv.Id,
-                        Payment_Type__c = 'Credit Payment',
+                        Payment_Type__c = 'Credit Applied',
                         Status__c       = 'Received',
                         Amount__c       = inv.Amount__c,
                         Payment_Date__c = inv.Invoice_Date__c
