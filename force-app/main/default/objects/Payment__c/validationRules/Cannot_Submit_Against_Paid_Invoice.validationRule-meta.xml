@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Submit_Against_Paid_Invoice</fullName>
+    <active>true</active>
+    <description>Prevents a tenant from submitting a payment against an invoice that is already fully paid.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Invoice__c)),
+    ISPICKVAL(Status__c, "Paid"),
+    ISPICKVAL(Invoice__r.Status__c, "Paid")
+)</errorConditionFormula>
+    <errorMessage>This invoice has already been paid in full. No further payments can be submitted against it.</errorMessage>
+</ValidationRule>

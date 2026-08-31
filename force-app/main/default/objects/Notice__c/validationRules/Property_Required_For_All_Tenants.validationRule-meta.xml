@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Property_Required_For_All_Tenants</fullName>
+    <active>true</active>
+    <description>Property must be set when the notice audience is All Tenants in Property.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Audience__c, "All Tenants in Property"),
+    ISBLANK(Property__c)
+)</errorConditionFormula>
+    <errorMessage>Property is required when the Audience is &quot;All Tenants in Property&quot;.</errorMessage>
+    <errorDisplayField>Property__c</errorDisplayField>
+</ValidationRule>

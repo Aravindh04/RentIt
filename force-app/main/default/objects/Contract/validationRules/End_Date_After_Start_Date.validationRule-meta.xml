@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>End_Date_After_Start_Date</fullName>
+    <active>true</active>
+    <description>Contract end date must be after the start date.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(StartDate)),
+    NOT(ISBLANK(EndDate)),
+    EndDate &lt;= StartDate
+)</errorConditionFormula>
+    <errorMessage>End Date must be after Start Date.</errorMessage>
+    <errorDisplayField>EndDate</errorDisplayField>
+</ValidationRule>

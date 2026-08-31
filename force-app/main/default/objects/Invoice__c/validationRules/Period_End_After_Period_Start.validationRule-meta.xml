@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Period_End_After_Period_Start</fullName>
+    <active>true</active>
+    <description>Ensures the billing period end date is after the start date.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Period_Start__c)),
+    NOT(ISBLANK(Period_End__c)),
+    Period_End__c &lt;= Period_Start__c
+)</errorConditionFormula>
+    <errorMessage>Period End date must be after Period Start date.</errorMessage>
+    <errorDisplayField>Period_End__c</errorDisplayField>
+</ValidationRule>

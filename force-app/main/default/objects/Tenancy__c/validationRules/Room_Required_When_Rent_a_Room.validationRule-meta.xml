@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Room_Required_When_Rent_a_Room</fullName>
+    <active>true</active>
+    <description>Room must be populated when the tenancy is for a room rental.</description>
+    <errorConditionFormula>AND(Rent_a_room__c = true, ISBLANK(Room__c))</errorConditionFormula>
+    <errorMessage>Room is required when &quot;Rent a Room&quot; is enabled.</errorMessage>
+</ValidationRule>

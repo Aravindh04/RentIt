@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Void_Reason_Only_On_Activated</fullName>
+    <active>true</active>
+    <description>A void reason can only be set on an Activated contract to trigger the termination flow.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Void_Reason__c)),
+    ISCHANGED(Void_Reason__c),
+    NOT(ISPICKVAL(Status, "Activated"))
+)</errorConditionFormula>
+    <errorMessage>Void Reason can only be set on an Activated contract.</errorMessage>
+    <errorDisplayField>Void_Reason__c</errorDisplayField>
+</ValidationRule>

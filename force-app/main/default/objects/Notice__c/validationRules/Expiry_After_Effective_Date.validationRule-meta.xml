@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Expiry_After_Effective_Date</fullName>
+    <active>true</active>
+    <description>When an expiry date is provided, it must be after the effective date.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Expiry_Date__c)),
+    NOT(ISBLANK(Effective_Date__c)),
+    Expiry_Date__c &lt;= Effective_Date__c
+)</errorConditionFormula>
+    <errorMessage>Expiry Date must be after the Effective Date.</errorMessage>
+    <errorDisplayField>Expiry_Date__c</errorDisplayField>
+</ValidationRule>

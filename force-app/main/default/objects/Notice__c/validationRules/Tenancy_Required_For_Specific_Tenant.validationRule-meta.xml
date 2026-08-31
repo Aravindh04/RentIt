@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tenancy_Required_For_Specific_Tenant</fullName>
+    <active>true</active>
+    <description>Tenancy must be set when the notice is targeted at a specific tenant.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Audience__c, "Specific Tenant"),
+    ISBLANK(Tenancy__c)
+)</errorConditionFormula>
+    <errorMessage>Tenancy is required when the Audience is &quot;Specific Tenant&quot;.</errorMessage>
+    <errorDisplayField>Tenancy__c</errorDisplayField>
+</ValidationRule>

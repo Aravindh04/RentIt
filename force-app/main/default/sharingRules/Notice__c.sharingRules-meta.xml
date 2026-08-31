@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!--
+        Shares Published notices addressed to "All Tenants in Property" with the community
+        tenant group. These property-wide notices cannot be covered by Sharing Sets (which
+        traverse a single User lookup) because the "All Tenants" path goes through Property__c,
+        not through an individual Tenancy.
+
+        Specific-Tenant notices are handled by the Sharing Set (Notice__c → Tenancy__c →
+        Community_User__c) and do NOT need a sharing rule.
+    -->
+    <sharingCriteriaRules>
+        <fullName>Published_All_Tenants_Notices_To_Community</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Published All-Tenants Notices to Community Tenants</label>
+        <criteriaItems>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Published</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Audience__c</field>
+            <operation>equals</operation>
+            <value>All Tenants in Property</value>
+        </criteriaItems>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <sharedTo>
+            <group>RentIt_Community_Tenants</group>
+        </sharedTo>
+    </sharingCriteriaRules>
+</SharingRules>
