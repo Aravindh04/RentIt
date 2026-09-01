@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "My Tenancy",
+  "contentBody" : {
+    "activeViewId" : "My_Tenancy",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "custom-my-tenancy",
+    "urlPrefix" : "my-tenancy"
+  },
+  "urlName" : "my-tenancy"
+}
