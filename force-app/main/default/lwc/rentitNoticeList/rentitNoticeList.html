@@ -1,42 +1,108 @@
 <template>
-    <div class="slds-box slds-theme_default">
-        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Notices</h2>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="utility:notification" size="small" alternative-text="Notices"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">Notices</h2>
+        </div>
 
         <template if:true={isLoading}>
-            <lightning-spinner alternative-text="Loading notices" size="medium"></lightning-spinner>
+            <div class="ri-spinner-wrap">
+                <div class="ri-spinner"></div>
+            </div>
         </template>
 
         <template if:true={error}>
-            <p class="slds-text-color_error">{error}</p>
+            <div class="ri-error-msg">{error}</div>
         </template>
 
-        <template if:true={hasNotices}>
-            <template for:each={notices} for:item="notice">
-                <div key={notice.Id} class="slds-box slds-theme_shade slds-m-bottom_small">
-                    <h3 class="slds-text-heading_small">{notice.Name}</h3>
-                    <p class="slds-text-body_regular slds-m-top_x-small">{notice.Content__c}</p>
-                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                        <template if:true={notice.Expiry_Date__c}>
-                            Expires:&nbsp;
-                            <lightning-formatted-date-time
-                                value={notice.Expiry_Date__c}
-                                year="numeric"
-                                month="short"
-                                day="2-digit">
-                            </lightning-formatted-date-time>
-                        </template>
-                        <template if:false={notice.Expiry_Date__c}>
-                            No expiry
-                        </template>
-                    </p>
+        <!-- List View -->
+        <template if:true={showList}>
+            <template if:true={hasNotices}>
+                <div class="ri-notices-body">
+                    <template for:each={notices} for:item="notice">
+                        <div key={notice.Id}
+                             class="ri-notice ri-notice--clickable"
+                             onclick={handleNoticeSelect}
+                             data-id={notice.Id}>
+                            <div class="ri-notice__header">
+                                <h3 class="ri-notice__title">{notice.Name}</h3>
+                                <div class="ri-notice__meta">
+                                    <template if:true={notice.Notice_Type__c}>
+                                        <span class="ri-notice-type" data-type={notice.Notice_Type__c}>
+                                            {notice.Notice_Type__c}
+                                        </span>
+                                    </template>
+                                    <span class="ri-notice__expiry">
+                                        <template if:true={notice.Expiry_Date__c}>
+                                            <lightning-icon icon-name="utility:date_time" size="xx-small" alternative-text="Expires"></lightning-icon>
+                                            Expires&nbsp;
+                                            <lightning-formatted-date-time
+                                                value={notice.Expiry_Date__c}
+                                                year="numeric" month="short" day="2-digit">
+                                            </lightning-formatted-date-time>
+                                        </template>
+                                        <template if:false={notice.Expiry_Date__c}>
+                                            <lightning-icon icon-name="utility:infinity" size="xx-small" alternative-text="Permanent"></lightning-icon>
+                                            &nbsp;Permanent
+                                        </template>
+                                    </span>
+                                    <span class="ri-notice__view-hint">View →</span>
+                                </div>
+                            </div>
+                            <div class="ri-notice__body">
+                                <lightning-formatted-rich-text value={notice.Content__c}></lightning-formatted-rich-text>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </template>
+
+            <template if:false={hasNotices}>
+                <template if:false={isLoading}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:check" size="large" alternative-text="No notices"></lightning-icon>
+                        <p>No active notices at this time.</p>
+                    </div>
+                </template>
+            </template>
         </template>
 
-        <template if:false={hasNotices}>
-            <template if:false={isLoading}>
-                <p class="slds-text-color_weak">No active notices at this time.</p>
-            </template>
+        <!-- Detail View -->
+        <template if:true={showDetail}>
+            <div class="ri-detail-panel">
+                <button class="ri-back-btn" onclick={handleCloseDetail}>← Back to Notices</button>
+                <div class="ri-notice ri-notice--full">
+                    <div class="ri-notice__header">
+                        <h3 class="ri-notice__title">{selectedNotice.Name}</h3>
+                        <div class="ri-notice__meta">
+                            <template if:true={selectedNotice.Notice_Type__c}>
+                                <span class="ri-notice-type" data-type={selectedNotice.Notice_Type__c}>
+                                    {selectedNotice.Notice_Type__c}
+                                </span>
+                            </template>
+                            <span class="ri-notice__expiry">
+                                <template if:true={selectedNotice.Expiry_Date__c}>
+                                    <lightning-icon icon-name="utility:date_time" size="xx-small" alternative-text="Expires"></lightning-icon>
+                                    Expires&nbsp;
+                                    <lightning-formatted-date-time
+                                        value={selectedNotice.Expiry_Date__c}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </template>
+                                <template if:false={selectedNotice.Expiry_Date__c}>
+                                    <lightning-icon icon-name="utility:infinity" size="xx-small" alternative-text="Permanent"></lightning-icon>
+                                    &nbsp;Permanent
+                                </template>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ri-notice__body ri-notice__body--full">
+                        <lightning-formatted-rich-text value={selectedNotice.Content__c}></lightning-formatted-rich-text>
+                    </div>
+                </div>
+            </div>
         </template>
     </div>
 </template>

@@ -1,0 +1,95 @@
+<template>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:invoice" size="small" alternative-text="Invoices"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">My Invoices</h2>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap">
+                <lightning-spinner alternative-text="Loading invoices" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="ri-error-msg">{error}</div>
+        </template>
+
+        <template if:true={hasInvoices}>
+            <div class="ri-table-wrap">
+                <table class="ri-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Period</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Balance Due</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={invoices} for:item="inv">
+                            <tr key={inv.Id}>
+                                <td class="ri-td--name">{inv.Name}</td>
+                                <td class="ri-td--period">
+                                    <lightning-formatted-date-time
+                                        value={inv.Period_Start__c}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                    &nbsp;&ndash;&nbsp;
+                                    <lightning-formatted-date-time
+                                        value={inv.Period_End__c}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </td>
+                                <td>
+                                    <lightning-formatted-number
+                                        value={inv.Total_Amount__c}
+                                        format-style="currency" currency-code="AUD"
+                                        minimum-fraction-digits="2">
+                                    </lightning-formatted-number>
+                                </td>
+                                <td>
+                                    <lightning-formatted-number
+                                        value={inv.Total_Paid__c}
+                                        format-style="currency" currency-code="AUD"
+                                        minimum-fraction-digits="2">
+                                    </lightning-formatted-number>
+                                </td>
+                                <td class="ri-td--balance">
+                                    <lightning-formatted-number
+                                        value={inv.Balance_Due__c}
+                                        format-style="currency" currency-code="AUD"
+                                        minimum-fraction-digits="2">
+                                    </lightning-formatted-number>
+                                </td>
+                                <td>
+                                    <lightning-formatted-date-time
+                                        value={inv.Due_Date__c}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </td>
+                                <td>
+                                    <span class="ri-status" data-status={inv.Status__c}>{inv.Status__c}</span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template if:false={hasInvoices}>
+            <template if:false={isLoading}>
+                <div class="ri-empty-state">
+                    <lightning-icon icon-name="utility:check" size="large" alternative-text="No invoices"></lightning-icon>
+                    <p>No invoices found.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

@@ -25,149 +25,9 @@
           },
           "children" : [ {
             "children" : [ {
-              "attributes" : {
-                "headerLayout" : "LogoLeft",
-                "slotOneWidth" : "",
-                "slotThreeWidth" : "",
-                "slotTwoWidth" : "",
-                "spaceBetweenSlots" : "16px"
-              },
-              "children" : [ {
-                "children" : [ {
-                  "attributes" : {
-                    "alignment" : "left",
-                    "imageInfo" : "",
-                    "imageInfoMobile" : "",
-                    "logoWidth" : 250
-                  },
-                  "definition" : "dxp_content_layout:siteLogo",
-                  "id" : "3fa7fb93-b93c-420c-84d0-5728032269a7",
-                  "type" : "component"
-                } ],
-                "id" : "77eb3207-995d-416f-b26f-adb62ce75542",
-                "name" : "siteLogo",
-                "title" : "Add component",
-                "type" : "region"
-              }, {
-                "children" : [ {
-                  "attributes" : {
-                    "dxpStyle" : {
-                      "padding" : {
-                        "bottom" : "5px",
-                        "left" : "5px",
-                        "right" : "5px",
-                        "top" : "5px"
-                      }
-                    }
-                  },
-                  "children" : [ {
-                    "children" : [ {
-                      "attributes" : {
-                        "activeLineWeight" : "3px",
-                        "backgroundColor" : "rgba(255, 255, 255, 0)",
-                        "dropdownAccordionIconSize" : "xx-small",
-                        "dropdownActiveLineWeight" : "5px",
-                        "dropdownBackgroundActiveColor" : "rgba(0, 0, 0, 0)",
-                        "dropdownBackgroundColor" : "",
-                        "dropdownBackgroundHoverColor" : "",
-                        "dropdownBottomBorderRadius" : "5px",
-                        "dropdownFontSizeOverride" : "",
-                        "dropdownFontWeightOverride" : "300",
-                        "dropdownItemPadding" : "{\"top\":\"10px\",\"right\":\"10px\",\"bottom\":\"10px\",\"left\":\"10px\"}",
-                        "dropdownLineHeightOverride" : "",
-                        "dropdownMenuPadding" : "{\"top\":\"0px\",\"right\":\"0px\",\"bottom\":\"0px\",\"left\":\"0px\"}",
-                        "dropdownOverrideTextStyle" : true,
-                        "dropdownShowDividerLines" : false,
-                        "dropdownTextDecorationOverride" : "",
-                        "dropdownTextStyle" : "body-regular",
-                        "dropdownTopBorderRadius" : "5px",
-                        "dxpStyle" : {
-                          "isVisible" : true
-                        },
-                        "fontSizeOverride" : "",
-                        "fontWeightOverride" : "",
-                        "iconSize" : "xx-small",
-                        "itemBackgroundActiveColor" : "rgba(255, 255, 255, 0)",
-                        "itemBackgroundHoverColor" : "rgba(255, 255, 255, 0)",
-                        "lineHeightOverride" : "",
-                        "menuHorizontalAlignment" : "left",
-                        "overrideTextStyle" : false,
-                        "showHomeLink" : false,
-                        "showParentMenuIcon" : true,
-                        "spaceBetweenMenuItems" : "30px",
-                        "textDecorationOverride" : "",
-                        "textStyle" : "body-regular"
-                      },
-                      "definition" : "community_navigation:customizableNavigationBarContainer",
-                      "id" : "91ef773a-f571-43b9-8c38-2dac927e5b27",
-                      "type" : "component"
-                    } ],
-                    "id" : "ed186f78-6f5f-4c08-9b72-226cb4d53fca",
-                    "name" : "desktop",
-                    "title" : "Desktop View",
-                    "type" : "region"
-                  }, {
-                    "children" : [ {
-                      "attributes" : {
-                        "burgerIconHorizontalAlignment" : "left",
-                        "modalAccordionIconSize" : "xx-small",
-                        "modalActiveBackgroundColor" : "rgba(255, 255, 255, 0)",
-                        "modalActiveLineWeight" : "5px",
-                        "modalFontSizeOverride" : "",
-                        "modalFontWeightOverride" : "",
-                        "modalItemPadding" : "{\"top\":\"10px\",\"right\":\"10px\",\"bottom\":\"10px\",\"left\":\"15px\"}",
-                        "modalLineHeightOverride" : "",
-                        "modalMenuPadding" : "{\"top\":\"0px\",\"right\":\"0px\",\"bottom\":\"0px\",\"left\":\"0px\"}",
-                        "modalOverrideTextStyle" : false,
-                        "modalShowDividerLines" : true,
-                        "modalSubmenuFontSizeOverride" : "",
-                        "modalSubmenuFontWeightOverride" : "300",
-                        "modalSubmenuLineHeightOverride" : "",
-                        "modalSubmenuOverrideTextStyle" : true,
-                        "modalSubmenuTextDecorationOverride" : "",
-                        "modalSubmenuTextStyle" : "body-regular",
-                        "modalTextDecorationOverride" : "",
-                        "modalTextStyle" : "body-regular",
-                        "showHomeLink" : true
-                      },
-                      "definition" : "community_navigation:customizableNavigationHamburgerMenuContainer",
-                      "id" : "61bafee2-2219-423c-9f31-a01ceb0bcc7d",
-                      "type" : "component"
-                    } ],
-                    "id" : "392da2bf-75d6-4d27-8eb6-b410e427dd1e",
-                    "name" : "mobile",
-                    "title" : "Mobile View",
-                    "type" : "region"
-                  } ],
-                  "definition" : "community_navigation:customizableNavigationMenu",
-                  "id" : "d233c648-796e-4a9f-a2ef-2a9df12894aa",
-                  "type" : "component"
-                } ],
-                "id" : "4c146c1d-b32b-4044-aeef-d5ca8c2ee932",
-                "name" : "navigation",
-                "title" : "Add component",
-                "type" : "region"
-              }, {
-                "children" : [ {
-                  "attributes" : {
-                    "alignment" : "right",
-                    "size" : "standard",
-                    "stretch" : "standard",
-                    "text" : "Login",
-                    "type" : "primary",
-                    "url" : "{\"linkInfo\":{\"pageReference\":{\"type\":\"comm__namedPage\",\"attributes\":{\"name\":\"Login\"}}}}"
-                  },
-                  "definition" : "dxp_base:button",
-                  "id" : "03056e14-2a0d-45b4-a895-24dff7b62f3b",
-                  "type" : "component"
-                } ],
-                "id" : "6f22a759-d2ef-4485-8042-c1e169f6cc89",
-                "name" : "actions",
-                "title" : "Add component",
-                "type" : "region"
-              } ],
-              "definition" : "community_builder:customizableHeader",
-              "id" : "0831641d-21b0-4105-9396-c9cd2fd17bfa",
+              "attributes" : { },
+              "definition" : "c:rentitHeader",
+              "id" : "f0e1d2c3-b4a5-6789-0fed-cba987654321",
               "type" : "component"
             } ],
             "id" : "cd7d200b-ae84-4160-9f9a-eceefef2fc28",
@@ -199,6 +59,12 @@
             "sectionVerticalAlign" : "flex-start"
           },
           "children" : [ {
+            "children" : [ {
+              "attributes" : { },
+              "definition" : "c:rentitFooter",
+              "id" : "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+              "type" : "component"
+            } ],
             "id" : "7a3fb772-5337-45e9-b4e8-930e2cece9d9",
             "name" : "footerSection",
             "title" : "Theme Footer",

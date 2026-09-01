@@ -1,7 +1,7 @@
 # RentIt — Data Model & Administration Guide
 
 **API Version:** 62.0  
-**Last Updated:** 2026-08-31  
+**Last Updated:** 2026-09-01  
 **Author:** Aravindhan Vijayakumar
 
 ---
@@ -46,7 +46,7 @@ Account (Landlord)
                                               │
                             ┌─────────────────┼─────────────────────┐
                             │                 │                      │
-                  [MD: Property__c]   [Lookup: Property__c]  [Lookup: Property__c]
+              [Lookup: Property__c]   [Lookup: Property__c]  [Lookup: Property__c]
                             │                 │                      │
                         Tenancy__c         Notice__c              Case
                             │            (Audience: All Tenants)
@@ -78,9 +78,10 @@ Account (Person Account / Tenant)
 
 **Master-Detail Hierarchy:**
 ```
-Property__c  →  Tenancy__c  →  Invoice__c
-                           →  Payment__c
+Tenancy__c  →  Invoice__c
+            →  Payment__c
 ```
+> `Tenancy__c.Property__c` is a **Lookup** (not Master-Detail). Tenancy has its own OWD and sharing model.
 
 ---
 
@@ -117,7 +118,7 @@ Room `Status__c` is managed by Contract lifecycle Flows: Activated → Occupied;
 | Field | Type | Notes |
 |---|---|---|
 | `Name` | AutoNumber | TEN-{0000} |
-| `Property__c` | MasterDetail → Property__c | Primary parent; sharing ControlledByParent |
+| `Property__c` | Lookup → Property__c | deleteConstraint = SetNull; changed from Master-Detail — Tenancy now has its own OWD |
 | `Room__c` | Lookup → Room__c | Optional; filtered to rooms in same Property; populated when `Rent_a_room__c = true` |
 | `Tenant__c` | Lookup → Contact (required) | Filtered to RecordType.DeveloperName = Tenant_Contact |
 | `Tenant_Account__c` | Lookup → Account | Denormalized mirror of Tenant__r.AccountId; auto-set by Flow |
@@ -148,6 +149,10 @@ Room `Status__c` is managed by Contract lifecycle Flows: Activated → Occupied;
 | `Special_Conditions__c` | LongTextArea | Additional contract terms |
 
 > Contract has **no lookup to Property__c or Room__c**. Those are reached via `Contract.Tenancy__c`.
+
+> **Contract sharing with portal/external users**: The only supported mechanism is sharing the **Account** on the Contract with the external user. Sharing Sets and manual share records are not available for Contract.
+
+> **Activated Contract is locked**: Once `Status = Activated`, the Contract record becomes read-only in Salesforce. It cannot be edited via UI or standard DML.
 
 ### Invoice__c
 | Field | Type | Notes |
@@ -253,7 +258,8 @@ Record types: `Complaint`, `Maintenance_Request` — both accessible to tenants 
 | Contract Voided – Terminate Tenancy | Contract | Void_Reason__c newly set | Sets Tenancy = Terminated; Room = Available; sends termination email; creates Contract Termination Notice record |
 | Notice Published – Send Email | Notice__c | Status → Published | Sends email to Specific Tenant or loops all tenants in Property; sets Email_Sent__c = true and Email_Sent_Date__c |
 | Payment Received – Set Invoice Paid | Payment__c | Status → Received | Sets linked Invoice__c.Status = Paid |
-| Rent Payment Overdue – Create Arrears Notice | Invoice__c | Status → Overdue | Creates a Rent Arrears Notice on the Tenancy; sends overdue email to tenant |
+| Rent Invoice Unpaid – Task and Email | Invoice__c | Status newly → Unpaid | Sends "Invoice Now Unpaid" reminder email to tenant; creates a follow-up Task on Tenancy (Priority Normal, ActivityDate = today + 7 days) |
+| Rent Payment Overdue – Create Arrears Notice | Invoice__c | Status newly → Overdue | Creates a Rent Arrears Notice on the Tenancy; sends overdue email to tenant; creates an urgent follow-up Task on Tenancy (Priority High, ActivityDate = today + 3 days) |
 | Copy Mailing to Billing Address | Account | Before Save | When PersonAccount + Same_as_mailing_address__c = true + Mailing populated: copies Mailing → Billing address |
 
 ### Scheduled Flows (daily)
@@ -320,6 +326,7 @@ All templates are in the **RentIt Notifications** email folder.
 | Template | Sent To | Trigger |
 |---|---|---|
 | Rent Reminder — Due Tomorrow | Tenant | Daily scheduled flow (1 day before Due_Date__c) |
+| Rent Payment Reminder — Invoice Now Unpaid | Tenant | Rent Invoice Unpaid – Task and Email flow (Status → Unpaid) |
 | Rent Arrears — Invoice Overdue | Tenant | Invoice Overdue flow (Status → Overdue) |
 | Payment Pending Approval | Landlord | Approval process initial submission |
 | Payment Approved | Tenant | Approval process — final approval |
@@ -350,7 +357,7 @@ Assigned to: internal users (property managers, landlords)
 **Object Permissions:** CRUD + Modify All / View All on Invoice__c, Notice__c, Payment__c, Payment_Detail__c, Property__c, Room__c, Tenancy__c. Read + Create + Edit on Account, Case, Contact, Contract.
 
 **Notable field access:**
-- All Contract custom fields (Tenancy__c, Rent_Amount__c, Rent_Frequency__c, Deposit_Amount__c, Special_Conditions__c, Void_Reason__c, Tenant_Contact__c)
+- All Contract custom fields (Tenancy__c, Rent_Amount__c, Rent_Frequency__c, Deposit_Amount__c, Special_Conditions__c, Void_Reason__c) — `Tenant_Contact__c` is dormant/unused
 - All Tenancy__c financial rollups (Total_Received__c, Total_Arrears__c, Total_Unpaid__c, Total_Scheduled__c, Total_Credits__c) — read-only
 - Notice__c email tracking fields (Email_Sent__c, Email_Sent_Date__c) — read-only
 
@@ -359,11 +366,15 @@ Assigned to: internal users (property managers, landlords)
 ### RentIt_Tenant (Community)
 Assigned to: Experience Cloud community users
 
-**Object Permissions:** Read-only on Account, Contact, Invoice__c, Notice__c, Property__c, Room__c, Tenancy__c. Create + Edit on Case and Payment__c. No delete on any object.
+**Object Permissions:** Read-only on Account, Contact, Contract, Invoice__c, Notice__c, Property__c, Room__c, Tenancy__c. Create + Edit on Case and Payment__c. No delete on any object.
+
+**Contract field access (all read-only):** ContractNumber, Status, StartDate, EndDate, Tenancy__c, Rent_Amount__c, Rent_Frequency__c, Deposit_Amount__c, Special_Conditions__c.
 
 **Editable fields on Payment__c:** Comment__c and Payment_Reference__c only (all other fields are read-only after creation).
 
-**No access to:** ABN/GST fields on Account; Tenancy rollups beyond Available_Credits__c and Deposit_Amount__c; Notice tracking fields.
+**Property field access:** Address__c (compound — grants access to all sub-fields: Street, City, State, PostalCode, Country).
+
+**No access to:** ABN/GST fields on Account; Tenancy rollups beyond Available_Credits__c and Deposit_Amount__c; Notice tracking fields; Contract.Void_Reason__c.
 
 **Record Type Visibility:** Case.Complaint, Case.Maintenance_Request
 
@@ -378,11 +389,12 @@ Assigned to: Experience Cloud community users
 | **Advance payment support** | Batch checks for existing Invoice at Period_Start__c before creating; existing invoices are never duplicated |
 | **Financial visibility** | Tenancy shows Total Received, Arrears, Unpaid, and Scheduled via rollup summary fields on Invoice__c; Available Credits via formula |
 | **Rent reminder (1 day prior)** | Scheduled flow at 8 AM sends email and creates Rent Reminder Notice for Invoices due tomorrow |
-| **Arrears notices** | When an Invoice transitions to Overdue, a Rent Arrears Notice is auto-published and an email sent to tenant |
+| **Unpaid invoice notification** | When an Invoice transitions to Unpaid, an email is sent to the tenant and a follow-up Task (due in 7 days, Priority Normal) is created on the Tenancy |
+| **Arrears notices and tasks** | When an Invoice transitions to Overdue, a Rent Arrears Notice is auto-published, an email is sent to the tenant, and an urgent follow-up Task (due in 3 days, Priority High) is created on the Tenancy |
 | **Payment approval workflow** | Tenant sets Payment to Paid → submits for approval → landlord approves/rejects; Invoice marked Paid on approval |
 | **Contract lifecycle automation** | Contract Activated → Tenancy Active + Room Occupied; Contract Expired → Tenancy Expired + Room Available |
 | **Contract termination** | Setting Void_Reason__c → Tenancy Terminated + Room Available + termination email + Notice record |
 | **Notice delivery** | Published Notices trigger email to Specific Tenant or all tenants in a Property |
 | **Multi-channel communication** | All key events (rent due, overdue, payment submitted, approved, rejected, terminated) generate both email and an in-portal Notice record |
 | **GST support** | When landlord Account has GST_Registered__c = true, InvoiceBatch calculates GST_Amount__c (10%) on each Invoice |
-| **Experience Cloud access control** | Sharing Sets match `Tenancy__c.Tenant__c` (Contact) to `User.ContactId` — the Customer Community Plus standard pattern. Invoice__c and Payment__c inherit access via ControlledByParent. Specific-Tenant notices share via `Notice__c.Tenancy__c.Tenant__c`. All-Tenants notices share via a criteria-based sharing rule to the `RentIt_Community_Tenants` public group. |
+| **Experience Cloud access control** | Sharing Sets match `Tenancy__c.Tenant__c` (Contact) to `User.ContactId`. Tenancy__c has its own OWD (Property__c is now a Lookup, not Master-Detail). Invoice__c and Payment__c are ControlledByParent children of Tenancy__c and inherit sharing. Specific-Tenant notices share via `Notice__c.Tenancy__c.Tenant__c`. Contract does not support community Sharing Sets or manual share records — the only native mechanism is sharing the Contract's **Account** with the external user. Portal access is handled via `RentItPortalDataHelper` (`without sharing`) with tenancy-ownership validation. Activated Contracts are locked (read-only) in Salesforce. All-Tenants notices share via a criteria-based sharing rule to the `RentIt_Community_Tenants` public group. |

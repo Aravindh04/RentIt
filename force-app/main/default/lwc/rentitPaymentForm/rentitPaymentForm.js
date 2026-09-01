@@ -12,6 +12,8 @@ const PAYMENT_METHODS = [
     { label: 'Other',          value: 'Other' }
 ];
 
+const MAX_FILE_BYTES = 3 * 1024 * 1024; // 3 MB
+
 export default class RentitPaymentForm extends NavigationMixin(LightningElement) {
     @track tenancy;
     @track invoiceOptions = [];
@@ -21,14 +23,22 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
 
     isLoading    = true;
     isSubmitting = false;
+    paymentType  = 'invoice'; // 'invoice' | 'general'
 
-    // Form field values — only tenant-editable fields
+    // Form fields
     selectedInvoiceId = null;
     amount        = null;
     paymentDate   = null;
     paymentMethod = null;
     paymentReference = '';
     comment       = '';
+
+    // File state
+    selectedFile    = null;
+    imagePreviewUrl = null;
+    fileError       = null;
+    _base64Content  = null;
+    _contentType    = null;
 
     paymentMethodOptions = PAYMENT_METHODS;
 
@@ -60,16 +70,80 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
             });
     }
 
-    handleInvoiceChange(e)   { this.selectedInvoiceId = e.detail.value; }
-    handleAmountChange(e)    { this.amount = parseFloat(e.detail.value); }
-    handlePaymentDateChange(e) { this.paymentDate = e.detail.value; }
-    handleMethodChange(e)    { this.paymentMethod = e.detail.value; }
-    handleReferenceChange(e) { this.paymentReference = e.detail.value; }
-    handleCommentChange(e)   { this.comment = e.detail.value; }
+    // Payment type
+    get isInvoicePayment() { return this.paymentType === 'invoice'; }
+    get isGeneralPayment()  { return this.paymentType === 'general'; }
+    get btnInvoice() { return 'ri-type-btn' + (this.isInvoicePayment ? ' ri-type-btn--active' : ''); }
+    get btnGeneral()  { return 'ri-type-btn' + (this.isGeneralPayment  ? ' ri-type-btn--active' : ''); }
+    get successSubMessage() {
+        return this.paymentType === 'general'
+            ? 'Your payment has been submitted and will be credited to your account once approved.'
+            : 'Your payment has been submitted for landlord approval.';
+    }
 
+    handleTypeInvoice() { this.paymentType = 'invoice'; this.selectedInvoiceId = null; }
+    handleTypeGeneral()  { this.paymentType = 'general'; this.selectedInvoiceId = null; }
+
+    // Form field handlers
+    handleInvoiceChange(e)     { this.selectedInvoiceId = e.detail.value; }
+    handleAmountChange(e)      { this.amount = parseFloat(e.detail.value); }
+    handlePaymentDateChange(e) { this.paymentDate = e.detail.value; }
+    handleMethodChange(e)      { this.paymentMethod = e.detail.value; }
+    handleReferenceChange(e)   { this.paymentReference = e.detail.value; }
+    handleCommentChange(e)     { this.comment = e.detail.value; }
+
+    // File handlers
+    handleFileChange(event) {
+        this.fileError = null;
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        if (file.size > MAX_FILE_BYTES) {
+            this.fileError = 'File is too large. Maximum size is 3 MB.';
+            event.target.value = '';
+            return;
+        }
+        this.selectedFile = { name: file.name, size: file.size };
+        this._contentType = file.type;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const dataUrl = e.target.result;
+            this._base64Content = dataUrl.split(',')[1];
+            this.imagePreviewUrl = file.type.startsWith('image/') ? dataUrl : null;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    handleFileRemove() {
+        this.selectedFile    = null;
+        this._base64Content  = null;
+        this._contentType    = null;
+        this.imagePreviewUrl = null;
+        this.fileError       = null;
+        const input = this.template.querySelector('input[type="file"]');
+        if (input) input.value = '';
+    }
+
+    // Computed getters for file display
+    get selectedFileName() {
+        return this.selectedFile?.name || '';
+    }
+
+    get selectedFileSizeFormatted() {
+        const bytes = this.selectedFile?.size || 0;
+        if (bytes < 1024)       return `${bytes} B`;
+        if (bytes < 1048576)    return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / 1048576).toFixed(1)} MB`;
+    }
+
+    get screenshotAttached() {
+        return !!this._base64Content;
+    }
+
+    // Submit
     handleSubmit() {
         this.formError = null;
-        if (!this.selectedInvoiceId || !this.amount || !this.paymentDate || !this.paymentMethod) {
+        const invoiceRequired = this.isInvoicePayment && !this.selectedInvoiceId;
+        if (invoiceRequired || !this.amount || !this.paymentDate || !this.paymentMethod) {
             this.formError = 'Please fill in all required fields.';
             return;
         }
@@ -81,12 +155,15 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
         this.isSubmitting = true;
         submitPayment({
             tenancyId:        this.tenancy.Id,
-            invoiceId:        this.selectedInvoiceId,
+            invoiceId:        this.isInvoicePayment ? this.selectedInvoiceId : null,
             amount:           this.amount,
             paymentDate:      this.paymentDate,
             paymentMethod:    this.paymentMethod,
             paymentReference: this.paymentReference,
-            comment:          this.comment
+            comment:          this.comment,
+            base64Content:    this._base64Content || null,
+            fileName:         this.selectedFile?.name || null,
+            contentType:      this._contentType || null
         })
             .then(paymentId => {
                 this.submittedId = paymentId;

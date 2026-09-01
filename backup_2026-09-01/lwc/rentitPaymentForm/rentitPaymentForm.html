@@ -1,0 +1,104 @@
+<template>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="utility:money" size="small" alternative-text="Payment"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">Make a Payment</h2>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Success State -->
+            <template if:true={submitSuccess}>
+                <div class="ri-success">
+                    <div class="ri-success__icon">
+                        <lightning-icon icon-name="utility:success" size="large" alternative-text="Success"></lightning-icon>
+                    </div>
+                    <h3 class="ri-success__title">Payment Submitted</h3>
+                    <p class="ri-success__sub">Your payment has been submitted for landlord approval.</p>
+                    <span class="ri-success__ref">Reference: {submittedId}</span>
+                </div>
+            </template>
+
+            <!-- Form -->
+            <template if:false={submitSuccess}>
+                <div class="ri-card__body">
+                    <p class="ri-section-label">Invoice Details</p>
+                    <lightning-combobox
+                        label="Select Invoice"
+                        value={selectedInvoiceId}
+                        options={invoiceOptions}
+                        onchange={handleInvoiceChange}
+                        required>
+                    </lightning-combobox>
+
+                    <hr class="ri-divider"/>
+                    <p class="ri-section-label">Payment Details</p>
+
+                    <div class="ri-field-row">
+                        <lightning-input
+                            type="number"
+                            label="Amount (AUD)"
+                            value={amount}
+                            onchange={handleAmountChange}
+                            min="0.01"
+                            step="0.01"
+                            required>
+                        </lightning-input>
+                        <lightning-input
+                            type="date"
+                            label="Payment Date"
+                            value={paymentDate}
+                            onchange={handlePaymentDateChange}
+                            required>
+                        </lightning-input>
+                        <lightning-combobox
+                            label="Payment Method"
+                            value={paymentMethod}
+                            options={paymentMethodOptions}
+                            onchange={handleMethodChange}
+                            required>
+                        </lightning-combobox>
+                        <lightning-input
+                            type="text"
+                            label="Payment Reference"
+                            value={paymentReference}
+                            onchange={handleReferenceChange}
+                            maxlength="255"
+                            placeholder="Bank transaction ID or receipt">
+                        </lightning-input>
+                        <div class="ri-full-width">
+                            <lightning-input
+                                type="textarea"
+                                label="Comment (optional)"
+                                value={comment}
+                                onchange={handleCommentChange}
+                                max-length="1000"
+                                placeholder="Any additional notes for the landlord">
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <template if:true={formError}>
+                        <div class="ri-error-msg">{formError}</div>
+                    </template>
+
+                    <div class="ri-actions">
+                        <lightning-button
+                            label="Submit Payment"
+                            variant="brand"
+                            onclick={handleSubmit}
+                            disabled={isSubmitting}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,19 @@
+<template>
+    <div class="ri-support-tabs">
+        <button class={tabComplaint} onclick={handleTabComplaint}>
+            <lightning-icon icon-name="utility:warning" size="xx-small" alternative-text="Complaint"></lightning-icon>
+            &nbsp;Raise a Complaint
+        </button>
+        <button class={tabMaintenance} onclick={handleTabMaintenance}>
+            <lightning-icon icon-name="utility:tools" size="xx-small" alternative-text="Maintenance"></lightning-icon>
+            &nbsp;Maintenance Request
+        </button>
+    </div>
+
+    <template if:true={isComplaint}>
+        <c-rentit-complaint-form></c-rentit-complaint-form>
+    </template>
+    <template if:true={isMaintenance}>
+        <c-rentit-maintenance-form></c-rentit-maintenance-form>
+    </template>
+</template>

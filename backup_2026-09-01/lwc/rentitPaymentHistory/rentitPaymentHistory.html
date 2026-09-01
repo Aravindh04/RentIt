@@ -1,0 +1,80 @@
+<template>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:payment_gateway" size="small" alternative-text="Payments"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">Payment History</h2>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="ri-filter-tabs">
+            <button class={tabAll}      onclick={handleTabAll}>All</button>
+            <button class={tabPending}  onclick={handleTabPending}>Pending Approval</button>
+            <button class={tabReceived} onclick={handleTabReceived}>Received</button>
+            <button class={tabRejected} onclick={handleTabRejected}>Rejected</button>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap">
+                <lightning-spinner alternative-text="Loading payments" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="ri-error-msg">{error}</div>
+        </template>
+
+        <template if:true={hasPayments}>
+            <div class="ri-table-wrap">
+                <table class="ri-table">
+                    <thead>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={filteredPayments} for:item="pmt">
+                            <tr key={pmt.Id}>
+                                <td class="ri-td--ref">{pmt.Payment_Reference__c}</td>
+                                <td class="ri-td--amount">
+                                    <lightning-formatted-number
+                                        value={pmt.Amount__c}
+                                        format-style="currency"
+                                        currency-code="AUD"
+                                        minimum-fraction-digits="2">
+                                    </lightning-formatted-number>
+                                </td>
+                                <td>
+                                    <lightning-formatted-date-time
+                                        value={pmt.Payment_Date__c}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </td>
+                                <td>{pmt.Payment_Method__c}</td>
+                                <td>
+                                    <span class="ri-status" data-status={pmt.Status__c}>{pmt.Status__c}</span>
+                                </td>
+                                <td class="ri-td--comment">{pmt.Comment__c}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template if:false={hasPayments}>
+            <template if:false={isLoading}>
+                <div class="ri-empty-state">
+                    <lightning-icon icon-name="utility:list" size="large" alternative-text="No payments"></lightning-icon>
+                    <p>No payments found for the selected filter.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

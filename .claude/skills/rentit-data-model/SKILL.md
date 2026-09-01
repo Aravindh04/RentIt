@@ -8,10 +8,11 @@ description: RentIT object model and relationships. Use for any work involving P
 Account (Landlord)
  └── Property__c       (Landlord__c → Account)
       └── Room__c       (Property__c master-detail)
-           └── Tenancy__c (Property__c master-detail; Room__c lookup — optional)
-                ├── Invoice__c     (Tenancy__c master-detail)
-                │    └── Payment__c (Tenancy__c master-detail; Invoice__c lookup — optional)
-                └── Notice__c      (Tenancy__c lookup — optional)
+
+Tenancy__c             (Property__c lookup; Room__c lookup — optional)
+ ├── Invoice__c        (Tenancy__c master-detail)
+ │    └── Payment__c   (Tenancy__c master-detail; Invoice__c lookup — optional)
+ └── Notice__c         (Tenancy__c lookup — optional)
 
 Account (Tenant — PersonAccount)
  └── Payment_Detail__c (Account__c master-detail)
@@ -62,7 +63,7 @@ Case (record types: Complaint, Maintenance_Request)
 | Field | Type | Notes |
 |---|---|---|
 | `Name` | AutoNumber | TEN-{0000} |
-| `Property__c` | MasterDetail → Property__c | Primary parent; relationshipOrder=0 |
+| `Property__c` | Lookup → Property__c | deleteConstraint=SetNull; not master-detail (changed from MD) |
 | `Room__c` | Lookup → Room__c | deleteConstraint=SetNull; lookup filter restricts to rooms in same Property; populated when `Rent_a_room__c = true` |
 | `Tenant__c` | Lookup → Contact (required) | Lookup filter: RecordType.DeveloperName = Tenant_Contact |
 | `Tenant_Account__c` | Lookup → Account | Denormalized mirror of Tenant__r.AccountId; auto-set by Flow |
@@ -185,8 +186,9 @@ Record types: `Complaint`, `Maintenance_Request` — both visible to `RentIt_Ten
 | `Copy_Mailing_to_Billing_Address` | Record Before Save on Account | When PersonAccount + Same_as_mailing_address__c = true: copies Mailing → Billing address |
 | `Notice_Published_Send_Email` | Record After Save (Status → Published) on Notice__c | Sends email to Specific Tenant or loops all tenants in Property; sets Email_Sent__c = true |
 | `Payment_Received_Set_Invoice_Paid` | Record After Save (Status → Received) on Payment__c | Sets linked Invoice.Status = Paid |
+| `Rent_Invoice_Unpaid_Task_And_Email` | Record After Save (Status newly → Unpaid) on Invoice__c | Sends "Invoice Now Unpaid" email to tenant; creates follow-up Task on Tenancy (Priority Normal, due +7 days) |
 | `Rent_Payment_Due_Tomorrow_Reminder` | Scheduled daily 8 AM on Invoice__c | For Scheduled/Unpaid invoices due tomorrow: sends reminder email + creates Rent Reminder Notice |
-| `Rent_Payment_Overdue_Create_Notice` | Record After Save (Status → Overdue) on Invoice__c | Creates Rent Arrears Notice on Tenancy; sends arrears email to tenant |
+| `Rent_Payment_Overdue_Create_Notice` | Record After Save (Status newly → Overdue) on Invoice__c | Creates Rent Arrears Notice on Tenancy; sends arrears email to tenant; creates urgent follow-up Task (Priority High, due +3 days) |
 | `Rent_Payment_Scheduled_To_Unpaid` | Scheduled daily on Invoice__c | Transitions Scheduled → Unpaid when Due_Date ≤ today |
 
 ### Approval Process
@@ -208,8 +210,12 @@ Payment__c has a landlord approval process:
 
 ## Experience Cloud Access
 - Sharing Sets use `Tenancy__c.Tenant__c` (Contact lookup) matched against `User.ContactId` — the standard Customer Community Plus pattern
-- Tenancy__c and its ControlledByParent children (Invoice__c, Payment__c) are shared via this path
+- Tenancy__c has its own OWD (no longer ControlledByParent — Property__c relationship is now a Lookup); shared with tenants via the Sharing Set
+- Invoice__c and Payment__c are ControlledByParent children of Tenancy__c and inherit its sharing
 - Notice__c (Specific Tenant) is shared via the indirect path `Notice__c.Tenancy__c.Tenant__c → User.ContactId`
+- Contract is accessed via `RentItPortalDataHelper` (`without sharing` class) — Contract does not support community Sharing Sets or manual share records
+- **Contract sharing with portal/external users**: the only supported mechanism is sharing the **Account** on the Contract; if the landlord Account is shared with the tenant user, the Contract becomes accessible
+- **Activated Contracts are locked**: once `Status = Activated`, the Contract record is read-only in Salesforce and cannot be edited via UI or standard DML
 - "All Tenants in Property" notices are shared via a criteria-based sharing rule (Published + Audience = All Tenants) to the `RentIt_Community_Tenants` public group
 - Property__c (Private OWD) is shared read-only to all tenants via a criteria-based sharing rule; Room__c inherits via ControlledByParent
 
@@ -219,4 +225,4 @@ Payment__c has a landlord approval process:
 | Permission Set | Objects | Notes |
 |---|---|---|
 | `RentIt_Landlord` | CRUD + Modify All / View All on all custom objects; Read+Create+Edit on Account, Case, Contact, Contract | Full portfolio management |
-| `RentIt_Tenant` | Read-only on Account, Contact, Invoice__c, Notice__c, Property__c, Room__c, Tenancy__c; Create+Edit on Case and Payment__c | Editable Payment fields: Comment__c and Payment_Reference__c only |
+| `RentIt_Tenant` | Read-only on Account, Contact, Contract, Invoice__c, Notice__c, Property__c, Room__c, Tenancy__c; Create+Edit on Case and Payment__c | Contract access: ContractNumber, Status, StartDate, EndDate, Rent_Amount__c, Rent_Frequency__c, Deposit_Amount__c, Special_Conditions__c (all read-only). Property field: Address__c (compound). Editable Payment fields: Comment__c and Payment_Reference__c only |

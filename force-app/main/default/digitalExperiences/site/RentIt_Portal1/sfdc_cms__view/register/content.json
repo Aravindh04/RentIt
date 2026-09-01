@@ -21,17 +21,17 @@
           "children" : [ {
             "children" : [ {
               "attributes" : {
-                "alignment" : "left",
+                "alignment" : "center",
                 "imageInfo" : "",
                 "imageInfoMobile" : "",
-                "logoWidth" : 250
+                "logoWidth" : 200
               },
               "definition" : "dxp_content_layout:siteLogo",
               "id" : "b69e2d25-5e8c-4a1c-ba73-c5df39d42646",
               "type" : "component"
             }, {
               "attributes" : {
-                "cancelLinkLabel" : "Already have an account?",
+                "cancelLinkLabel" : "Back to Login",
                 "confirmPasswordLabel" : "Confirm Password",
                 "emailLabel" : "Email",
                 "firstnameLabel" : "First Name",

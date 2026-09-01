@@ -2,36 +2,26 @@ import { LightningElement, wire, track } from 'lwc';
 import getActiveTenancy from '@salesforce/apex/RentItPortalController.getActiveTenancy';
 import getPayments from '@salesforce/apex/RentItPortalController.getPayments';
 
-const COLUMNS = [
-    { label: 'Reference',      fieldName: 'Payment_Reference__c', type: 'text' },
-    { label: 'Amount',         fieldName: 'Amount__c',            type: 'currency',
-      typeAttributes: { currencyCode: 'AUD', minimumFractionDigits: 2 } },
-    { label: 'Payment Date',   fieldName: 'Payment_Date__c',      type: 'date' },
-    { label: 'Method',         fieldName: 'Payment_Method__c',    type: 'text' },
-    { label: 'Status',         fieldName: 'Status__c',            type: 'text' },
-    { label: 'Comment',        fieldName: 'Comment__c',           type: 'text' }
-];
-
 export default class RentitPaymentHistory extends LightningElement {
     @track payments = [];
     @track error;
-    isLoading = true;
-    activeTab = 'all';
-    columns = COLUMNS;
+    isLoading       = true;
+    activeTab       = 'all';
+    selectedPayment = null;
 
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
         if (data) {
-            this._loadPayments(data.Id, null);
+            this._loadPayments(data.Id);
         } else if (error) {
             this.error = 'Unable to load tenancy information.';
             this.isLoading = false;
         }
     }
 
-    _loadPayments(tenancyId, statusFilter) {
+    _loadPayments(tenancyId) {
         this.isLoading = true;
-        getPayments({ tenancyId, statusFilter: statusFilter || '' })
+        getPayments({ tenancyId, statusFilter: '' })
             .then(data => {
                 this.payments = data;
                 this.isLoading = false;
@@ -42,8 +32,19 @@ export default class RentitPaymentHistory extends LightningElement {
             });
     }
 
-    handleTabChange(e) {
-        this.activeTab = e.target.value;
+    // Tab handlers
+    handleTabAll()      { this.activeTab = 'all'; }
+    handleTabPending()  { this.activeTab = 'Pending Approval'; }
+    handleTabReceived() { this.activeTab = 'Received'; }
+    handleTabRejected() { this.activeTab = 'Rejected'; }
+
+    get tabAll()      { return this._tabClass('all'); }
+    get tabPending()  { return this._tabClass('Pending Approval'); }
+    get tabReceived() { return this._tabClass('Received'); }
+    get tabRejected() { return this._tabClass('Rejected'); }
+
+    _tabClass(tab) {
+        return 'ri-tab' + (this.activeTab === tab ? ' ri-tab--active' : '');
     }
 
     get filteredPayments() {
@@ -52,7 +53,14 @@ export default class RentitPaymentHistory extends LightningElement {
         return this.payments.filter(p => p.Status__c === this.activeTab);
     }
 
-    get hasPayments() {
-        return this.filteredPayments.length > 0;
+    get hasPayments()  { return this.filteredPayments.length > 0; }
+    get showList()     { return !this.selectedPayment; }
+    get showDetail()   { return !!this.selectedPayment; }
+
+    handlePaymentSelect(event) {
+        const id = event.currentTarget.dataset.id;
+        this.selectedPayment = this.payments.find(p => p.Id === id) || null;
     }
+
+    handleCloseDetail() { this.selectedPayment = null; }
 }

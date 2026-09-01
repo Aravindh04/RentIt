@@ -81,6 +81,13 @@
                     <stringValue>Overdue</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Overdue</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Tenancy</targetReference>
             </connector>
@@ -109,8 +116,13 @@
             <label>Tenancy Found</label>
         </rules>
     </decisions>
-    <description>When a Rent Payment status changes to Overdue, creates a Rent Arrears Notice on the Tenancy and sends an email to the tenant.</description>
+    <description>When a Rent Payment status changes to Overdue, creates a Rent Arrears Notice on the Tenancy, sends an urgent email to the tenant, and creates a high-priority Task for the property manager.</description>
     <environments>Default</environments>
+    <formulas>
+        <name>varOverdueFollowUpDate</name>
+        <dataType>Date</dataType>
+        <expression>$Flow.CurrentDate + 3</expression>
+    </formulas>
     <interviewLabel>Rent Payment Overdue – Create Notice {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Rent Payment Overdue – Create Arrears Notice</label>
     <processMetadataValues>
@@ -131,6 +143,9 @@
         <label>Create Rent Arrears Notice</label>
         <locationX>182</locationX>
         <locationY>1055</locationY>
+        <connector>
+            <targetReference>Create_Overdue_Task</targetReference>
+        </connector>
         <inputAssignments>
             <field>Audience__c</field>
             <value>
@@ -187,6 +202,55 @@
         </inputAssignments>
         <object>Notice__c</object>
     </recordCreates>
+    <recordCreates>
+        <name>Create_Overdue_Task</name>
+        <label>Create Overdue Follow-Up Task</label>
+        <locationX>182</locationX>
+        <locationY>1163</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>varOverdueFollowUpDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>tmplOverdueTaskDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Overdue Rent – Urgent Follow Up</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>varTenancy.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>varContact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordCreates>
     <recordLookups>
         <name>Get_Tenancy</name>
         <label>Get Tenancy</label>
@@ -209,6 +273,7 @@
         <queriedFields>Id</queriedFields>
         <queriedFields>Tenant__c</queriedFields>
         <queriedFields>Property__c</queriedFields>
+        <queriedFields>Name</queriedFields>
         <queriedFields>Total_Arrears__c</queriedFields>
     </recordLookups>
     <recordLookups>
@@ -253,7 +318,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <textTemplates>
         <name>tmplArrearsBody</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
@@ -263,9 +328,9 @@ Your rent payment ({!$Record.Name}) of ${!$Record.Amount__c} was due on {!$Recor
 
 Total current arrears on your tenancy: ${!varTenancy.Total_Arrears__c}
 
-Please make payment immediately and log into the tenant portal to mark your payment as Paid and submit it for approval.
+Please make payment immediately and log into the tenant portal to submit your payment for approval.
 
-If you are experiencing financial difficulty, please contact your property manager immediately.
+If you are experiencing financial difficulty, please contact your property manager immediately. Continued non-payment may result in formal breach proceedings.
 
 Regards,
 RentIt Property Management</text>
@@ -276,6 +341,11 @@ RentIt Property Management</text>
         <text>Your rent payment of ${!$Record.Amount__c} (Invoice: {!$Record.Name}), due on {!$Record.Due_Date__c}, is now overdue.
 
 Please arrange payment immediately and update your payment record in the portal. Continued non-payment may result in formal breach proceedings.</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tmplOverdueTaskDescription</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Invoice {!$Record.Name} (Amount: ${!$Record.Amount__c}, Due: {!$Record.Due_Date__c}) is now OVERDUE for Tenancy {!varTenancy.Name}. Total arrears: ${!varTenancy.Total_Arrears__c}. Contact the tenant urgently and consider formal breach notice if no response.</text>
     </textTemplates>
     <variables>
         <name>varContact</name>

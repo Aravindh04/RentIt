@@ -3,10 +3,11 @@
  *
  * Security contract:
  *  - All methods use WITH SHARING — community user sharing rules apply.
- *  - Never use without sharing in community-exposed controllers.
- *  - Field-level security is enforced by the UI API (@wire) and by
- *    enforcing FLS manually when using Database.query.
- *  - Tenants may only write Payment__c.Comment__c and Payment__c.Payment_Reference__c.
+ *  - Tenant isolation: Tenancy__c.Tenant__c (Contact) matched against
+ *    the running user's ContactId. Path: Tenancy__c.Tenant__c → Contact
+ *    ← User.ContactId.
+ *  - Field-level security enforced by WITH USER_MODE on reads, and by
+ *    Security.stripInaccessible on writes.
  */
 public with sharing class RentItPortalController {
 
@@ -15,21 +16,26 @@ public with sharing class RentItPortalController {
     // ──────────────────────────────────────────────────────────────
 
     /**
-     * Returns the active Tenancy record for the running community user.
-     * The Sharing Set on Tenancy__c (keyed on Community_User__c) grants read access.
+     * Returns the active Tenancy for the running community user.
+     * Matches via Tenant__c (Contact lookup) = User.ContactId.
      */
     @AuraEnabled(cacheable=true)
     public static Tenancy__c getActiveTenancy() {
         return [
             SELECT Id, Name, Status__c,
                    Property__c, Property__r.Name,
+                   Property__r.Address__Street__s, Property__r.Address__City__s,
+                   Property__r.Address__StateCode__s, Property__r.Address__PostalCode__s,
+                   Property__r.Address__CountryCode__s,
+                   Property__r.Description__c,
                    Room__c, Room__r.Name,
+                   Room__r.Room_Size__c, Room__r.Weekly_Rent__c, Room__r.Facilities__c,
                    Available_Credits__c, Total_Arrears__c,
                    Deposit_Amount__c, Total_Credits__c,
                    Total_Received__c, Total_Unpaid__c,
-                   Community_User__c
+                   Tenant__c
             FROM   Tenancy__c
-            WHERE  Community_User__c = :UserInfo.getUserId()
+            WHERE  Tenant__c IN (SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId())
               AND  Status__c = 'Active'
             WITH USER_MODE
             LIMIT  1
@@ -37,16 +43,42 @@ public with sharing class RentItPortalController {
     }
 
     // ──────────────────────────────────────────────────────────────
+    // Tenant — Profile (Contact linked to running community user)
+    // ──────────────────────────────────────────────────────────────
+
+    @AuraEnabled(cacheable=true)
+    public static Contact getContactProfile() {
+        List<Contact> contacts = [
+            SELECT Id, FirstName, LastName, Email, Phone, MobilePhone,
+                   MailingStreet, MailingCity, MailingState,
+                   MailingPostalCode, MailingCountry,
+                   Account.ABN__c, Account.GST_Number__c, Account.GST_Registered__c
+            FROM   Contact
+            WHERE  Id IN (SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId())
+            WITH USER_MODE
+            LIMIT  1
+        ];
+        return contacts.isEmpty() ? null : contacts[0];
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // Tenant — Contract
+    // ──────────────────────────────────────────────────────────────
+
+    @AuraEnabled(cacheable=true)
+    public static Contract getContract(Id tenancyId) {
+        if (tenancyId == null) return null;
+        return RentItPortalDataHelper.getContractForTenancy(tenancyId);
+    }
+
+    // ──────────────────────────────────────────────────────────────
     // Tenant — Invoices
     // ──────────────────────────────────────────────────────────────
 
-    /**
-     * Returns all invoices for the running tenant's active tenancy.
-     */
     @AuraEnabled(cacheable=true)
     public static List<Invoice__c> getInvoices(Id tenancyId) {
         return [
-            SELECT Id, Name, Period_Start__c, Period_End__c,
+            SELECT Id, Name, Category__c, Period_Start__c, Period_End__c,
                    Total_Amount__c, Total_Paid__c, Balance_Due__c,
                    GST_Amount__c, Status__c, Due_Date__c
             FROM   Invoice__c
@@ -60,11 +92,6 @@ public with sharing class RentItPortalController {
     // Tenant — Payments
     // ──────────────────────────────────────────────────────────────
 
-    /**
-     * Returns payment records for the running tenant, optionally filtered by Status.
-     * @param tenancyId  The active tenancy Id.
-     * @param statusFilter  Pass null/empty string to return all statuses.
-     */
     @AuraEnabled(cacheable=true)
     public static List<Payment__c> getPayments(Id tenancyId, String statusFilter) {
         if (String.isNotBlank(statusFilter)) {
@@ -92,38 +119,46 @@ public with sharing class RentItPortalController {
 
     /**
      * Submits a new payment on behalf of the tenant.
-     * Tenants may only supply: Amount__c, Payment_Date__c, Payment_Method__c,
-     * Payment_Reference__c, Comment__c. Status is forced to Pending.
+     * Status is forced to 'Pending' — tenants cannot set their own approval status.
      */
     @AuraEnabled
     public static Id submitPayment(Id tenancyId, Id invoiceId,
                                    Decimal amount, Date paymentDate,
                                    String paymentMethod, String paymentReference,
-                                   String comment) {
+                                   String comment,
+                                   String base64Content, String fileName, String contentType) {
         Payment__c pmt = new Payment__c(
-            Tenancy__c          = tenancyId,
-            Invoice__c          = invoiceId,
-            Amount__c           = amount,
-            Payment_Date__c     = paymentDate,
-            Payment_Method__c   = paymentMethod,
+            Tenancy__c           = tenancyId,
+            Invoice__c           = invoiceId,
+            Amount__c            = amount,
+            Payment_Date__c      = paymentDate,
+            Payment_Method__c    = paymentMethod,
             Payment_Reference__c = paymentReference,
-            Comment__c          = comment,
-            Status__c           = 'Pending'
+            Comment__c           = comment,
+            Status__c            = 'Pending'
         );
-        // Verify FLS before insert
         SObjectAccessDecision decision = Security.stripInaccessible(
             AccessType.CREATABLE, new List<Payment__c>{ pmt });
         insert decision.getRecords();
-        return ((Payment__c) decision.getRecords()[0]).Id;
+        Id paymentId = ((Payment__c) decision.getRecords()[0]).Id;
+
+        if (String.isNotBlank(base64Content)) {
+            ContentVersion cv = new ContentVersion(
+                Title                  = String.isNotBlank(fileName) ? fileName : 'Payment Screenshot',
+                PathOnClient           = String.isNotBlank(fileName) ? fileName : 'screenshot.jpg',
+                VersionData            = EncodingUtil.base64Decode(base64Content),
+                FirstPublishLocationId = paymentId
+            );
+            insert cv;
+        }
+
+        return paymentId;
     }
 
     // ──────────────────────────────────────────────────────────────
     // Tenant — Notices
     // ──────────────────────────────────────────────────────────────
 
-    /**
-     * Returns active notices for the running tenant's tenancy.
-     */
     @AuraEnabled(cacheable=true)
     public static List<Notice__c> getNotices(Id tenancyId) {
         return [
@@ -142,10 +177,6 @@ public with sharing class RentItPortalController {
     // Landlord — Portfolio summary
     // ──────────────────────────────────────────────────────────────
 
-    /**
-     * Returns aggregate portfolio stats for the landlord dashboard.
-     * Landlord sees all Tenancy records via Profile-based visibility.
-     */
     @AuraEnabled(cacheable=true)
     public static Map<String, Object> getPortfolioSummary() {
         Map<String, Object> result = new Map<String, Object>();
@@ -165,15 +196,10 @@ public with sharing class RentItPortalController {
         }
 
         result.put('pendingPayments', [
-            SELECT COUNT() FROM Payment__c
-            WHERE Status__c = 'Pending'
-            WITH USER_MODE
+            SELECT COUNT() FROM Payment__c WHERE Status__c = 'Pending' WITH USER_MODE
         ]);
-
         result.put('activeNotices', [
-            SELECT COUNT() FROM Notice__c
-            WHERE Status__c = 'Active'
-            WITH USER_MODE
+            SELECT COUNT() FROM Notice__c WHERE Status__c = 'Active' WITH USER_MODE
         ]);
 
         return result;
@@ -218,9 +244,6 @@ public with sharing class RentItPortalController {
         ];
     }
 
-    /**
-     * Approve or reject a payment. newStatus must be 'Approved' or 'Rejected'.
-     */
     @AuraEnabled
     public static void updatePaymentStatus(Id paymentId, String newStatus) {
         if (newStatus != 'Approved' && newStatus != 'Rejected') {

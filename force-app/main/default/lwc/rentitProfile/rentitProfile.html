@@ -1,0 +1,112 @@
+<template>
+    <div class="ri-profile-card">
+
+        <!-- Avatar + Name header -->
+        <div class="ri-profile-header">
+            <div class="ri-profile-avatar">
+                <template if:true={hasPhoto}>
+                    <img src={userPhotoUrl} alt="Profile photo" class="ri-profile-photo" />
+                </template>
+                <template if:false={hasPhoto}>
+                    <span class="ri-profile-initial">{userInitial}</span>
+                </template>
+            </div>
+            <div class="ri-profile-header__info">
+                <h2 class="ri-profile-header__name">{userName}</h2>
+                <p class="ri-profile-header__email">{userEmail}</p>
+            </div>
+        </div>
+
+        <!-- Account Details -->
+        <div class="ri-info-section">
+            <div class="ri-section-header">
+                <lightning-icon icon-name="utility:user" size="x-small" alternative-text="Account"></lightning-icon>
+                <h3>Account Details</h3>
+            </div>
+            <div class="ri-detail-grid">
+                <div class="ri-detail-row">
+                    <span class="ri-detail-label">Title</span>
+                    <span class="ri-detail-value">{userTitle}</span>
+                </div>
+                <div class="ri-detail-row">
+                    <span class="ri-detail-label">Department</span>
+                    <span class="ri-detail-value">{userDepartment}</span>
+                </div>
+                <div class="ri-detail-row">
+                    <span class="ri-detail-label">Phone</span>
+                    <span class="ri-detail-value">{userPhone}</span>
+                </div>
+                <div class="ri-detail-row">
+                    <span class="ri-detail-label">Last Login</span>
+                    <span class="ri-detail-value">
+                        <template if:true={userLastLogin}>
+                            <lightning-formatted-date-time
+                                value={userLastLogin}
+                                year="numeric" month="short" day="2-digit"
+                                hour="2-digit" minute="2-digit">
+                            </lightning-formatted-date-time>
+                        </template>
+                        <template if:false={userLastLogin}>—</template>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <template if:true={hasContact}>
+            <div class="ri-info-section">
+                <div class="ri-section-header">
+                    <lightning-icon icon-name="utility:contact" size="x-small" alternative-text="Contact"></lightning-icon>
+                    <h3>Contact Information</h3>
+                </div>
+                <div class="ri-detail-grid">
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Full Name</span>
+                        <span class="ri-detail-value">{contactName}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Email</span>
+                        <span class="ri-detail-value">{contactEmail}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Phone</span>
+                        <span class="ri-detail-value">{contactPhone}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Mobile</span>
+                        <span class="ri-detail-value">{contactMobile}</span>
+                    </div>
+                </div>
+                <template if:true={contactAddress}>
+                    <div class="ri-detail-row ri-detail-row--address">
+                        <span class="ri-detail-label">Mailing Address</span>
+                        <span class="ri-detail-value">{contactAddress}</span>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Business / Tax Details -->
+            <div class="ri-info-section">
+                <div class="ri-section-header">
+                    <lightning-icon icon-name="utility:company" size="x-small" alternative-text="Business"></lightning-icon>
+                    <h3>Business &amp; Tax Details</h3>
+                </div>
+                <div class="ri-detail-grid ri-detail-grid--3">
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">ABN</span>
+                        <span class="ri-detail-value">{abn}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">GST Registered</span>
+                        <span class="ri-detail-value">{gstRegistered}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">GST Number</span>
+                        <span class="ri-detail-value">{gstNumber}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

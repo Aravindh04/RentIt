@@ -6,6 +6,7 @@ export default class RentitNoticeList extends LightningElement {
     @track notices = [];
     @track error;
     isLoading = true;
+    selectedNotice = null;
 
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
@@ -32,4 +33,14 @@ export default class RentitNoticeList extends LightningElement {
     get hasNotices() {
         return this.notices && this.notices.length > 0;
     }
+
+    get showList()   { return !this.selectedNotice; }
+    get showDetail() { return !!this.selectedNotice; }
+
+    handleNoticeSelect(event) {
+        const id = event.currentTarget.dataset.id;
+        this.selectedNotice = this.notices.find(n => n.Id === id) || null;
+    }
+
+    handleCloseDetail() { this.selectedNotice = null; }
 }

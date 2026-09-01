@@ -32,6 +32,10 @@ export default class RentitMaintenanceForm extends LightningElement {
     get tenancyId()         { return this.tenancy?.Id; }
     get tenancyPropertyId() { return this.tenancy?.Property__c; }
     get tenancyRoomId()     { return this.tenancy?.Room__c; }
+    get contextLabel() {
+        const parts = [this.tenancy?.Property__r?.Name, this.tenancy?.Room__r?.Name].filter(Boolean);
+        return parts.length ? parts.join(' · ') : '';
+    }
 
     handleSuccess(e) {
         this.submittedCaseNumber = e.detail.fields?.CaseNumber?.value || e.detail.id;

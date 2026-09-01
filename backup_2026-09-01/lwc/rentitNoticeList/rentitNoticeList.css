@@ -1,0 +1,147 @@
+.ri-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.ri-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.75rem;
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+    color: #fff;
+}
+
+.ri-card__header-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ri-card__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.ri-notices-body {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Notice item card */
+.ri-notice {
+    border: 1px solid #dce3ee;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+}
+
+.ri-notice:hover {
+    box-shadow: 0 4px 16px rgba(13, 45, 107, 0.10);
+}
+
+.ri-notice__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.1rem;
+    background: #F7F9FC;
+    border-bottom: 1px solid #EEF2F7;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ri-notice__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0d2d6b;
+    margin: 0;
+}
+
+.ri-notice__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Notice type badge */
+.ri-notice-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2em 0.7em;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ri-notice-type[data-type="Urgent"]              { background: #FFEBEE; color: #B71C1C; }
+.ri-notice-type[data-type="Rent Arrears"]        { background: #FFEBEE; color: #B71C1C; }
+.ri-notice-type[data-type="Eviction Notice"]     { background: #FFEBEE; color: #B71C1C; }
+.ri-notice-type[data-type="Breach of Contract"]  { background: #FFEBEE; color: #B71C1C; }
+.ri-notice-type[data-type="Rent Reminder"]       { background: #FFF3E0; color: #E65100; }
+.ri-notice-type[data-type="Rent Increase"]       { background: #FFF3E0; color: #E65100; }
+.ri-notice-type[data-type="Scheduled Maintenance"]{ background: #E3F2FD; color: #0D47A1; }
+.ri-notice-type[data-type="Inspection Notice"]   { background: #E3F2FD; color: #0D47A1; }
+.ri-notice-type[data-type="Entry Notice"]        { background: #E3F2FD; color: #0D47A1; }
+.ri-notice-type[data-type="General Information"] { background: #E8F5E9; color: #1B5E20; }
+.ri-notice-type[data-type="Lease Renewal"]       { background: #E8F5E9; color: #1B5E20; }
+.ri-notice-type[data-type="Contract Termination"]{ background: #F3E5F5; color: #6A1B9A; }
+
+/* Expiry chip */
+.ri-notice__expiry {
+    font-size: 0.7rem;
+    color: #5f6b7a;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.ri-notice__body {
+    padding: 1rem 1.1rem;
+    color: #1a1b1e;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+/* Loading + empty */
+.ri-spinner-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.ri-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 3rem;
+    color: #5f6b7a;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.ri-error-msg {
+    margin: 1rem 1.5rem;
+    padding: 0.85rem 1rem;
+    background: #FFEBEE;
+    border-left: 4px solid #B71C1C;
+    border-radius: 6px;
+    color: #B71C1C;
+    font-size: 0.875rem;
+}

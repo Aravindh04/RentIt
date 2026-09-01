@@ -1,0 +1,15 @@
+Feedback 1 - The Tenanant should be able to Lodge a complaint, Make a request
+Feedback 2 - Payment can be againt invoices or generic rent payment that's logged as credits. Enable this feature in RentIt Portal
+Feedback 3 - User should be able to submit the Rent payment and Invoice payment for approval. Update the neccssary permissions and update the Portal to enable this facility.
+Feedback 4 - A Task must be created for any payment overdue and payment unpaid. And the user must be notified over email about the arrers using 2 different templates. 
+Feedback 5 - The user is unable to logout. The portal logout function is not actually logging them out and taking them to login in screen, instead it takes them to standard empleyee login screen without logging the user out
+Feedback 6 - When the Portal/External user user is created and is linked with an Acitve Tenancy, the user must be added to the RentIt_Community_Tenants and assigned a permission set RentIt_Tenant
+Feedback 7 - Maintenace and Complaint are both similar type. Merge it to one tab with a simple generic name. They can be subtabs or dropdowns or anything inside that one tab to make it better
+Feedback 8 - Similarly the Make payment and Payment history, can have sub tabs or expandable sections to minimize the initial load. All payment related things can be handled under that one tab
+Feedback 9 - All the invoices are dumped in one area. Similar to the payment history, they can be categorized using the invoice type and status.
+Feedback 10 - The active tab in header should be highlighted when clicked
+Feedback 11 - The failities in My Tenancy should be available as Pills or some nice design
+Feedback 12 - The tenants should also be able to view their Contract infomation but not edit any
+Feedback 13 - The Rent on the My Tenancy should come from Contract
+Feedback 14 - The Address information should come from the property
+Feedback 15 - On click of View Profile, the user should see his own Contact and user information instead of My Tenancy

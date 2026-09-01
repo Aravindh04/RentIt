@@ -1,0 +1,32 @@
+.ri-support-tabs {
+    display: flex;
+    border-bottom: 2px solid #dce3ee;
+    margin-bottom: 1.5rem;
+}
+
+.ri-support-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    background: none;
+    color: #5f6b7a;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.ri-support-tab:hover {
+    color: #1565C0;
+}
+
+.ri-support-tab--active {
+    color: #0d2d6b;
+    font-weight: 700;
+    border-bottom-color: #1565C0;
+}

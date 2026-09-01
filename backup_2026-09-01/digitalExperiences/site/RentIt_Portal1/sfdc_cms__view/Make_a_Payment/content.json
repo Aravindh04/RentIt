@@ -1,0 +1,67 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Make a Payment",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"b7e62999-767b-4bca-819e-3a469625a153\",\"columns\":[{\"UUID\":\"66ba61fe-0f89-4a55-99b8-5eeaabce9355\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":[]}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : { },
+              "definition" : "c:rentitPaymentForm",
+              "id" : "645b7844-6b4b-4319-af55-677d54b340c5",
+              "type" : "component"
+            } ],
+            "id" : "66ba61fe-0f89-4a55-99b8-5eeaabce9355",
+            "name" : "col1",
+            "title" : "Column 1",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "b7e62999-767b-4bca-819e-3a469625a153",
+          "type" : "component"
+        } ],
+        "id" : "7076d05b-1d62-47f1-9c14-475f1838e63f",
+        "name" : "content",
+        "title" : "Content",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "customHeadTags" : "",
+            "description" : "",
+            "pageTitle" : "Make a Payment",
+            "recordId" : "{!recordId}"
+          },
+          "definition" : "community_builder:seoAssistant",
+          "id" : "2bee5bbe-20ef-475e-a990-4ff62968dcd8",
+          "type" : "component"
+        } ],
+        "id" : "ea37dd7b-33d9-4b60-b986-79135ede387f",
+        "name" : "sfdcHiddenRegion",
+        "title" : "sfdcHiddenRegion",
+        "type" : "region"
+      } ],
+      "definition" : "community_layout:sldsFlexibleLayout",
+      "id" : "5961fa73-ee0f-4f9e-b7a7-08000e1030f5",
+      "type" : "component"
+    },
+    "dataProviders" : [ ],
+    "themeLayoutType" : "Inner",
+    "viewType" : "custom-make-a-payment"
+  },
+  "urlName" : "make-a-payment"
+}

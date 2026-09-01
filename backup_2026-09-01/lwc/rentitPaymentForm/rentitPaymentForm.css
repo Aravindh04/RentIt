@@ -1,0 +1,136 @@
+.ri-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+}
+
+.ri-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.75rem;
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+    color: #fff;
+}
+
+.ri-card__header-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ri-card__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.ri-card__body {
+    padding: 1.75rem;
+}
+
+.ri-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 500px) {
+    .ri-field-row { grid-template-columns: 1fr; }
+}
+
+.ri-field-row .ri-full-width {
+    grid-column: 1 / -1;
+}
+
+/* Success state */
+.ri-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    gap: 1rem;
+}
+
+.ri-success__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #E8F5E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ri-success__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1B5E20;
+    margin: 0;
+}
+
+.ri-success__sub {
+    font-size: 0.875rem;
+    color: #5f6b7a;
+    margin: 0;
+}
+
+.ri-success__ref {
+    font-size: 0.8rem;
+    background: #EEF2F7;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    color: #0d2d6b;
+    font-weight: 600;
+}
+
+/* Actions */
+.ri-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Error */
+.ri-error-msg {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #FFEBEE;
+    border-left: 4px solid #B71C1C;
+    border-radius: 6px;
+    color: #B71C1C;
+    font-size: 0.875rem;
+}
+
+/* Loading */
+.ri-spinner-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.ri-divider {
+    border: none;
+    border-top: 1px solid #EEF2F7;
+    margin: 1.25rem 0;
+}
+
+.ri-section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #5f6b7a;
+    margin-bottom: 1rem;
+}

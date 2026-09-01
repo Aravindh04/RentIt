@@ -1,30 +1,17 @@
 import { LightningElement, wire, track } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+import BasePath from '@salesforce/community/basePath';
 import getActiveTenancy from '@salesforce/apex/RentItPortalController.getActiveTenancy';
 import getInvoices from '@salesforce/apex/RentItPortalController.getInvoices';
 
-const COLUMNS = [
-    { label: 'Invoice',       fieldName: 'Name',             type: 'text' },
-    { label: 'Period Start',  fieldName: 'Period_Start__c',  type: 'date' },
-    { label: 'Period End',    fieldName: 'Period_End__c',    type: 'date' },
-    { label: 'Total Amount',  fieldName: 'Total_Amount__c',  type: 'currency',
-      typeAttributes: { currencyCode: 'AUD', minimumFractionDigits: 2 } },
-    { label: 'GST Amount',    fieldName: 'GST_Amount__c',    type: 'currency',
-      typeAttributes: { currencyCode: 'AUD', minimumFractionDigits: 2 } },
-    { label: 'Total Paid',    fieldName: 'Total_Paid__c',    type: 'currency',
-      typeAttributes: { currencyCode: 'AUD', minimumFractionDigits: 2 } },
-    { label: 'Balance Due',   fieldName: 'Balance_Due__c',   type: 'currency',
-      typeAttributes: { currencyCode: 'AUD', minimumFractionDigits: 2 } },
-    { label: 'Due Date',      fieldName: 'Due_Date__c',      type: 'date' },
-    { label: 'Status',        fieldName: 'Status__c',        type: 'text' }
-];
-
-export default class RentitInvoiceList extends LightningElement {
+export default class RentitInvoiceList extends NavigationMixin(LightningElement) {
     @track invoices;
     @track error;
-    isLoading = true;
-    columns = COLUMNS;
+    isLoading       = true;
+    selectedInvoice = null;
+    activeStatusTab = 'all';
+    activeCatTab    = 'all';
 
-    // Step 1: resolve tenancy
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
         if (data) {
@@ -47,7 +34,62 @@ export default class RentitInvoiceList extends LightningElement {
             });
     }
 
-    get hasInvoices() {
-        return this.invoices && this.invoices.length > 0;
+    // ── Filtered list ─────────────────────────────────────────────
+    get filteredInvoices() {
+        if (!this.invoices) return [];
+        return this.invoices.filter(inv => {
+            const statusOk = this.activeStatusTab === 'all' || inv.Status__c === this.activeStatusTab;
+            const catOk    = this.activeCatTab    === 'all' || inv.Category__c === this.activeCatTab;
+            return statusOk && catOk;
+        });
+    }
+
+    get hasInvoices() { return this.filteredInvoices.length > 0; }
+    get showList()    { return !this.selectedInvoice; }
+    get showDetail()  { return !!this.selectedInvoice; }
+
+    // ── Status filter tabs ────────────────────────────────────────
+    handleTabAll()       { this.activeStatusTab = 'all'; }
+    handleTabScheduled() { this.activeStatusTab = 'Scheduled'; }
+    handleTabUnpaid()    { this.activeStatusTab = 'Unpaid'; }
+    handleTabOverdue()   { this.activeStatusTab = 'Overdue'; }
+    handleTabPaid()      { this.activeStatusTab = 'Paid'; }
+
+    get tabAll()       { return this._stClass('all'); }
+    get tabScheduled() { return this._stClass('Scheduled'); }
+    get tabUnpaid()    { return this._stClass('Unpaid'); }
+    get tabOverdue()   { return this._stClass('Overdue'); }
+    get tabPaid()      { return this._stClass('Paid'); }
+
+    _stClass(tab) {
+        return 'ri-tab' + (this.activeStatusTab === tab ? ' ri-tab--active' : '');
+    }
+
+    // ── Category filter tabs ──────────────────────────────────────
+    handleCatAll()       { this.activeCatTab = 'all'; }
+    handleCatRent()      { this.activeCatTab = 'Rent'; }
+    handleCatUtilities() { this.activeCatTab = 'Utilities'; }
+
+    get catAll()       { return this._catClass('all'); }
+    get catRent()      { return this._catClass('Rent'); }
+    get catUtilities() { return this._catClass('Utilities'); }
+
+    _catClass(cat) {
+        return 'ri-cat-tab' + (this.activeCatTab === cat ? ' ri-cat-tab--active' : '');
+    }
+
+    // ── Row interaction ───────────────────────────────────────────
+    handleInvoiceSelect(event) {
+        const id = event.currentTarget.dataset.id;
+        this.selectedInvoice = this.invoices.find(inv => inv.Id === id) || null;
+    }
+
+    handleCloseDetail() { this.selectedInvoice = null; }
+
+    handleMakePayment() {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: { url: `${BasePath}/payments` }
+        });
     }
 }

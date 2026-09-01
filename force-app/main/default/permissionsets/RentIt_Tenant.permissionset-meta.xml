@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Experience Cloud permission set for tenants. Grants read access to their own Tenancy, Room, Property, Notices, and Invoices. Allows creating and editing Payment records for approval submission. Assign to Customer Community users.</description>
+    <description>Experience Cloud permission set for tenants. Grants read access to their own Tenancy, Room, Property, Notices, and Invoices. Allows creating Payment records for approval submission. Assign to Customer Community users.</description>
+
+    <!-- ── Apex Class Access ───────────────────────────────────── -->
+    <classAccesses>
+        <apexClass>RentItPortalController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+
+    <!-- ── Account fields ─────────────────────────────────────── -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Account.ABN__c</field>
@@ -16,6 +24,8 @@
         <field>Account.GST_Registered__c</field>
         <readable>true</readable>
     </fieldPermissions>
+
+    <!-- ── Case fields ────────────────────────────────────────── -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Case.Property__c</field>
@@ -31,6 +41,8 @@
         <field>Case.Tenancy__c</field>
         <readable>true</readable>
     </fieldPermissions>
+
+    <!-- ── Invoice__c fields ──────────────────────────────────── -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Invoice__c.Balance_Due__c</field>
@@ -61,6 +73,8 @@
         <field>Invoice__c.Total_Paid__c</field>
         <readable>true</readable>
     </fieldPermissions>
+
+    <!-- ── Notice__c fields ───────────────────────────────────── -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Notice__c.Content__c</field>
@@ -68,9 +82,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Notice__c.Tenancy__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Notice__c.Expiry_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    
+    <!-- ── Payment__c fields ──────────────────────────────────── -->
+    <!-- Excluded (required): Amount__c, Payment_Date__c, Payment_Method__c, Payment_Type__c, Status__c -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Payment__c.Comment__c</field>
@@ -78,12 +100,56 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Payment__c.Invoice__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Payment__c.Payment_Reference__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <!-- ── Contract fields ───────────────────────────────────── -->
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contract.Deposit_Amount__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Property__c.Country__c</field>
+        <field>Contract.EndDate</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contract.Rent_Amount__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contract.Rent_Frequency__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contract.Special_Conditions__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contract.StartDate</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contract.Tenancy__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
+    <!-- ── Property__c fields ─────────────────────────────────── -->
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Property__c.Address__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -91,16 +157,8 @@
         <field>Property__c.Description__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Property__c.Postcode__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Property__c.State__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
+
+    <!-- ── Room__c fields ─────────────────────────────────────── -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Room__c.Description__c</field>
@@ -121,6 +179,10 @@
         <field>Room__c.Weekly_Rent__c</field>
         <readable>true</readable>
     </fieldPermissions>
+
+    <!-- ── Tenancy__c fields ──────────────────────────────────── -->
+    <!-- Excluded (required): Status__c, Tenant__c -->
+    <!-- Excluded (internal-only): Community_User__c -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Tenancy__c.Available_Credits__c</field>
@@ -133,7 +195,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Tenancy__c.Room__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Tenancy__c.Tenant_Account__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Tenancy__c.Total_Arrears__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -141,8 +213,21 @@
         <field>Tenancy__c.Total_Credits__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Tenancy__c.Total_Received__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Tenancy__c.Total_Unpaid__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
     <hasActivationRequired>false</hasActivationRequired>
     <label>RentIt - Tenant (Community)</label>
+
+    <!-- ── Object Permissions ─────────────────────────────────── -->
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
@@ -160,6 +245,16 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>Case</object>
+        <viewAllFields>false</viewAllFields>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Contract</object>
         <viewAllFields>false</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
@@ -233,6 +328,7 @@
         <viewAllFields>false</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+
     <recordTypeVisibilities>
         <recordType>Case.Complaint</recordType>
         <visible>true</visible>

@@ -1,0 +1,41 @@
+/* RentIt Portal — Global Styles */
+:root {
+    --ri-navy:    #0d2d6b;
+    --ri-blue:    #1565C0;
+    --ri-teal:    #00897B;
+    --ri-bg:      #EEF2F7;
+    --ri-surface: #ffffff;
+    --ri-text:    #1a1b1e;
+    --ri-muted:   #5f6b7a;
+    --ri-border:  #dce3ee;
+    --ri-shadow:  0 2px 12px rgba(13, 45, 107, 0.10);
+    --ri-radius:  12px;
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    background: var(--ri-bg);
+}
+
+body {
+    margin: 0;
+    background-color: var(--ri-bg);
+    color: var(--ri-text);
+}
+
+/* Page body region padding */
+.slds-container--x-large,
+.cPageContent,
+.contentRegion {
+    padding: 1.5rem;
+}
+
+/* Nav bar background override via global */
+.cNavBar,
+.navBar,
+.siteforceHeader {
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+}

@@ -1,0 +1,67 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Payment History",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"122f4eb7-9486-4495-b30a-c2bd4b9a244b\",\"columns\":[{\"UUID\":\"96a581b4-a19c-49b3-a15e-ad7c2ac53e21\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":[]}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : { },
+              "definition" : "c:rentitPaymentHistory",
+              "id" : "273c81b9-eb87-4313-b181-2ae447aacee9",
+              "type" : "component"
+            } ],
+            "id" : "96a581b4-a19c-49b3-a15e-ad7c2ac53e21",
+            "name" : "col1",
+            "title" : "Column 1",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "122f4eb7-9486-4495-b30a-c2bd4b9a244b",
+          "type" : "component"
+        } ],
+        "id" : "9221d35a-8c69-4bed-9de1-7fe293d4873e",
+        "name" : "content",
+        "title" : "Content",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "customHeadTags" : "",
+            "description" : "",
+            "pageTitle" : "Payment History",
+            "recordId" : "{!recordId}"
+          },
+          "definition" : "community_builder:seoAssistant",
+          "id" : "e7f8cb25-9573-44a0-8123-4c421577ae77",
+          "type" : "component"
+        } ],
+        "id" : "8f9dbb95-50ec-47d3-9a14-a7695a5c7d01",
+        "name" : "sfdcHiddenRegion",
+        "title" : "sfdcHiddenRegion",
+        "type" : "region"
+      } ],
+      "definition" : "community_layout:sldsFlexibleLayout",
+      "id" : "3afe216d-b5b9-4d44-8cde-dde0fc0c393a",
+      "type" : "component"
+    },
+    "dataProviders" : [ ],
+    "themeLayoutType" : "Inner",
+    "viewType" : "custom-payment-history"
+  },
+  "urlName" : "payment-history"
+}

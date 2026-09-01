@@ -1,0 +1,209 @@
+/* Hero Banner */
+.ri-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0d2d6b 0%, #1565C0 55%, #00897B 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    padding: 2.5rem 2rem 2rem;
+    color: #fff;
+}
+
+.ri-hero-bg {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+}
+
+.ri-hero-bg::after {
+    content: '';
+    position: absolute;
+    top: 80px;
+    left: -120px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.ri-hero-inner {
+    position: relative;
+    z-index: 1;
+}
+
+/* Greeting row */
+.ri-greeting {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.ri-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    letter-spacing: -0.01em;
+}
+
+.ri-hero-title {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+    color: #fff;
+}
+
+.ri-hero-sub {
+    font-size: 0.875rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Status badge */
+.ri-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2em 0.8em;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ri-badge--active     { background: #E8F5E9; color: #1B5E20; }
+.ri-badge--pending    { background: #FFF3E0; color: #E65100; }
+.ri-badge--expired    { background: #F5F5F5; color: #424242; }
+.ri-badge--terminated { background: #FFEBEE; color: #B71C1C; }
+
+/* Stat cards grid */
+.ri-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.ri-stat-card {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 1.1rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: background 0.2s;
+}
+
+.ri-stat-card:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.ri-stat-card__icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ri-stat-card--property .ri-stat-card__icon { background: rgba(255, 255, 255, 0.18); }
+.ri-stat-card--credits  .ri-stat-card__icon { background: rgba(0, 200, 160, 0.28); }
+.ri-stat-card--arrears  .ri-stat-card__icon { background: rgba(255, 90, 90, 0.28); }
+.ri-stat-card--received .ri-stat-card__icon { background: rgba(100, 240, 180, 0.25); }
+
+.ri-stat-card__label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 0.3rem;
+}
+
+.ri-stat-card__value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.ri-stat-card__sub {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 0.15rem;
+}
+
+/* Invoice alert */
+.ri-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.ri-alert--warning {
+    background: #FFFDE7;
+    border: 1px solid #FFD600;
+    color: #4E3500;
+    box-shadow: 0 2px 8px rgba(255, 214, 0, 0.15);
+}
+
+.ri-alert__icon { flex-shrink: 0; }
+
+.ri-alert__body { flex: 1; min-width: 200px; line-height: 1.5; }
+
+.ri-alert__action {
+    background: #E65100;
+    color: #fff;
+    border: none;
+    padding: 0.45rem 1.1rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    letter-spacing: 0.02em;
+}
+
+.ri-alert__action:hover { background: #BF360C; }
+
+/* Loading / error states */
+.ri-loading {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.ri-error {
+    background: #FFEBEE;
+    border-left: 4px solid #B71C1C;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    color: #B71C1C;
+    font-size: 0.9rem;
+}

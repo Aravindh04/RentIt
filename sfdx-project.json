@@ -3,6 +3,10 @@
     {
       "path": "force-app",
       "default": true
+    },
+    {
+      "path": "backup_2026-09-01",
+      "default": false
     }
   ],
   "name": "RentIt",

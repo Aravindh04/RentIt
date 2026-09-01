@@ -1,0 +1,329 @@
+/* Card */
+.ri-tenancy-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+/* Header */
+.ri-tenancy-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+    color: #fff;
+}
+
+.ri-tenancy-header__icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ri-tenancy-header__info {
+    flex: 1;
+}
+
+.ri-tenancy-header__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 0.2rem;
+}
+
+.ri-tenancy-header__sub {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+/* Financial metrics */
+.ri-metrics {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem 1.75rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #EEF2F7;
+}
+
+.ri-metric {
+    flex: 1;
+    min-width: 120px;
+    background: #F7F9FC;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.ri-metric__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5f6b7a;
+}
+
+.ri-metric__value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0d2d6b;
+}
+
+.ri-metric--arrears .ri-metric__value { color: #B71C1C; }
+.ri-metric--credits .ri-metric__value { color: #00897B; }
+.ri-metric--received .ri-metric__value { color: #1B5E20; }
+
+/* Info sections */
+.ri-info-section {
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid #EEF2F7;
+}
+
+.ri-info-section:last-child {
+    border-bottom: none;
+}
+
+.ri-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.ri-section-header h3 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0d2d6b;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ri-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem 2rem;
+}
+
+.ri-detail-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.ri-detail-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Facilities pills */
+.ri-facilities-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #EEF2F7;
+}
+
+.ri-facilities-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #5f6b7a;
+    margin-bottom: 0.6rem;
+}
+
+.ri-facilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ri-facility-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3em 0.85em;
+    border-radius: 999px;
+    background: #E0F2F1;
+    color: #00695C;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid #B2DFDB;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.ri-facility-pill:hover {
+    background: #B2DFDB;
+    border-color: #00897B;
+}
+
+.ri-detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.ri-detail-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #5f6b7a;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ri-detail-value {
+    font-size: 0.875rem;
+    color: #1a1b1e;
+    font-weight: 500;
+}
+
+.ri-detail-desc {
+    margin-top: 0.75rem;
+    font-size: 0.825rem;
+    color: #5f6b7a;
+    line-height: 1.5;
+}
+
+/* Status badges */
+.ri-status {
+    display: inline-flex;
+    padding: 0.2em 0.75em;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.ri-status[data-status="Active"]     { background: #E8F5E9; color: #1B5E20; }
+.ri-status[data-status="Expired"]    { background: #F5F5F5; color: #616161; }
+.ri-status[data-status="Terminated"] { background: #FFEBEE; color: #B71C1C; }
+
+/* Spinner */
+.ri-spinner-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 160px;
+}
+
+.ri-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #dce3ee;
+    border-top-color: #1565C0;
+    border-radius: 50%;
+    animation: ri-spin 0.75s linear infinite;
+}
+
+@keyframes ri-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.ri-empty {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5f6b7a;
+    padding: 2rem 1.75rem;
+    font-size: 0.875rem;
+}
+
+/* Contract section */
+.ri-contract-status {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2em 0.75em;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ri-contract-status[data-status="Activated"] { background: #E8F5E9; color: #1B5E20; }
+.ri-contract-status[data-status="Draft"]     { background: #E3F2FD; color: #0D47A1; }
+.ri-contract-status[data-status="Expired"]   { background: #F5F5F5; color: #616161; }
+.ri-contract-status[data-status="Voided"]    { background: #FFEBEE; color: #B71C1C; }
+
+.ri-contract-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.ri-contract-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ri-contract-number {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0d2d6b;
+}
+
+.ri-contract-financials {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #EEF2F7;
+    flex-wrap: wrap;
+}
+
+.ri-contract-financial {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.ri-contract-rent {
+    display: flex;
+    align-items: baseline;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0d2d6b;
+}
+
+.ri-contract-freq {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #5f6b7a;
+}
+
+.ri-contract-conditions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #EEF2F7;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ri-contract-conditions__text {
+    font-size: 0.85rem;
+    color: #3a3f47;
+    line-height: 1.6;
+    background: #F7F9FC;
+    border-left: 3px solid #dce3ee;
+    border-radius: 0 6px 6px 0;
+    padding: 0.75rem 1rem;
+    margin: 0;
+    white-space: pre-wrap;
+}

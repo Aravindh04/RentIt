@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "Notices",
+  "contentBody" : {
+    "activeViewId" : "Notices",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "custom-notices",
+    "urlPrefix" : "notices"
+  },
+  "urlName" : "notices"
+}

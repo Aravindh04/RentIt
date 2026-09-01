@@ -1,0 +1,53 @@
+.ri-tenancy-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.ri-tenancy-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+    color: #fff;
+}
+
+.ri-tenancy-header__icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ri-tenancy-header__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 0.2rem;
+}
+
+.ri-tenancy-header__sub {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+.ri-tenancy-body {
+    padding: 1.5rem 1.75rem;
+}
+
+.ri-empty {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5f6b7a;
+    padding: 1rem 0;
+    font-size: 0.875rem;
+}

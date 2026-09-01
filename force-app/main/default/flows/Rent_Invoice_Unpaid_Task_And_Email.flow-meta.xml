@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Unpaid_Email</name>
+        <label>Send Unpaid Rent Reminder Email</label>
+        <locationX>50</locationX>
+        <locationY>863</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Create_Unpaid_Task</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>varContact.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Rent Payment Reminder – Invoice Now Unpaid</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tmplUnpaidBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Status_Changed_To_Unpaid</name>
+        <label>Status Newly Changed to Unpaid?</label>
+        <locationX>182</locationX>
+        <locationY>215</locationY>
+        <defaultConnectorLabel>Not Newly Unpaid</defaultConnectorLabel>
+        <rules>
+            <name>Is_Newly_Unpaid</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Unpaid</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Unpaid</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Tenancy</targetReference>
+            </connector>
+            <label>Newly Unpaid</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Tenancy_Found</name>
+        <label>Tenancy Found?</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>No Tenancy</defaultConnectorLabel>
+        <rules>
+            <name>Has_Tenancy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTenancy.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Tenant_Contact</targetReference>
+            </connector>
+            <label>Tenancy Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Contact_Has_Email</name>
+        <label>Tenant Has Email?</label>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>Create_Unpaid_Task</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Email – Just Create Task</defaultConnectorLabel>
+        <rules>
+            <name>Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varContact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Unpaid_Email</targetReference>
+            </connector>
+            <label>Has Email</label>
+        </rules>
+    </decisions>
+    <description>When an Invoice status changes to Unpaid, creates a follow-up Task for the property manager and sends a payment reminder email to the tenant.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>varUnpaidFollowUpDate</name>
+        <dataType>Date</dataType>
+        <expression>$Flow.CurrentDate + 7</expression>
+    </formulas>
+    <interviewLabel>Rent Invoice Unpaid – Task and Email {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Rent Invoice Unpaid – Task and Email</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Unpaid_Task</name>
+        <label>Create Unpaid Follow-Up Task</label>
+        <locationX>182</locationX>
+        <locationY>971</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>varUnpaidFollowUpDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>tmplTaskDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Unpaid Rent – Follow Up Required</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>varTenancy.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>varContact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Tenancy</name>
+        <label>Get Tenancy</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Tenancy_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Tenancy__c</elementReference>
+            </value>
+        </filters>
+        <object>Tenancy__c</object>
+        <outputReference>varTenancy</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Tenant__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Total_Arrears__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Tenant_Contact</name>
+        <label>Get Tenant Contact</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Contact_Has_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varTenancy.Tenant__c</elementReference>
+            </value>
+        </filters>
+        <object>Contact</object>
+        <outputReference>varContact</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Status_Changed_To_Unpaid</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Unpaid</stringValue>
+            </value>
+        </filters>
+        <object>Invoice__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tmplUnpaidBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Dear {!varContact.FirstName} {!varContact.LastName},
+
+This is a reminder that your rent invoice ({!$Record.Name}) of ${!$Record.Amount__c} was due on {!$Record.Due_Date__c} and remains unpaid.
+
+Please log into the tenant portal and submit your payment at your earliest convenience. If you have already made payment, please record it in the portal so it can be reviewed and approved.
+
+If you are experiencing financial difficulty, please contact your property manager immediately.
+
+Regards,
+RentIt Property Management</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tmplTaskDescription</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Invoice {!$Record.Name} (Amount: ${!$Record.Amount__c}, Due: {!$Record.Due_Date__c}) has become Unpaid for Tenancy {!varTenancy.Name}. Contact the tenant to arrange payment.</text>
+    </textTemplates>
+    <variables>
+        <name>varContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>varTenancy</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Tenancy__c</objectType>
+    </variables>
+</Flow>

@@ -1,0 +1,19 @@
+<template>
+    <div class="ri-payment-tabs">
+        <button class={tabMakePayment} onclick={handleTabMakePayment}>
+            <lightning-icon icon-name="utility:money" size="xx-small" alternative-text="Make a Payment"></lightning-icon>
+            &nbsp;Make a Payment
+        </button>
+        <button class={tabHistory} onclick={handleTabHistory}>
+            <lightning-icon icon-name="utility:list" size="xx-small" alternative-text="Payment History"></lightning-icon>
+            &nbsp;Payment History
+        </button>
+    </div>
+
+    <template if:true={isMakePayment}>
+        <c-rentit-payment-form></c-rentit-payment-form>
+    </template>
+    <template if:true={isHistory}>
+        <c-rentit-payment-history></c-rentit-payment-history>
+    </template>
+</template>

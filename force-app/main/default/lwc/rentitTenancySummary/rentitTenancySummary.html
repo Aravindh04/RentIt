@@ -1,13 +1,228 @@
 <template>
-    <template if:true={recordId}>
-        <lightning-record-form
-            record-id={recordId}
-            object-api-name="Tenancy__c"
-            fields={fields}
-            mode="readonly">
-        </lightning-record-form>
-    </template>
-    <template if:false={recordId}>
-        <p class="slds-text-color_error">No tenancy record available.</p>
-    </template>
+    <div class="ri-tenancy-card">
+        <!-- Gradient Header -->
+        <div class="ri-tenancy-header">
+            <div class="ri-tenancy-header__icon">
+                <lightning-icon icon-name="standard:home" size="medium" alternative-text="Tenancy"></lightning-icon>
+            </div>
+            <div class="ri-tenancy-header__info">
+                <h2 class="ri-tenancy-header__title">My Tenancy</h2>
+                <p class="ri-tenancy-header__sub">{tenancyName}</p>
+            </div>
+            <template if:true={hasTenancy}>
+                <span class="ri-status" data-status={status}>{status}</span>
+            </template>
+        </div>
+
+        <!-- Spinner -->
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap">
+                <div class="ri-spinner"></div>
+            </div>
+        </template>
+
+        <!-- Body -->
+        <template if:false={isLoading}>
+            <template if:true={hasTenancy}>
+
+                <!-- Financial Metrics -->
+                <div class="ri-metrics">
+                    <div class="ri-metric ri-metric--arrears">
+                        <span class="ri-metric__label">Arrears</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={arrears}
+                                format-style="currency"
+                                currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                    <div class="ri-metric ri-metric--credits">
+                        <span class="ri-metric__label">Credits</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={credits}
+                                format-style="currency"
+                                currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                    <div class="ri-metric">
+                        <span class="ri-metric__label">Deposit</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={deposit}
+                                format-style="currency"
+                                currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                    <div class="ri-metric ri-metric--received">
+                        <span class="ri-metric__label">Received</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={received}
+                                format-style="currency"
+                                currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Property Section -->
+                <template if:true={hasProperty}>
+                    <div class="ri-info-section">
+                        <div class="ri-section-header">
+                            <lightning-icon icon-name="utility:location" size="x-small" alternative-text="Property"></lightning-icon>
+                            <h3>Property</h3>
+                        </div>
+                        <div class="ri-detail-grid">
+                            <div class="ri-detail-row">
+                                <span class="ri-detail-label">Name</span>
+                                <span class="ri-detail-value">{propertyName}</span>
+                            </div>
+                            <div class="ri-detail-row">
+                                <span class="ri-detail-label">Address</span>
+                                <span class="ri-detail-value">{propertyAddress}</span>
+                            </div>
+                        </div>
+                        <template if:true={propertyDescription}>
+                            <p class="ri-detail-desc">{propertyDescription}</p>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Room Section -->
+                <template if:true={hasRoom}>
+                    <div class="ri-info-section">
+                        <div class="ri-section-header">
+                            <lightning-icon icon-name="utility:home" size="x-small" alternative-text="Room"></lightning-icon>
+                            <h3>Room</h3>
+                        </div>
+                        <div class="ri-detail-grid ri-detail-grid--3">
+                            <div class="ri-detail-row">
+                                <span class="ri-detail-label">Room</span>
+                                <span class="ri-detail-value">{roomName}</span>
+                            </div>
+                            <div class="ri-detail-row">
+                                <span class="ri-detail-label">Size</span>
+                                <span class="ri-detail-value">{roomSize}</span>
+                            </div>
+                            <template if:true={hasContract}>
+                                <div class="ri-detail-row">
+                                    <span class="ri-detail-label">Rent</span>
+                                    <span class="ri-detail-value">
+                                        <lightning-formatted-number
+                                            value={contractRent}
+                                            format-style="currency"
+                                            currency-code="AUD"
+                                            minimum-fraction-digits="2">
+                                        </lightning-formatted-number>
+                                        <span class="ri-contract-freq">&nbsp;/ {contractFrequency}</span>
+                                    </span>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Facilities as pills -->
+                        <template if:true={hasFacilities}>
+                            <div class="ri-facilities-section">
+                                <span class="ri-facilities-label">Facilities</span>
+                                <div class="ri-facilities">
+                                    <template for:each={facilityPills} for:item="pill">
+                                        <span key={pill.id} class="ri-facility-pill">{pill.label}</span>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+            </template>
+
+                <!-- Contract Section -->
+                <template if:true={hasContract}>
+                    <div class="ri-info-section">
+                        <div class="ri-section-header">
+                            <lightning-icon icon-name="utility:contract" size="x-small" alternative-text="Contract"></lightning-icon>
+                            <h3>Contract</h3>
+                            <span class="ri-contract-status" data-status={contractStatus}>{contractStatus}</span>
+                        </div>
+
+                        <!-- Key metrics row -->
+                        <div class="ri-contract-metrics">
+                            <div class="ri-contract-metric">
+                                <span class="ri-detail-label">Contract No.</span>
+                                <span class="ri-contract-number">{contractNumber}</span>
+                            </div>
+                            <div class="ri-contract-metric">
+                                <span class="ri-detail-label">Start Date</span>
+                                <span>
+                                    <lightning-formatted-date-time
+                                        value={contractStart}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </span>
+                            </div>
+                            <div class="ri-contract-metric">
+                                <span class="ri-detail-label">End Date</span>
+                                <span>
+                                    <lightning-formatted-date-time
+                                        value={contractEnd}
+                                        year="numeric" month="short" day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Rent & Deposit -->
+                        <div class="ri-contract-financials">
+                            <div class="ri-contract-financial">
+                                <span class="ri-detail-label">Rent</span>
+                                <span class="ri-contract-rent">
+                                    <lightning-formatted-number
+                                        value={contractRent}
+                                        format-style="currency"
+                                        currency-code="AUD"
+                                        minimum-fraction-digits="2">
+                                    </lightning-formatted-number>
+                                    <span class="ri-contract-freq">&nbsp;/ {contractFrequency}</span>
+                                </span>
+                            </div>
+                            <div class="ri-contract-financial">
+                                <span class="ri-detail-label">Security Deposit</span>
+                                <span>
+                                    <lightning-formatted-number
+                                        value={contractDeposit}
+                                        format-style="currency"
+                                        currency-code="AUD"
+                                        minimum-fraction-digits="2">
+                                    </lightning-formatted-number>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Special Conditions -->
+                        <template if:true={hasContractConditions}>
+                            <div class="ri-contract-conditions">
+                                <span class="ri-detail-label">Special Conditions</span>
+                                <p class="ri-contract-conditions__text">{contractConditions}</p>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+            <!-- Empty State -->
+            <template if:false={hasTenancy}>
+                <div class="ri-empty">
+                    <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+                    <p>No active tenancy found.</p>
+                </div>
+            </template>
+        </template>
+    </div>
 </template>

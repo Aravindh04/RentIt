@@ -1,0 +1,35 @@
+<template>
+    <div class="ri-tenancy-card">
+        <div class="ri-tenancy-header">
+            <div class="ri-tenancy-header__icon">
+                <lightning-icon icon-name="standard:home" size="medium" alternative-text="Tenancy"></lightning-icon>
+            </div>
+            <div>
+                <h2 class="ri-tenancy-header__title">My Tenancy</h2>
+                <p class="ri-tenancy-header__sub">Active tenancy details</p>
+            </div>
+        </div>
+        <div class="ri-tenancy-body">
+            <template if:true={tenancyId}>
+                <lightning-record-form
+                    record-id={tenancyId}
+                    object-api-name="Tenancy__c"
+                    fields={fields}
+                    mode="readonly"
+                    columns="2">
+                </lightning-record-form>
+            </template>
+            <template if:false={tenancyId}>
+                <template if:false={isLoading}>
+                    <div class="ri-empty">
+                        <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+                        <p>No active tenancy found.</p>
+                    </div>
+                </template>
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

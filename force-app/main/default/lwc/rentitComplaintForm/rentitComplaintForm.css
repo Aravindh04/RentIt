@@ -1,0 +1,133 @@
+.ri-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+}
+
+.ri-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.75rem;
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+    color: #fff;
+}
+
+.ri-card__header-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ri-card__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.ri-card__body {
+    padding: 1.75rem;
+}
+
+.ri-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* Context strip — shows Property · Room */
+.ri-context-strip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #EEF2F7;
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    color: #0d2d6b;
+    font-weight: 500;
+    margin: 0.25rem 0 0.5rem;
+    width: fit-content;
+}
+
+/* Hidden internal fields — visible to Apex via form, hidden in UI */
+.ri-hidden-field {
+    display: none;
+}
+
+.ri-actions {
+    margin-top: 1.25rem;
+}
+
+/* Success */
+.ri-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    gap: 1rem;
+}
+
+.ri-success__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #E8F5E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ri-success__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1B5E20;
+    margin: 0;
+}
+
+.ri-success__sub {
+    font-size: 0.875rem;
+    color: #5f6b7a;
+    margin: 0;
+    max-width: 360px;
+}
+
+.ri-success__ref {
+    font-size: 0.8rem;
+    background: #EEF2F7;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    color: #0d2d6b;
+    font-weight: 600;
+}
+
+/* Spinner */
+.ri-spinner-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 160px;
+}
+
+.ri-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #dce3ee;
+    border-top-color: #1565C0;
+    border-radius: 50%;
+    animation: ri-spin 0.75s linear infinite;
+}
+
+@keyframes ri-spin {
+    to { transform: rotate(360deg); }
+}

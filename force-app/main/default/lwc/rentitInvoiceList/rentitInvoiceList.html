@@ -1,28 +1,205 @@
 <template>
-    <div class="slds-box slds-theme_default">
-        <h2 class="slds-text-heading_medium slds-m-bottom_medium">My Invoices</h2>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:invoice" size="small" alternative-text="Invoices"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">My Invoices</h2>
+        </div>
 
         <template if:true={isLoading}>
-            <lightning-spinner alternative-text="Loading invoices" size="medium"></lightning-spinner>
+            <div class="ri-spinner-wrap">
+                <div class="ri-spinner"></div>
+            </div>
         </template>
 
         <template if:true={error}>
-            <p class="slds-text-color_error">{error}</p>
+            <div class="ri-error-msg">{error}</div>
         </template>
 
-        <template if:true={hasInvoices}>
-            <lightning-datatable
-                key-field="Id"
-                data={invoices}
-                columns={columns}
-                hide-checkbox-column>
-            </lightning-datatable>
-        </template>
+        <!-- List View -->
+        <template if:true={showList}>
+            <!-- Status filter tabs -->
+            <div class="ri-filter-tabs">
+                <button class={tabAll}       onclick={handleTabAll}>All</button>
+                <button class={tabScheduled} onclick={handleTabScheduled}>Scheduled</button>
+                <button class={tabUnpaid}    onclick={handleTabUnpaid}>Unpaid</button>
+                <button class={tabOverdue}   onclick={handleTabOverdue}>Overdue</button>
+                <button class={tabPaid}      onclick={handleTabPaid}>Paid</button>
+            </div>
 
-        <template if:false={hasInvoices}>
-            <template if:false={isLoading}>
-                <p class="slds-text-color_weak">No invoices found.</p>
+            <!-- Category filter tabs -->
+            <div class="ri-cat-tabs">
+                <span class="ri-cat-tabs__label">Type:</span>
+                <button class={catAll}       onclick={handleCatAll}>All</button>
+                <button class={catRent}      onclick={handleCatRent}>Rent</button>
+                <button class={catUtilities} onclick={handleCatUtilities}>Utilities</button>
+            </div>
+
+            <template if:true={hasInvoices}>
+                <div class="ri-table-wrap">
+                    <table class="ri-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Type</th>
+                                <th>Period</th>
+                                <th>Total</th>
+                                <th>Paid</th>
+                                <th>Balance Due</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={filteredInvoices} for:item="inv">
+                                <tr key={inv.Id}
+                                    class="ri-tr--clickable"
+                                    onclick={handleInvoiceSelect}
+                                    data-id={inv.Id}>
+                                    <td class="ri-td--name">{inv.Name}</td>
+                                    <td>
+                                        <span class="ri-cat" data-cat={inv.Category__c}>{inv.Category__c}</span>
+                                    </td>
+                                    <td class="ri-td--period">
+                                        <lightning-formatted-date-time
+                                            value={inv.Period_Start__c}
+                                            year="numeric" month="short" day="2-digit">
+                                        </lightning-formatted-date-time>
+                                        &nbsp;&ndash;&nbsp;
+                                        <lightning-formatted-date-time
+                                            value={inv.Period_End__c}
+                                            year="numeric" month="short" day="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </td>
+                                    <td>
+                                        <lightning-formatted-number
+                                            value={inv.Total_Amount__c}
+                                            format-style="currency" currency-code="AUD"
+                                            minimum-fraction-digits="2">
+                                        </lightning-formatted-number>
+                                    </td>
+                                    <td>
+                                        <lightning-formatted-number
+                                            value={inv.Total_Paid__c}
+                                            format-style="currency" currency-code="AUD"
+                                            minimum-fraction-digits="2">
+                                        </lightning-formatted-number>
+                                    </td>
+                                    <td class="ri-td--balance">
+                                        <lightning-formatted-number
+                                            value={inv.Balance_Due__c}
+                                            format-style="currency" currency-code="AUD"
+                                            minimum-fraction-digits="2">
+                                        </lightning-formatted-number>
+                                    </td>
+                                    <td>
+                                        <lightning-formatted-date-time
+                                            value={inv.Due_Date__c}
+                                            year="numeric" month="short" day="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </td>
+                                    <td>
+                                        <span class="ri-status" data-status={inv.Status__c}>{inv.Status__c}</span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
             </template>
+
+            <template if:false={hasInvoices}>
+                <template if:false={isLoading}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:check" size="large" alternative-text="No invoices"></lightning-icon>
+                        <p>No invoices match the selected filters.</p>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <!-- Detail View -->
+        <template if:true={showDetail}>
+            <div class="ri-detail-panel">
+                <button class="ri-back-btn" onclick={handleCloseDetail}>← Back to Invoices</button>
+                <div class="ri-detail-header">
+                    <div>
+                        <div class="ri-detail-title">{selectedInvoice.Name}</div>
+                        <div class="ri-detail-period">
+                            <lightning-formatted-date-time
+                                value={selectedInvoice.Period_Start__c}
+                                year="numeric" month="short" day="2-digit">
+                            </lightning-formatted-date-time>
+                            &nbsp;&ndash;&nbsp;
+                            <lightning-formatted-date-time
+                                value={selectedInvoice.Period_End__c}
+                                year="numeric" month="short" day="2-digit">
+                            </lightning-formatted-date-time>
+                        </div>
+                    </div>
+                    <div class="ri-detail-header__badges">
+                        <span class="ri-cat" data-cat={selectedInvoice.Category__c}>{selectedInvoice.Category__c}</span>
+                        <span class="ri-status" data-status={selectedInvoice.Status__c}>{selectedInvoice.Status__c}</span>
+                    </div>
+                </div>
+                <div class="ri-metrics">
+                    <div class="ri-metric">
+                        <span class="ri-metric__label">Total Amount</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={selectedInvoice.Total_Amount__c}
+                                format-style="currency" currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                    <div class="ri-metric">
+                        <span class="ri-metric__label">GST Amount</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={selectedInvoice.GST_Amount__c}
+                                format-style="currency" currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                    <div class="ri-metric">
+                        <span class="ri-metric__label">Total Paid</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={selectedInvoice.Total_Paid__c}
+                                format-style="currency" currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                    <div class="ri-metric ri-metric--balance">
+                        <span class="ri-metric__label">Balance Due</span>
+                        <span class="ri-metric__value">
+                            <lightning-formatted-number
+                                value={selectedInvoice.Balance_Due__c}
+                                format-style="currency" currency-code="AUD"
+                                minimum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                    </div>
+                </div>
+                <div class="ri-detail-meta">
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Due Date</span>
+                        <span>
+                            <lightning-formatted-date-time
+                                value={selectedInvoice.Due_Date__c}
+                                year="numeric" month="long" day="2-digit">
+                            </lightning-formatted-date-time>
+                        </span>
+                    </div>
+                </div>
+                <div class="ri-detail-actions">
+                    <button class="ri-btn ri-btn--primary" onclick={handleMakePayment}>Make a Payment</button>
+                </div>
+            </div>
         </template>
     </div>
 </template>

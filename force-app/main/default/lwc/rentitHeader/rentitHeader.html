@@ -1,0 +1,87 @@
+<template>
+    <header class="ri-header">
+        <div class="ri-header__inner">
+
+            <!-- Brand / Logo — always visible -->
+            <div class="ri-header__brand" onclick={handleNavHome}>
+                <lightning-icon icon-name="standard:home" size="small" alternative-text="RentIt"></lightning-icon>
+                <span class="ri-header__brand-name">RentIt</span>
+            </div>
+
+            <!-- Authenticated layout: nav + user avatar + hamburger -->
+            <template if:true={isLoggedIn}>
+                <nav class="ri-header__nav" aria-label="Main navigation">
+                    <button class={navMyTenancy} onclick={handleNavMyTenancy}>My Tenancy</button>
+                    <button class={navInvoices}  onclick={handleNavInvoices}>Invoices</button>
+                    <button class={navPayments}  onclick={handleNavPayments}>Payments</button>
+                    <button class={navNotices}   onclick={handleNavNotices}>Notices</button>
+                    <button class={navSupport}   onclick={handleNavSupport}>Support</button>
+                </nav>
+
+                <!-- User avatar + dropdown -->
+                <div class="ri-header__user">
+                    <button class="ri-avatar-btn" onclick={toggleDropdown} aria-haspopup="true" aria-expanded={isDropdownOpen}>
+                        <template if:true={hasPhoto}>
+                            <img src={userPhotoUrl} alt={userName} class="ri-avatar-img" />
+                        </template>
+                        <template if:false={hasPhoto}>
+                            <div class="ri-avatar-initials">{userInitial}</div>
+                        </template>
+                        <span class="ri-avatar-name">{userFirstName}</span>
+                        <lightning-icon icon-name="utility:chevrondown" size="xx-small" alternative-text="Open menu"></lightning-icon>
+                    </button>
+
+                    <template if:true={isDropdownOpen}>
+                        <div class="ri-overlay" onclick={closeDropdown}></div>
+                        <div class="ri-dropdown" role="menu">
+                            <div class="ri-dropdown__user-info">
+                                <div class="ri-dropdown__name">{userName}</div>
+                                <div class="ri-dropdown__email">{userEmail}</div>
+                            </div>
+                            <div class="ri-dropdown__items">
+                                <button class="ri-dropdown__item" role="menuitem" onclick={handleProfile}>
+                                    <lightning-icon icon-name="utility:user" size="x-small" alternative-text="Profile"></lightning-icon>
+                                    <span>View Profile</span>
+                                </button>
+                                <button class="ri-dropdown__item ri-dropdown__item--logout" role="menuitem" onclick={handleLogout}>
+                                    <lightning-icon icon-name="utility:power" size="x-small" alternative-text="Log out"></lightning-icon>
+                                    <span>Log Out</span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Hamburger (mobile only — CSS controls visibility) -->
+                <button class="ri-hamburger" onclick={toggleMobileMenu} aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </template>
+
+            <!-- Guest: Sign In button -->
+            <template if:false={isLoggedIn}>
+                <a class="ri-signin-btn" href={loginUrl}>Sign In</a>
+            </template>
+        </div>
+
+        <!-- Mobile navigation panel — authenticated only -->
+        <template if:true={isMobileMenuOpen}>
+            <nav class="ri-mobile-nav" aria-label="Mobile navigation">
+                <button class={mobileNavMyTenancy} onclick={handleNavMyTenancy}>My Tenancy</button>
+                <button class={mobileNavInvoices}  onclick={handleNavInvoices}>Invoices</button>
+                <button class={mobileNavPayments}  onclick={handleNavPayments}>Payments</button>
+                <button class={mobileNavNotices}   onclick={handleNavNotices}>Notices</button>
+                <button class={mobileNavSupport}   onclick={handleNavSupport}>Support</button>
+                <hr class="ri-mobile-nav__divider" />
+                <div class="ri-mobile-nav__user">
+                    <div class="ri-mobile-nav__user-name">{userName}</div>
+                    <div class="ri-mobile-nav__user-email">{userEmail}</div>
+                </div>
+                <button class="ri-mobile-nav__item" onclick={handleProfile}>View Profile</button>
+                <button class="ri-mobile-nav__item ri-mobile-nav__item--logout" onclick={handleLogout}>Log Out</button>
+            </nav>
+        </template>
+    </header>
+</template>
