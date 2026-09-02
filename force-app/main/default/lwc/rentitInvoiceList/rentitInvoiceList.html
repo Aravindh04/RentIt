@@ -7,12 +7,6 @@
             <h2 class="ri-card__title">My Invoices</h2>
         </div>
 
-        <template if:true={isLoading}>
-            <div class="ri-spinner-wrap">
-                <div class="ri-spinner"></div>
-            </div>
-        </template>
-
         <template if:true={error}>
             <div class="ri-error-msg">{error}</div>
         </template>
@@ -36,6 +30,13 @@
                 <button class={catUtilities} onclick={handleCatUtilities}>Utilities</button>
             </div>
 
+            <!-- Spinner below TYPE selection (Feedback 27) -->
+            <template if:true={isLoading}>
+                <div class="ri-spinner-wrap">
+                    <div class="ri-spinner"></div>
+                </div>
+            </template>
+
             <template if:true={hasInvoices}>
                 <div class="ri-table-wrap">
                     <table class="ri-table">
@@ -57,7 +58,12 @@
                                     class="ri-tr--clickable"
                                     onclick={handleInvoiceSelect}
                                     data-id={inv.Id}>
-                                    <td class="ri-td--name">{inv.Name}</td>
+                                    <td class="ri-td--name">
+                                        <span class="ri-inv-name-link">{inv.Name}</span>
+                                        <template if:true={inv.Discount__c}>
+                                            <span class="ri-discount-badge">Discount Applied</span>
+                                        </template>
+                                    </td>
                                     <td>
                                         <span class="ri-cat" data-cat={inv.Category__c}>{inv.Category__c}</span>
                                     </td>
@@ -122,7 +128,10 @@
         <!-- Detail View -->
         <template if:true={showDetail}>
             <div class="ri-detail-panel">
-                <button class="ri-back-btn" onclick={handleCloseDetail}>← Back to Invoices</button>
+                <button class="ri-back-btn" onclick={handleCloseDetail}>
+                    <lightning-icon icon-name="utility:chevronleft" size="xx-small" alternative-text="Back"></lightning-icon>
+                    Back to Invoices
+                </button>
                 <div class="ri-detail-header">
                     <div>
                         <div class="ri-detail-title">{selectedInvoice.Name}</div>
@@ -144,21 +153,47 @@
                     </div>
                 </div>
                 <div class="ri-metrics">
+                    <!-- Original + Discount — only when discount applies -->
+                    <template if:true={selectedHasDiscount}>
+                        <div class="ri-metric">
+                            <span class="ri-metric__label">Original Amount</span>
+                            <span class="ri-metric__value">
+                                <lightning-formatted-number
+                                    value={selectedOriginalAmount}
+                                    format-style="currency" currency-code="AUD"
+                                    minimum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </span>
+                        </div>
+                        <div class="ri-metric ri-metric--discount">
+                            <span class="ri-metric__label">Discount Applied</span>
+                            <span class="ri-metric__value">−&nbsp;<lightning-formatted-number
+                                    value={selectedDiscountAmount}
+                                    format-style="currency" currency-code="AUD"
+                                    minimum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </span>
+                        </div>
+                    </template>
+                    <!-- GST — only when > 0 -->
+                    <template if:true={selectedHasGst}>
+                        <div class="ri-metric">
+                            <span class="ri-metric__label">GST Amount</span>
+                            <span class="ri-metric__value">
+                                <lightning-formatted-number
+                                    value={selectedGstAmount}
+                                    format-style="currency" currency-code="AUD"
+                                    minimum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </span>
+                        </div>
+                    </template>
+                    <!-- Always shown -->
                     <div class="ri-metric">
                         <span class="ri-metric__label">Total Amount</span>
                         <span class="ri-metric__value">
                             <lightning-formatted-number
                                 value={selectedInvoice.Total_Amount__c}
-                                format-style="currency" currency-code="AUD"
-                                minimum-fraction-digits="2">
-                            </lightning-formatted-number>
-                        </span>
-                    </div>
-                    <div class="ri-metric">
-                        <span class="ri-metric__label">GST Amount</span>
-                        <span class="ri-metric__value">
-                            <lightning-formatted-number
-                                value={selectedInvoice.GST_Amount__c}
                                 format-style="currency" currency-code="AUD"
                                 minimum-fraction-digits="2">
                             </lightning-formatted-number>
@@ -196,9 +231,85 @@
                         </span>
                     </div>
                 </div>
-                <div class="ri-detail-actions">
-                    <button class="ri-btn ri-btn--primary" onclick={handleMakePayment}>Make a Payment</button>
-                </div>
+                <!-- Discount section — collapsible, shown only if discount applied -->
+                <template if:true={hasDiscount}>
+                    <div class="ri-collapsible-section ri-collapsible-section--spaced">
+                        <button class="ri-collapsible-toggle" onclick={toggleDiscount} aria-expanded={isDiscountOpen}>
+                            <div class="ri-collapsible-label">
+                                <lightning-icon icon-name="utility:discount" size="x-small" alternative-text="Discount"></lightning-icon>
+                                <span>Discount Details</span>
+                            </div>
+                            <lightning-icon icon-name={discountToggleIcon} size="x-small" alternative-text="Toggle"></lightning-icon>
+                        </button>
+                        <template if:true={isDiscountOpen}>
+                            <div class="ri-collapsible-body">
+                                <div class="ri-detail-row">
+                                    <span class="ri-detail-label">Type</span>
+                                    <span class="ri-discount-type-badge" data-type={discountType}>{discountType}</span>
+                                </div>
+                                <div class="ri-detail-row">
+                                    <span class="ri-detail-label">Discount Value</span>
+                                    <template if:true={discountIsPercentage}>
+                                        <span class="ri-discount-value">{discountValue}%</span>
+                                    </template>
+                                    <template if:true={discountIsFixed}>
+                                        <span class="ri-discount-value">
+                                            <lightning-formatted-number
+                                                value={discountValue}
+                                                format-style="currency"
+                                                currency-code="AUD"
+                                                minimum-fraction-digits="2">
+                                            </lightning-formatted-number>
+                                        </span>
+                                    </template>
+                                </div>
+                                <div class="ri-detail-row">
+                                    <span class="ri-detail-label">Applied Amount</span>
+                                    <span class="ri-discount-value ri-discount-value--applied">
+                                        <lightning-formatted-number
+                                            value={discountAmount}
+                                            format-style="currency"
+                                            currency-code="AUD"
+                                            minimum-fraction-digits="2">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+                                <!-- Discount period + coverage (Feedback 28) -->
+                                <template if:true={discountHasPeriodInfo}>
+                                    <div class="ri-detail-row">
+                                        <span class="ri-detail-label">Discount Period</span>
+                                        <span>
+                                            <lightning-formatted-date-time
+                                                value={discountPeriodStart}
+                                                year="numeric" month="short" day="2-digit">
+                                            </lightning-formatted-date-time>
+                                            &nbsp;&ndash;&nbsp;
+                                            <template if:true={discountPeriodEnd}>
+                                                <lightning-formatted-date-time
+                                                    value={discountPeriodEnd}
+                                                    year="numeric" month="short" day="2-digit">
+                                                </lightning-formatted-date-time>
+                                            </template>
+                                            <template if:false={discountPeriodEnd}>
+                                                <span class="ri-discount-open-ended">Open-ended</span>
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class="ri-detail-row">
+                                        <span class="ri-detail-label">Coverage</span>
+                                        <span class="ri-discount-coverage">{discountCoverageText}</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:false={isPaidInvoice}>
+                    <div class="ri-detail-actions">
+                        <button class="ri-btn ri-btn--primary" onclick={handleMakePayment}>Make a Payment</button>
+                    </div>
+                </template>
             </div>
         </template>
     </div>

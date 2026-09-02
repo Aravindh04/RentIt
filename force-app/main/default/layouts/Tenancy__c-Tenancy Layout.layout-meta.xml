@@ -123,6 +123,14 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Discount_Type__c</fields>
+        <fields>Discount_Value__c</fields>
+        <fields>Start_Date__c</fields>
+        <fields>End_Date__c</fields>
+        <relatedList>Discount__c.Tenancy__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
         <fields>Invoice_Date__c</fields>
         <fields>Amount__c</fields>
         <fields>Category__c</fields>

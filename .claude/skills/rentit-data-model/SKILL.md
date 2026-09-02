@@ -10,7 +10,8 @@ Account (Landlord)
       └── Room__c       (Property__c master-detail)
 
 Tenancy__c             (Property__c lookup; Room__c lookup — optional)
- ├── Invoice__c        (Tenancy__c master-detail)
+ ├── Discount__c       (Tenancy__c master-detail; Contract__c lookup — optional)
+ ├── Invoice__c        (Tenancy__c master-detail; Discount__c lookup — optional)
  │    └── Payment__c   (Tenancy__c master-detail; Invoice__c lookup — optional)
  └── Notice__c         (Tenancy__c lookup — optional)
 
@@ -78,14 +79,30 @@ Case (record types: Complaint, Maintenance_Request)
 | `Total_Unpaid__c` | Summary SUM | Invoices where Status = Unpaid |
 | `Total_Scheduled__c` | Summary SUM | Invoices where Status = Scheduled |
 
+### Discount__c
+Child of `Tenancy__c` (MasterDetail). Landlord-created; tenants have no object access.
+
+| Field | Type | Notes |
+|---|---|---|
+| `Name` | Text | E.g. "10% Off — Sept 2026" |
+| `Tenancy__c` | MasterDetail → Tenancy__c | Always required; sharingModel = ControlledByParent |
+| `Contract__c` | Lookup → Contract | Optional — null = applies to any contract on the tenancy |
+| `Discount_Type__c` | Picklist (required) | Percentage, Fixed Amount |
+| `Discount_Value__c` | Number(18,2) (required) | For Percentage: 10 = 10%; for Fixed Amount: dollar value per full frequency period |
+| `Start_Date__c` | Date (required) | First calendar day the discount is active |
+| `End_Date__c` | Date | Last calendar day the discount is active; null = open-ended |
+| `Description__c` | LongTextArea | Internal notes |
+
 ### Invoice__c
 | Field | Type | Notes |
 |---|---|---|
 | `Name` | AutoNumber | INV-{00000} |
 | `Tenancy__c` | MasterDetail → Tenancy__c | Cascade-delete |
-| `Amount__c` | Currency (required) | Rent excl. GST (sourced from Contract.Rent_Amount__c) |
+| `Amount__c` | Currency (required) | **Original** rent excl. GST (sourced from Contract.Rent_Amount__c); never modified by discounts |
+| `Discount_Amount__c` | Currency | Dollar amount of applied discount (pro-rated); null if no discount |
+| `Discount__c` | Lookup → Discount__c | Primary discount that contributed; null if no discount; deleteConstraint=SetNull |
 | `GST_Amount__c` | Currency | 10% GST; set by batch when landlord Account.GST_Registered__c = true |
-| `Total_Amount__c` | Formula Currency | `Amount__c + GST_Amount__c` |
+| `Total_Amount__c` | Formula Currency | `(Amount__c - Discount_Amount__c) + IF(ISNULL(GST_Amount__c), 0, GST_Amount__c)` — the amount to pay |
 | `Total_Paid__c` | Currency | Aggregate of Received payments; updated by PaymentTriggerHandler |
 | `Balance_Due__c` | Formula Currency | `Total_Amount__c - Total_Paid__c` |
 | `Status__c` | Picklist (required) | Scheduled, Unpaid (default), Overdue, Paid, Void |
@@ -172,8 +189,10 @@ Record types: `Complaint`, `Maintenance_Request` — both visible to `RentIt_Ten
 ### Apex
 | Class | Role |
 |---|---|
-| `InvoiceBatch` | Daily batch — queries Activated Contracts with an Active Tenancy; generates Invoice__c records 1 day ahead. Auto-applies `Available_Credits__c` (marks invoice Paid + creates Credit Payment record). |
-| `InvoiceBackfillBatch` | One-time backfill — iterates Contract.StartDate → today; creates missing invoices as Overdue; applies credits (Credit Applied Payment records). |
+| `InvoiceBatch` | Daily batch — queries Activated Contracts with an Active Tenancy; generates Invoice__c records 1 day ahead. Calls `DiscountCalculator` to set `Discount_Amount__c`. Auto-applies `Available_Credits__c` (marks invoice Paid + creates Credit Applied payment for `Amount - Discount`). |
+| `InvoiceBackfillBatch` | One-time backfill — iterates Contract.StartDate → today; creates missing invoices; applies discounts and credits. |
+| `InvoiceDiscountBackfillBatch` | Retroactively applies Discount__c records to existing invoices and their Credit Applied payments. Batches over Tenancy__c; queries overlapping invoices; calls `DiscountCalculator` per invoice; updates `Discount_Amount__c` and syncs Credit Applied payment amounts. |
+| `DiscountCalculator` | Stateless service class. `apply(invoiceAmount, periodStart, periodEnd, contractId, discounts)` → `Result{discountAmount, primaryDiscountId}`. Pro-rates discount by calendar-day overlap; accumulates multiple discounts; clamps at invoice amount. Used by all batch classes. |
 | `InvoiceScheduler` | Schedules InvoiceBatch daily at 2 AM (`0 0 2 * * ?`). |
 | `PaymentTriggerHandler` | Before insert/update: populates Payment.Tenancy__c from Invoice.Tenancy__c when missing. After all DML: recalculates Invoice.Total_Paid__c and Account.Total_Payments_Received__c. |
 
@@ -201,6 +220,10 @@ Payment__c has a landlord approval process:
 
 ## Key Business Rules
 - Invoice amount and frequency come from `Contract.Rent_Amount__c` and `Contract.Rent_Frequency__c` — not stored on Tenancy
+- `Invoice.Amount__c` is always the **original** rent; discounts are stored separately in `Discount_Amount__c`; `Total_Amount__c = (Amount - Discount) + GST` is the amount to pay
+- Discount pro-ration: if a discount covers only N of M invoice days, `DiscountCalculator` applies the reduction proportionally (day-level granularity)
+- Multiple `Discount__c` records for the same tenancy accumulate; `Invoice.Discount__c` lookup points to the first contributing discount
+- Credit Applied payment amount = `Invoice.Amount__c - Invoice.Discount_Amount__c` (i.e. matches `Total_Amount__c` when GST = 0)
 - `Available_Credits__c` is a formula: `Total_Credits__c − Total_Credits_Applied__c`; InvoiceBatch auto-applies it when generating invoices
 - Payment > Balance_Due → excess flows back as a Credit Payment on the Tenancy
 - Notices are system-created (Flows/Apex); tenants cannot create or edit them
@@ -209,20 +232,22 @@ Payment__c has a landlord approval process:
 ---
 
 ## Experience Cloud Access
-- Sharing Sets use `Tenancy__c.Tenant__c` (Contact lookup) matched against `User.ContactId` — the standard Customer Community Plus pattern
-- Tenancy__c has its own OWD (no longer ControlledByParent — Property__c relationship is now a Lookup); shared with tenants via the Sharing Set
-- Invoice__c and Payment__c are ControlledByParent children of Tenancy__c and inherit its sharing
-- Notice__c (Specific Tenant) is shared via the indirect path `Notice__c.Tenancy__c.Tenant__c → User.ContactId`
-- Contract is accessed via `RentItPortalDataHelper` (`without sharing` class) — Contract does not support community Sharing Sets or manual share records
-- **Contract sharing with portal/external users**: the only supported mechanism is sharing the **Account** on the Contract; if the landlord Account is shared with the tenant user, the Contract becomes accessible
-- **Activated Contracts are locked**: once `Status = Activated`, the Contract record is read-only in Salesforce and cannot be edited via UI or standard DML
-- "All Tenants in Property" notices are shared via a criteria-based sharing rule (Published + Audience = All Tenants) to the `RentIt_Community_Tenants` public group
-- Property__c (Private OWD) is shared read-only to all tenants via a criteria-based sharing rule; Room__c inherits via ControlledByParent
+
+### Tenancy__c Sharing (Sharing Set)
+`Tenancy__c.Property__c` is a **Lookup** (not MasterDetail), so Tenancy has its own OWD (Private). Tenant portal access is granted declaratively via the Sharing Set (`RentIt_Tenant_Sharing_Set`): `Tenant__c (Contact) → User.ContactId` → Read. Re-evaluates automatically when `Tenant__c` changes — no Apex trigger required.
+- `Invoice__c` and `Payment__c` are `ControlledByParent` children of Tenancy and inherit its sharing automatically
+- Landlords have `modifyAllRecords: true` on Tenancy__c via `RentIt_Landlord` — no extra sharing needed
+
+### Other Objects
+- `Notice__c` (Specific Tenant) — shared via Sharing Set: `Notice__c.Tenancy__c.Tenant__c → User.ContactId`
+- `Notice__c` (All Tenants in Property) — criteria-based sharing rule (Status = Published + Audience = All Tenants) to the `RentIt_Community_Tenants` public group
+- `Property__c` (Private OWD) — shared read-only to all tenants via a criteria-based sharing rule; `Room__c` inherits via ControlledByParent
+- `Contract` — accessed via `RentItPortalDataHelper` (`without sharing`); **Activated Contracts are locked** (read-only once Status = Activated)
 
 ---
 
 ## Permission Sets Summary
 | Permission Set | Objects | Notes |
 |---|---|---|
-| `RentIt_Landlord` | CRUD + Modify All / View All on all custom objects; Read+Create+Edit on Account, Case, Contact, Contract | Full portfolio management |
-| `RentIt_Tenant` | Read-only on Account, Contact, Contract, Invoice__c, Notice__c, Property__c, Room__c, Tenancy__c; Create+Edit on Case and Payment__c | Contract access: ContractNumber, Status, StartDate, EndDate, Rent_Amount__c, Rent_Frequency__c, Deposit_Amount__c, Special_Conditions__c (all read-only). Property field: Address__c (compound). Editable Payment fields: Comment__c and Payment_Reference__c only |
+| `RentIt_Landlord` | CRUD + Modify All / View All on all custom objects including Discount__c; Read+Create+Edit on Account, Case, Contact, Contract | Full portfolio management. All Discount__c fields editable. Invoice discount fields (Discount__c lookup, Discount_Amount__c) read-only (set by batch). |
+| `RentIt_Tenant` | Read-only on Account, Contact, Contract, Invoice__c, Notice__c, Property__c, Room__c, Tenancy__c; Create+Edit on Case and Payment__c; no access to Discount__c object | Invoice discount fields readable (tenant sees saving). Contract access: ContractNumber, Status, StartDate, EndDate, Rent_Amount__c, Rent_Frequency__c, Deposit_Amount__c, Special_Conditions__c (all read-only). Property field: Address__c (compound). Editable Payment fields: Comment__c and Payment_Reference__c only |

@@ -42,10 +42,38 @@
         <readable>true</readable>
     </fieldPermissions>
 
+    <!-- ── Discount__c fields ────────────────────────────────── -->
+    <!-- Required fields excluded: Discount_Type__c, Discount_Value__c, Start_Date__c, Tenancy__c -->
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Discount__c.Contract__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Discount__c.Description__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Discount__c.End_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
     <!-- ── Invoice__c fields ──────────────────────────────────── -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Invoice__c.Balance_Due__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Invoice__c.Discount__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Invoice__c.Discount_Amount__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -182,7 +210,6 @@
 
     <!-- ── Tenancy__c fields ──────────────────────────────────── -->
     <!-- Excluded (required): Status__c, Tenant__c -->
-    <!-- Excluded (internal-only): Community_User__c -->
     <fieldPermissions>
         <editable>false</editable>
         <field>Tenancy__c.Available_Credits__c</field>
@@ -275,6 +302,16 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>Invoice__c</object>
+        <viewAllFields>false</viewAllFields>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Discount__c</object>
         <viewAllFields>false</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>

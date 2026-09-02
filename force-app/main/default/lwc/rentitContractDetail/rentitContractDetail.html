@@ -1,0 +1,140 @@
+<template>
+    <div class="ri-contract-card">
+
+        <!-- Spinner -->
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap"><div class="ri-spinner"></div></div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasContract}>
+
+                <!-- Header -->
+                <div class="ri-contract-header">
+                    <div class="ri-contract-header__icon">
+                        <lightning-icon icon-name="utility:contract" size="medium" alternative-text="Contract"></lightning-icon>
+                    </div>
+                    <div class="ri-contract-header__info">
+                        <h2 class="ri-contract-header__title">My Contract</h2>
+                        <p class="ri-contract-header__number">{contractNumber}</p>
+                    </div>
+                    <span class="ri-contract-status-badge" data-status={contractStatus}>{contractStatus}</span>
+                </div>
+
+                <!-- Contract Period -->
+                <div class="ri-info-section">
+                    <div class="ri-section-header">
+                        <lightning-icon icon-name="utility:date_time" size="x-small" alternative-text="Dates"></lightning-icon>
+                        <h3>Contract Period</h3>
+                    </div>
+                    <div class="ri-detail-grid">
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Start Date</span>
+                            <span class="ri-detail-value">
+                                <lightning-formatted-date-time
+                                    value={contractStart}
+                                    year="numeric" month="short" day="2-digit">
+                                </lightning-formatted-date-time>
+                            </span>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">End Date</span>
+                            <span class="ri-detail-value">
+                                <lightning-formatted-date-time
+                                    value={contractEnd}
+                                    year="numeric" month="short" day="2-digit">
+                                </lightning-formatted-date-time>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rent & Deposit -->
+                <div class="ri-info-section">
+                    <div class="ri-section-header">
+                        <lightning-icon icon-name="utility:money" size="x-small" alternative-text="Financials"></lightning-icon>
+                        <h3>Rent &amp; Deposit</h3>
+                    </div>
+                    <div class="ri-detail-grid">
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Rent Amount</span>
+                            <span class="ri-detail-value ri-rent-value">
+                                <lightning-formatted-number
+                                    value={contractRent}
+                                    format-style="currency"
+                                    currency-code="AUD"
+                                    minimum-fraction-digits="2">
+                                </lightning-formatted-number>
+                                <span class="ri-rent-freq">&nbsp;/ {contractFrequency}</span>
+                            </span>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Security Deposit</span>
+                            <span class="ri-detail-value">
+                                <lightning-formatted-number
+                                    value={contractDeposit}
+                                    format-style="currency"
+                                    currency-code="AUD"
+                                    minimum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Conditions -->
+                <template if:true={hasConditions}>
+                    <div class="ri-info-section">
+                        <div class="ri-section-header">
+                            <lightning-icon icon-name="utility:note" size="x-small" alternative-text="Conditions"></lightning-icon>
+                            <h3>Special Conditions</h3>
+                        </div>
+                        <p class="ri-conditions-text">{contractConditions}</p>
+                    </div>
+                </template>
+
+                <!-- Attachments — collapsible -->
+                <div class="ri-info-section ri-info-section--last">
+                    <button class="ri-attachments-toggle" onclick={toggleAttachments} aria-expanded={isAttachmentsOpen}>
+                        <div class="ri-attachments-toggle__label">
+                            <lightning-icon icon-name="utility:attach" size="x-small" alternative-text="Attachments"></lightning-icon>
+                            <h3>{attachmentLabel}</h3>
+                        </div>
+                        <lightning-icon icon-name={toggleIcon} size="x-small" alternative-text="Toggle"></lightning-icon>
+                    </button>
+
+                    <template if:true={isAttachmentsOpen}>
+                        <template if:true={hasFiles}>
+                            <ul class="ri-file-list">
+                                <template for:each={files} for:item="file">
+                                    <li key={file.id} class="ri-file-item">
+                                        <lightning-icon icon-name="doctype:attachment" size="small" alternative-text="File"></lightning-icon>
+                                        <div class="ri-file-info">
+                                            <a href={file.downloadUrl} target="_blank" class="ri-file-name">{file.title}</a>
+                                            <span class="ri-file-meta">{file.fileType} &middot; {file.size}</span>
+                                        </div>
+                                        <a href={file.downloadUrl} target="_blank" class="ri-file-download" title="Download">
+                                            <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download"></lightning-icon>
+                                        </a>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                        <template if:false={hasFiles}>
+                            <p class="ri-no-files">No attachments on this contract.</p>
+                        </template>
+                    </template>
+                </div>
+
+            </template>
+
+            <!-- No contract state -->
+            <template if:false={hasContract}>
+                <div class="ri-empty">
+                    <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+                    <p>No active contract found.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

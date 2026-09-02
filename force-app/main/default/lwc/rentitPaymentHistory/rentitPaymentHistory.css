@@ -259,3 +259,102 @@
 .ri-detail-value { color: #1a1b1e; }
 
 .ri-detail-value--comment { color: #5f6b7a; font-size: 0.825rem; line-height: 1.5; }
+
+/* Payment name link style in list */
+.ri-pmt-name-link {
+    color: #1565C0;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+/* Collapsible attachments */
+.ri-pmt-collapsible {
+    margin: 0.75rem 1.5rem 0;
+    border: 1px solid #EEF2F7;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ri-pmt-attach-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #F7F9FC;
+    border: none;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+}
+
+.ri-pmt-attach-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0d2d6b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* File list */
+.ri-pmt-file-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: #fff;
+}
+
+.ri-pmt-file-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background: #F7F9FC;
+    border: 1px solid #dce3ee;
+    border-radius: 8px;
+}
+
+.ri-pmt-file-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.ri-pmt-file-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1565C0;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ri-pmt-file-name:hover { text-decoration: underline; }
+
+.ri-pmt-file-meta {
+    font-size: 0.7rem;
+    color: #5f6b7a;
+}
+
+.ri-pmt-file-download {
+    color: #5f6b7a;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.ri-pmt-file-download:hover { color: #1565C0; }
+
+.ri-pmt-no-files {
+    padding: 0.75rem 1rem 1rem;
+    font-size: 0.85rem;
+    color: #5f6b7a;
+    background: #fff;
+    margin: 0;
+}

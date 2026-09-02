@@ -4,7 +4,6 @@
     box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
     overflow: hidden;
     margin-bottom: 1.5rem;
-    max-width: 680px;
 }
 
 .ri-card__header {
@@ -92,16 +91,30 @@
 
 .ri-field-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 767px) {
+    .ri-field-row { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
     .ri-field-row { grid-template-columns: 1fr; }
 }
 
 .ri-field-row .ri-full-width {
     grid-column: 1 / -1;
+}
+
+.ri-field-row--2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 480px) {
+    .ri-field-row--2col { grid-template-columns: 1fr; }
 }
 
 /* Success state */
@@ -291,6 +304,11 @@
 
 .ri-file-chip__remove:hover {
     color: #7f0000;
+}
+
+/* Body padding breathing room for wider layouts */
+.ri-card__body {
+    padding: 1.75rem 2rem;
 }
 
 /* Image preview */

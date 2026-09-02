@@ -13,3 +13,21 @@ Feedback 12 - The tenants should also be able to view their Contract infomation 
 Feedback 13 - The Rent on the My Tenancy should come from Contract
 Feedback 14 - The Address information should come from the property
 Feedback 15 - On click of View Profile, the user should see his own Contact and user information instead of My Tenancy
+Feedback 16 - The entire Contract should be visible to the Portal user including the document attached
+Feedback 17 - Best to Isolate the Contract in a new page, with attachments in a Collapsible section
+Feedback 18 - The Invoice number on Invoices tab should be clickable with Discont applied checkbox if there is any Applied_Discount__c on the invoice
+Feedback 19 - On click of the Invoice number, in the same page the Invoice detail including the discount information in a Collapsible section if there is any discount applied should be visible with an option to go back to the list view with a small back arrow button
+Feedback 20 - The same for the Payments as well. Also replace the Reference in the Payment list view to Payment Name. The payments should also show the attachment in a Collapsible section same as Contract
+Feedback 21 - On the 'Invoice Payment' of Payments, if the user choses and invoice or switches to another invoice, then the Fiedl values on 'Make a Payment' must be updated as per the selected Invoice and Makes the amount field Read-only
+Feedback 22 - While the Invoice is Defaulted on the 'Invoice Payment', if the user swiches to another invoice, then the Field values (Amount) must be updated as per the selected Invoice
+Feedback 23 - If the Portal user manually switches the Prefilled 'Invoice payment' to General Payment, the Invoice related values should be cleared and Filled in again when switched back
+Feedback 24 - 'Make a Payment' button on the Invoice Detail in Invoices must not be visible for the paid invoices
+Feedback 25 - When 'Make a Payment' button on the Invoice Detail in Invoices when selected via invoice navigates the user to 'Invoice payment' section in 'Make a Payment'
+Feedback 26 - On the Invoice Details in Invoices tab, dynamically include the Actual amount and Discount Amount applied if there are any discount. Dynamically remove the GST amount if there is none
+Feedback 27 - On the Invoices tab, The spinner is visible below the 'TYPE' choices! Instead, it must be below the 'TYPE' selection
+Feedback 28 - Discount Details should also highlight the discount period and how many days among that period is the invoice covered
+Feedback 29 - The Discount Details section should be a very little bit darker, similar color as the Invoice List Table header
+Feedback 30 - 'My Tenancy' tab doesn't dislay spinner when loading. It should display spinner while loading instead of 'No active tenancy found.'
+Feedback 31 - 'Make a Payment' has lot of width space left. Make use of the space also make the form look better in Landscape and portait view
+Feedback 32 - The Notices should display all Current and Actioned notices
+Feedback 32 - The Notices should also display different type filters Applicable for tenants

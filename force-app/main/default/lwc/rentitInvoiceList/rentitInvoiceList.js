@@ -11,6 +11,7 @@ export default class RentitInvoiceList extends NavigationMixin(LightningElement)
     selectedInvoice = null;
     activeStatusTab = 'all';
     activeCatTab    = 'all';
+    isDiscountOpen  = false;
 
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
@@ -84,12 +85,55 @@ export default class RentitInvoiceList extends NavigationMixin(LightningElement)
         this.selectedInvoice = this.invoices.find(inv => inv.Id === id) || null;
     }
 
-    handleCloseDetail() { this.selectedInvoice = null; }
+    handleCloseDetail() {
+        this.selectedInvoice = null;
+        this.isDiscountOpen = false;
+    }
+
+    // ── Invoice detail — dynamic metrics (Feedback 26) ───────────
+    get isPaidInvoice()        { return this.selectedInvoice?.Status__c === 'Paid'; }
+    get selectedHasDiscount()  { return !!(this.selectedInvoice?.Discount_Amount__c); }
+    get selectedHasGst()       { return !!(this.selectedInvoice?.GST_Amount__c); }
+    get selectedOriginalAmount(){ return this.selectedInvoice?.Amount__c; }
+    get selectedDiscountAmount(){ return this.selectedInvoice?.Discount_Amount__c; }
+    get selectedGstAmount()    { return this.selectedInvoice?.GST_Amount__c; }
+
+    // ── Discount collapsible ──────────────────────────────────────
+    get hasDiscount()          { return !!this.selectedInvoice?.Discount__c; }
+    get discountAmount()       { return this.selectedInvoice?.Discount_Amount__c; }
+    get discountType()         { return this.selectedInvoice?.Discount__r?.Discount_Type__c || ''; }
+    get discountValue()        { return this.selectedInvoice?.Discount__r?.Discount_Value__c; }
+    get discountIsPercentage() { return this.discountType === 'Percentage'; }
+    get discountIsFixed()      { return this.discountType === 'Fixed Amount'; }
+    get discountToggleIcon() {
+        return this.isDiscountOpen ? 'utility:chevronup' : 'utility:chevrondown';
+    }
+    toggleDiscount() { this.isDiscountOpen = !this.isDiscountOpen; }
+
+    // ── Discount period + coverage (Feedback 28) ──────────────────
+    get discountPeriodStart()    { return this.selectedInvoice?.Discount__r?.Start_Date__c; }
+    get discountPeriodEnd()      { return this.selectedInvoice?.Discount__r?.End_Date__c; }
+    get discountHasPeriodInfo()  { return !!this.discountPeriodStart; }
+
+    get discountCoverageText() {
+        const inv = this.selectedInvoice;
+        if (!inv?.Period_Start__c || !inv?.Period_End__c || !this.discountPeriodStart) return null;
+        const invStart  = new Date(inv.Period_Start__c);
+        const invEnd    = new Date(inv.Period_End__c);
+        const discStart = new Date(this.discountPeriodStart);
+        const discEnd   = this.discountPeriodEnd ? new Date(this.discountPeriodEnd) : null;
+        const overlapStart = discStart > invStart ? discStart : invStart;
+        const overlapEnd   = discEnd && discEnd < invEnd ? discEnd : invEnd;
+        const coverDays = Math.max(0, Math.round((overlapEnd - overlapStart) / 86400000) + 1);
+        const invDays   = Math.round((invEnd - invStart) / 86400000) + 1;
+        return `${coverDays} of ${invDays} days`;
+    }
 
     handleMakePayment() {
+        const invoiceId = this.selectedInvoice?.Id || '';
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',
-            attributes: { url: `${BasePath}/payments` }
+            attributes: { url: `${BasePath}/payments?invoiceId=${invoiceId}` }
         });
     }
 }

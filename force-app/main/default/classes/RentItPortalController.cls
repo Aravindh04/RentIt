@@ -71,6 +71,12 @@ public with sharing class RentItPortalController {
         return RentItPortalDataHelper.getContractForTenancy(tenancyId);
     }
 
+    @AuraEnabled(cacheable=true)
+    public static List<ContentDocumentLink> getContractFiles(Id contractId, Id tenancyId) {
+        if (contractId == null || tenancyId == null) return new List<ContentDocumentLink>();
+        return RentItPortalDataHelper.getContractFilesForTenancy(contractId, tenancyId);
+    }
+
     // ──────────────────────────────────────────────────────────────
     // Tenant — Invoices
     // ──────────────────────────────────────────────────────────────
@@ -79,13 +85,22 @@ public with sharing class RentItPortalController {
     public static List<Invoice__c> getInvoices(Id tenancyId) {
         return [
             SELECT Id, Name, Category__c, Period_Start__c, Period_End__c,
-                   Total_Amount__c, Total_Paid__c, Balance_Due__c,
-                   GST_Amount__c, Status__c, Due_Date__c
+                   Amount__c, Total_Amount__c, Total_Paid__c, Balance_Due__c,
+                   GST_Amount__c, Status__c, Due_Date__c,
+                   Discount__c, Discount_Amount__c,
+                   Discount__r.Discount_Type__c, Discount__r.Discount_Value__c,
+                   Discount__r.Start_Date__c, Discount__r.End_Date__c
             FROM   Invoice__c
             WHERE  Tenancy__c = :tenancyId
             WITH USER_MODE
             ORDER BY Period_Start__c DESC
         ];
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<ContentDocumentLink> getPaymentFiles(Id paymentId, Id tenancyId) {
+        if (paymentId == null || tenancyId == null) return new List<ContentDocumentLink>();
+        return RentItPortalDataHelper.getPaymentFilesForTenancy(paymentId, tenancyId);
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -216,7 +231,6 @@ public with sharing class RentItPortalController {
                    Property__c, Property__r.Name,
                    Room__c, Room__r.Name,
                    Tenant__c, Tenant__r.Name,
-                   Community_User__c, Community_User__r.Name,
                    Total_Arrears__c, Total_Credits__c,
                    Total_Received__c, Total_Unpaid__c
             FROM   Tenancy__c

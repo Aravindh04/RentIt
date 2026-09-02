@@ -1,16 +1,21 @@
 import { LightningElement, wire } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+import BasePath from '@salesforce/community/basePath';
 import getActiveTenancy from '@salesforce/apex/RentItPortalController.getActiveTenancy';
 import getContract from '@salesforce/apex/RentItPortalController.getContract';
 
-export default class RentitTenancySummary extends LightningElement {
+export default class RentitTenancySummary extends NavigationMixin(LightningElement) {
     tenancy  = null;
     contract = null;
     isLoading = true;
 
     @wire(getActiveTenancy)
-    wiredTenancy({ data, error }) {
-        if (data) { this.tenancy = data; }
-        this.isLoading = false;
+    wiredTenancy(result) {
+        // Only hide spinner once data or error has resolved (not on initial {data:undefined, error:undefined} fire)
+        if (result.data !== undefined || result.error) {
+            if (result.data) this.tenancy = result.data;
+            this.isLoading = false;
+        }
     }
 
     @wire(getContract, { tenancyId: '$tenancyId' })
@@ -67,4 +72,12 @@ export default class RentitTenancySummary extends LightningElement {
     get contractDeposit()        { return this.contract?.Deposit_Amount__c; }
     get contractConditions()     { return this.contract?.Special_Conditions__c || ''; }
     get hasContractConditions()  { return !!this.contract?.Special_Conditions__c; }
+
+    // ── Navigation ────────────────────────────────────────────────
+    handleViewContract() {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: { url: `${BasePath}/my-contract` }
+        });
+    }
 }

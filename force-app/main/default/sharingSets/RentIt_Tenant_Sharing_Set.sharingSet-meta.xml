@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Grants Customer Community Plus tenant users read access to the Tenancy and Notice records they are directly associated with, matching the Tenancy Tenant__c (Contact) to User.ContactId.</description>
-    <name>RentIt Tenant Sharing Set</name>
-
-    <!--
-        PROFILE: Update this to match the profile assigned to tenant community users in your org.
-        Typically named something like "RentIt Tenant" or "Customer Community Plus Login User".
-    -->
-    <profiles>Customer Community Plus User</profiles>
-
-
     <accessMappings>
-        <!--
-            Notice__c (Specific Tenant): Indirect access via Tenancy__c.Tenant__c → User.ContactId.
-            Covers notices where Audience__c = "Specific Tenant" and Tenancy__c is populated.
-            "All Tenants in Property" notices are covered by the Notice__c sharing rule instead.
-        -->
         <accessLevel>Read</accessLevel>
         <object>Notice__c</object>
         <objectField>Tenancy__c.Tenant__c</objectField>
-        <userField>ContactId</userField>
+        <userField>Contact</userField>
     </accessMappings>
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>Tenancy__c</object>
+        <objectField>Tenant__c</objectField>
+        <userField>Contact</userField>
+    </accessMappings>
+    <description>Grants Customer Community Plus tenant users read access to the Tenancy and Notice records they are directly associated with, matching the Tenancy Tenant__c (Contact) to User.ContactId.</description>
+    <name>RentIt Tenant Sharing Set</name>
+    <profiles>customer community plus user</profiles>
 </SharingSet>

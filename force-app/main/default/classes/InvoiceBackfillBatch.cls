@@ -24,7 +24,20 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
             availableCreditsByTenancy.put(t.Id, t.Available_Credits__c != null ? t.Available_Credits__c : 0);
         }
 
-        // Fetch all existing non-void invoices — we need the full history, not just future ones
+        Map<Id, List<Discount__c>> discountsByTenancy = new Map<Id, List<Discount__c>>();
+        for (Discount__c d : [
+            SELECT Id, Tenancy__c, Contract__c, Discount_Type__c, Discount_Value__c,
+                   Start_Date__c, End_Date__c
+            FROM Discount__c
+            WHERE Tenancy__c IN :tenancyIds
+        ]) {
+            if (!discountsByTenancy.containsKey(d.Tenancy__c)) {
+                discountsByTenancy.put(d.Tenancy__c, new List<Discount__c>());
+            }
+            discountsByTenancy.get(d.Tenancy__c).add(d);
+        }
+
+        // Fetch full invoice history — not just future — to skip already-created periods
         Map<Id, Set<Date>> existingPeriodsByTenancy = new Map<Id, Set<Date>>();
         for (Id tid : tenancyIds) {
             existingPeriodsByTenancy.put(tid, new Set<Date>());
@@ -42,9 +55,9 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
         List<Invoice__c> toCreate = new List<Invoice__c>();
 
         for (Contract c : contracts) {
-            Decimal amount = c.Rent_Amount__c;
-            String freq   = c.Rent_Frequency__c;
-            Date startDate = c.StartDate;
+            Decimal amount    = c.Rent_Amount__c;
+            String  freq      = c.Rent_Frequency__c;
+            Date    startDate = c.StartDate;
 
             if (amount == null || freq == null || startDate == null) continue;
 
@@ -62,8 +75,16 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
             Date periodStart = startDate;
             while (periodStart <= ceiling) {
                 if (!existingPeriods.contains(periodStart)) {
-                    Boolean applyCredit = credits >= amount;
-                    String status;
+                    Date periodEnd = periodStart.addDays(intervalDays - 1);
+
+                    DiscountCalculator.Result dr = DiscountCalculator.apply(
+                        amount, periodStart, periodEnd, c.Id,
+                        discountsByTenancy.get(c.Tenancy__c)
+                    );
+
+                    Decimal netAmount   = (amount - dr.discountAmount).setScale(2);
+                    Boolean applyCredit = credits >= netAmount;
+                    String  status;
                     if (applyCredit) {
                         status = 'Paid';
                     } else if (periodStart < today) {
@@ -73,18 +94,20 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
                     }
 
                     toCreate.add(new Invoice__c(
-                        Tenancy__c      = c.Tenancy__c,
-                        Amount__c       = amount,
-                        Invoice_Date__c = periodStart,
-                        Due_Date__c     = periodStart,
-                        Period_Start__c = periodStart,
-                        Period_End__c   = periodStart.addDays(intervalDays - 1),
-                        Status__c       = status
+                        Tenancy__c         = c.Tenancy__c,
+                        Amount__c          = amount,
+                        Discount_Amount__c = dr.discountAmount > 0 ? dr.discountAmount : null,
+                        Discount__c        = dr.primaryDiscountId,
+                        Invoice_Date__c    = periodStart,
+                        Due_Date__c        = periodStart,
+                        Period_Start__c    = periodStart,
+                        Period_End__c      = periodEnd,
+                        Status__c          = status
                     ));
                     existingPeriods.add(periodStart);
 
                     if (applyCredit) {
-                        credits -= amount;
+                        credits -= netAmount;
                         availableCreditsByTenancy.put(c.Tenancy__c, credits);
                     }
                 }
@@ -98,12 +121,13 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
             List<Payment__c> creditApplications = new List<Payment__c>();
             for (Invoice__c inv : toCreate) {
                 if (inv.Status__c == 'Paid') {
+                    Decimal discountAmt = inv.Discount_Amount__c != null ? inv.Discount_Amount__c : 0;
                     creditApplications.add(new Payment__c(
                         Tenancy__c      = inv.Tenancy__c,
                         Invoice__c      = inv.Id,
                         Payment_Type__c = 'Credit Applied',
                         Status__c       = 'Received',
-                        Amount__c       = inv.Amount__c,
+                        Amount__c       = inv.Amount__c - discountAmt,
                         Payment_Date__c = inv.Invoice_Date__c
                     ));
                 }

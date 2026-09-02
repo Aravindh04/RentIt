@@ -42,6 +42,7 @@ export default class RentitHeader extends NavigationMixin(LightningElement) {
     get navInvoices()  { return this._navClass('invoices'); }
     get navPayments()  { return this._navClass('payments'); }
     get navNotices()   { return this._navClass('notices'); }
+    get navContract()  { return this._navClass('my-contract'); }
     get navSupport()   { return this._navClass('support'); }
 
     _navClass(route) {
@@ -53,6 +54,7 @@ export default class RentitHeader extends NavigationMixin(LightningElement) {
     get mobileNavInvoices()  { return this._mobileClass('invoices'); }
     get mobileNavPayments()  { return this._mobileClass('payments'); }
     get mobileNavNotices()   { return this._mobileClass('notices'); }
+    get mobileNavContract()  { return this._mobileClass('my-contract'); }
     get mobileNavSupport()   { return this._mobileClass('support'); }
 
     _mobileClass(route) {
@@ -61,18 +63,20 @@ export default class RentitHeader extends NavigationMixin(LightningElement) {
 
     // ── Navigation ────────────────────────────────────────────────
     _go(urlSuffix) {
+        let navurl = urlSuffix ? `${BasePath}/${urlSuffix}` : `${BasePath}`;
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',
-            attributes: { url: `${BasePath}/${urlSuffix}` }
+            attributes: { url: navurl }
         });
         this.isMobileMenuOpen = false;
     }
 
-    handleNavHome()      { this._go('home'); }
+    handleNavHome()      { this._go(''); }
     handleNavMyTenancy() { this._go('my-tenancy'); }
     handleNavInvoices()  { this._go('invoices'); }
     handleNavPayments()  { this._go('payments'); }
     handleNavNotices()   { this._go('notices'); }
+    handleNavContract()  { this._go('my-contract'); }
     handleNavSupport()   { this._go('support'); }
 
     // ── Dropdown ──────────────────────────────────────────────────

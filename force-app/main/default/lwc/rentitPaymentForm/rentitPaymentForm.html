@@ -77,6 +77,7 @@
                             label="Amount (AUD)"
                             value={amount}
                             onchange={handleAmountChange}
+                            read-only={isAmountReadOnly}
                             min="0.01"
                             step="0.01"
                             required>
@@ -95,15 +96,15 @@
                             onchange={handleMethodChange}
                             required>
                         </lightning-combobox>
-                        <lightning-input
-                            type="text"
-                            label="Payment Reference"
-                            value={paymentReference}
-                            onchange={handleReferenceChange}
-                            maxlength="255"
-                            placeholder="Bank transaction ID or receipt">
-                        </lightning-input>
-                        <div class="ri-full-width">
+                        <div class="ri-full-width ri-field-row--2col">
+                            <lightning-input
+                                type="text"
+                                label="Payment Reference"
+                                value={paymentReference}
+                                onchange={handleReferenceChange}
+                                maxlength="255"
+                                placeholder="Bank transaction ID or receipt">
+                            </lightning-input>
                             <lightning-input
                                 type="textarea"
                                 label="Comment (optional)"

@@ -20,9 +20,10 @@ public with sharing class ContactCommunityUserService {
 
     private static final String COMMUNITY_PROFILE_NAME = 'Customer Community Plus User';
     private static final String USERNAME_SUFFIX = '@rentit.com.dev';
+    
 
-    @InvocableMethod(
-        label='Create Contact Community User',
+   @InvocableMethod(
+        label='Create Contact Community User' 
         description='Queues creation of a Customer Community Plus User for a Contact and triggers the standard welcome/password-set email.'
     )
     public static List<Result> createCommunityUsers(List<Request> requests) {

@@ -7,9 +7,8 @@
 public without sharing class RentItPortalDataHelper {
 
     public static Contract getContractForTenancy(Id tenancyId) {
-        // Confirm the tenancy belongs to the running user before bypassing sharing
         Integer owned = [
-            SELECT COUNT(id) FROM Tenancy__c
+            SELECT COUNT() FROM Tenancy__c
             WHERE Id = :tenancyId
               AND Tenant__c IN (SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId())
             WITH USER_MODE
@@ -26,5 +25,56 @@ public without sharing class RentItPortalDataHelper {
             LIMIT  1
         ];
         return contracts.isEmpty() ? null : contracts[0];
+    }
+
+    public static List<ContentDocumentLink> getPaymentFilesForTenancy(Id paymentId, Id tenancyId) {
+        Integer ownedTenancy = [
+            SELECT COUNT() FROM Tenancy__c
+            WHERE Id = :tenancyId
+              AND Tenant__c IN (SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId())
+            WITH USER_MODE
+        ];
+        if (ownedTenancy == 0) return new List<ContentDocumentLink>();
+
+        Integer ownedPayment = [
+            SELECT COUNT() FROM Payment__c
+            WHERE Id = :paymentId AND Tenancy__c = :tenancyId
+            WITH USER_MODE
+        ];
+        if (ownedPayment == 0) return new List<ContentDocumentLink>();
+
+        return [
+            SELECT ContentDocumentId,
+                   ContentDocument.Title,
+                   ContentDocument.FileType,
+                   ContentDocument.ContentSize,
+                   ContentDocument.LatestPublishedVersionId,
+                   ContentDocument.CreatedDate
+            FROM   ContentDocumentLink
+            WHERE  LinkedEntityId = :paymentId
+            ORDER BY ContentDocument.CreatedDate DESC
+        ];
+    }
+
+    public static List<ContentDocumentLink> getContractFilesForTenancy(Id contractId, Id tenancyId) {
+        Integer owned = [
+            SELECT COUNT() FROM Tenancy__c
+            WHERE Id = :tenancyId
+              AND Tenant__c IN (SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId())
+            WITH USER_MODE
+        ];
+        if (owned == 0) return new List<ContentDocumentLink>();
+
+        return [
+            SELECT ContentDocumentId,
+                   ContentDocument.Title,
+                   ContentDocument.FileType,
+                   ContentDocument.ContentSize,
+                   ContentDocument.LatestPublishedVersionId,
+                   ContentDocument.CreatedDate
+            FROM   ContentDocumentLink
+            WHERE  LinkedEntityId = :contractId
+            ORDER BY ContentDocument.CreatedDate DESC
+        ];
     }
 }

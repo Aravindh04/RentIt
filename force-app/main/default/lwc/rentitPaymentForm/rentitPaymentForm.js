@@ -1,5 +1,5 @@
 import { LightningElement, wire, track } from 'lwc';
-import { NavigationMixin } from 'lightning/navigation';
+import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
 import getActiveTenancy from '@salesforce/apex/RentItPortalController.getActiveTenancy';
 import getInvoices from '@salesforce/apex/RentItPortalController.getInvoices';
 import submitPayment from '@salesforce/apex/RentItPortalController.submitPayment';
@@ -21,17 +21,21 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
     @track submitSuccess = false;
     @track submittedId;
 
-    isLoading    = true;
-    isSubmitting = false;
-    paymentType  = 'invoice'; // 'invoice' | 'general'
+    isLoading        = true;
+    isSubmitting     = false;
+    isAmountReadOnly = false;
+    paymentType      = 'invoice'; // 'invoice' | 'general'
 
     // Form fields
     selectedInvoiceId = null;
-    amount        = null;
-    paymentDate   = null;
-    paymentMethod = null;
-    paymentReference = '';
-    comment       = '';
+    amount            = null;
+    paymentDate       = null;
+    paymentMethod     = null;
+    paymentReference  = '';
+    comment           = '';
+
+    // Internal: invoice map for quick balance lookup
+    _invoiceMap = new Map();
 
     // File state
     selectedFile    = null;
@@ -41,6 +45,9 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
     _contentType    = null;
 
     paymentMethodOptions = PAYMENT_METHODS;
+
+    @wire(CurrentPageReference)
+    pageRef;
 
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
@@ -56,13 +63,14 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
     _loadInvoices(tenancyId) {
         getInvoices({ tenancyId })
             .then(invoices => {
-                this.invoiceOptions = invoices
-                    .filter(inv => inv.Balance_Due__c > 0)
-                    .map(inv => ({
-                        label: `${inv.Name} — Balance: $${inv.Balance_Due__c}`,
-                        value: inv.Id
-                    }));
+                const withBalance = invoices.filter(inv => inv.Balance_Due__c > 0);
+                this._invoiceMap = new Map(withBalance.map(inv => [inv.Id, inv]));
+                this.invoiceOptions = withBalance.map(inv => ({
+                    label: `${inv.Name} — Balance: $${(inv.Balance_Due__c || 0).toFixed(2)}`,
+                    value: inv.Id
+                }));
                 this.isLoading = false;
+                this._applyPreselectedInvoice();
             })
             .catch(err => {
                 this.formError = err?.body?.message || 'Failed to load invoices.';
@@ -70,7 +78,36 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
             });
     }
 
-    // Payment type
+    // ── URL pre-selection (Feedback 25) ──────────────────────────
+    _applyPreselectedInvoice() {
+        const preId = this._getQueryParam('invoiceId');
+        if (preId && this._invoiceMap.has(preId)) {
+            this.selectedInvoiceId = preId;
+            this._applyInvoiceAmount(preId);
+        }
+    }
+
+    _getQueryParam(name) {
+        const url = this.pageRef?.attributes?.url || window.location.href;
+        const qIdx = url.indexOf('?');
+        if (qIdx === -1) return null;
+        try {
+            return new URLSearchParams(url.substring(qIdx + 1)).get(name);
+        } catch (_) {
+            return null;
+        }
+    }
+
+    // ── Invoice amount auto-fill (Feedbacks 21 + 22) ─────────────
+    _applyInvoiceAmount(invoiceId) {
+        const inv = this._invoiceMap.get(invoiceId);
+        if (inv) {
+            this.amount = inv.Balance_Due__c;
+            this.isAmountReadOnly = true;
+        }
+    }
+
+    // Payment type — switching clears/restores values (Feedback 23)
     get isInvoicePayment() { return this.paymentType === 'invoice'; }
     get isGeneralPayment()  { return this.paymentType === 'general'; }
     get btnInvoice() { return 'ri-type-btn' + (this.isInvoicePayment ? ' ri-type-btn--active' : ''); }
@@ -81,11 +118,29 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
             : 'Your payment has been submitted for landlord approval.';
     }
 
-    handleTypeInvoice() { this.paymentType = 'invoice'; this.selectedInvoiceId = null; }
-    handleTypeGeneral()  { this.paymentType = 'general'; this.selectedInvoiceId = null; }
+    handleTypeInvoice() {
+        this.paymentType = 'invoice';
+        // Restore invoice amount when switching back
+        if (this.selectedInvoiceId) {
+            this._applyInvoiceAmount(this.selectedInvoiceId);
+        } else {
+            this.isAmountReadOnly = false;
+        }
+    }
+
+    handleTypeGeneral() {
+        this.paymentType = 'general';
+        // Clear amount so user enters their own; remember the invoice selection
+        this.amount = null;
+        this.isAmountReadOnly = false;
+    }
 
     // Form field handlers
-    handleInvoiceChange(e)     { this.selectedInvoiceId = e.detail.value; }
+    handleInvoiceChange(e) {
+        this.selectedInvoiceId = e.detail.value;
+        this._applyInvoiceAmount(this.selectedInvoiceId);
+    }
+
     handleAmountChange(e)      { this.amount = parseFloat(e.detail.value); }
     handlePaymentDateChange(e) { this.paymentDate = e.detail.value; }
     handleMethodChange(e)      { this.paymentMethod = e.detail.value; }
@@ -123,21 +178,16 @@ export default class RentitPaymentForm extends NavigationMixin(LightningElement)
         if (input) input.value = '';
     }
 
-    // Computed getters for file display
-    get selectedFileName() {
-        return this.selectedFile?.name || '';
-    }
+    get selectedFileName() { return this.selectedFile?.name || ''; }
 
     get selectedFileSizeFormatted() {
         const bytes = this.selectedFile?.size || 0;
-        if (bytes < 1024)       return `${bytes} B`;
-        if (bytes < 1048576)    return `${(bytes / 1024).toFixed(1)} KB`;
+        if (bytes < 1024)    return `${bytes} B`;
+        if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
         return `${(bytes / 1048576).toFixed(1)} MB`;
     }
 
-    get screenshotAttached() {
-        return !!this._base64Content;
-    }
+    get screenshotAttached() { return !!this._base64Content; }
 
     // Submit
     handleSubmit() {

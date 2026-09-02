@@ -342,6 +342,10 @@
     color: #E65100;
 }
 
+.ri-metric--discount .ri-metric__value {
+    color: #1B5E20;
+}
+
 .ri-detail-meta {
     padding: 0.5rem 1.5rem 0;
 }
@@ -388,4 +392,115 @@
 
 .ri-btn--primary:hover {
     background: #0d2d6b;
+}
+
+/* Invoice name link style in list */
+.ri-inv-name-link {
+    color: #1565C0;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+/* Discount badge in list row */
+.ri-discount-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.4rem;
+    padding: 0.1em 0.55em;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #FFF8E1;
+    color: #E65100;
+    white-space: nowrap;
+}
+
+/* Collapsible section (discount / attachments) */
+.ri-collapsible-section {
+    margin: 0 1.5rem;
+    border: 1px solid #EEF2F7;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.ri-collapsible-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #EEF2F7;
+    border: none;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+}
+
+.ri-collapsible-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0d2d6b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ri-collapsible-body {
+    padding: 0 1rem;
+    background: #fff;
+}
+
+.ri-discount-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #1B5E20;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.ri-discount-value {
+    font-weight: 700;
+    color: #0d2d6b;
+    font-size: 0.95rem;
+}
+
+.ri-discount-value--applied {
+    color: #1B5E20;
+}
+
+/* Extra top spacing between invoice detail and collapsible section */
+.ri-collapsible-section--spaced {
+    margin-top: 1.25rem;
+}
+
+/* Discount type badge */
+.ri-discount-type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2em 0.65em;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.ri-discount-type-badge[data-type="Percentage"]   { background: #E3F2FD; color: #0D47A1; }
+.ri-discount-type-badge[data-type="Fixed Amount"] { background: #E8F5E9; color: #1B5E20; }
+
+.ri-discount-open-ended {
+    font-style: italic;
+    color: #5f6b7a;
+    font-size: 0.825rem;
+}
+
+.ri-discount-coverage {
+    font-weight: 600;
+    color: #0d2d6b;
+    font-size: 0.875rem;
 }

@@ -241,89 +241,59 @@
     font-size: 0.875rem;
 }
 
-/* Contract section */
-.ri-contract-status {
-    margin-left: auto;
-    display: inline-flex;
+/* Contract CTA banner */
+.ri-contract-cta {
+    display: flex;
     align-items: center;
-    padding: 0.2em 0.75em;
-    border-radius: 999px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.ri-contract-status[data-status="Activated"] { background: #E8F5E9; color: #1B5E20; }
-.ri-contract-status[data-status="Draft"]     { background: #E3F2FD; color: #0D47A1; }
-.ri-contract-status[data-status="Expired"]   { background: #F5F5F5; color: #616161; }
-.ri-contract-status[data-status="Voided"]    { background: #FFEBEE; color: #B71C1C; }
-
-.ri-contract-metrics {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    justify-content: space-between;
     gap: 1rem;
-    margin-top: 0.75rem;
-}
-
-.ri-contract-metric {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.ri-contract-number {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #0d2d6b;
-}
-
-.ri-contract-financials {
-    display: flex;
-    gap: 2rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
+    padding: 1rem 1.75rem;
+    background: #F7F9FC;
     border-top: 1px solid #EEF2F7;
     flex-wrap: wrap;
 }
 
-.ri-contract-financial {
+.ri-contract-cta__info {
     display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #3a3f47;
 }
 
-.ri-contract-rent {
-    display: flex;
-    align-items: baseline;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #0d2d6b;
+.ri-contract-cta__status {
+    display: inline-flex;
+    padding: 0.15em 0.65em;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
+.ri-contract-cta__status[data-status="Activated"] { background: #E8F5E9; color: #1B5E20; }
+.ri-contract-cta__status[data-status="Draft"]     { background: #E3F2FD; color: #0D47A1; }
+.ri-contract-cta__status[data-status="Expired"]   { background: #F5F5F5; color: #616161; }
+.ri-contract-cta__status[data-status="Terminated"]{ background: #FFEBEE; color: #B71C1C; }
+
+.ri-btn-view-contract {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 1.1rem;
+    background: #0d2d6b;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.ri-btn-view-contract:hover { background: #1565C0; }
 
 .ri-contract-freq {
     font-size: 0.75rem;
     font-weight: 500;
     color: #5f6b7a;
-}
-
-.ri-contract-conditions {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #EEF2F7;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.ri-contract-conditions__text {
-    font-size: 0.85rem;
-    color: #3a3f47;
-    line-height: 1.6;
-    background: #F7F9FC;
-    border-left: 3px solid #dce3ee;
-    border-radius: 0 6px 6px 0;
-    padding: 0.75rem 1rem;
-    margin: 0;
-    white-space: pre-wrap;
 }

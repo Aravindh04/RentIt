@@ -16,6 +16,7 @@ force-app/main/default/objects/Contact
 force-app/main/default/objects/Contract
 force-app/main/default/aiAuthoringBundles
 force-app/main/default/experiences
+force-app/main/default/flows/RentIT_Contact_Create_Community_User.flow-meta.xml
 
 # LWC Jest
 **/__tests__/**

@@ -6,8 +6,7 @@
         traverse a single User lookup) because the "All Tenants" path goes through Property__c,
         not through an individual Tenancy.
 
-        Specific-Tenant notices are handled by the Sharing Set (Notice__c → Tenancy__c →
-        Community_User__c) and do NOT need a sharing rule.
+        Specific-Tenant notices are handled by the Sharing Set and do NOT need a sharing rule.
     -->
     <sharingCriteriaRules>
         <fullName>Published_All_Tenants_Notices_To_Community</fullName>

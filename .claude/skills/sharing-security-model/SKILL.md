@@ -76,8 +76,6 @@ Only add non-required fields. Required fields (see table above) are automaticall
 - `Payment__c.Payment_Reference__c` — editable
 - `Payment__c.Tenancy__c` — editable (needed to link payment to tenancy on submit)
 
-**`Tenancy__c.Community_User__c` is NOT readable by tenants** — internal-only field.
-
 ---
 
 ## Tenant Data Access — Relationship Path
@@ -97,28 +95,27 @@ Do NOT use `Community_User__c = :UserInfo.getUserId()` — that field is supplem
 
 ---
 
-## Sharing Sets (Tenant record access)
+## Tenancy Sharing
 
-Sharing Sets traverse from the object through a Contact/User path to the running community user.
-Traversal path for all RentIT objects uses `Tenant__c → Contact ← User.ContactId`:
+### Tenant access — Declarative (Sharing Set)
+File: `force-app/main/default/sharingSets/RentIt_Tenant_Sharing_Set.sharingSet-meta.xml`
 
 | Object | Access | Traversal Path |
 |---|---|---|
-| Tenancy__c | Read | `Tenant__c` (Contact) → User via `ContactId` |
-| Invoice__c | Read | `Tenancy__c.Tenant__c` (Contact) → User via `ContactId` |
-| Payment__c | Read/Create | `Tenancy__c.Tenant__c` (Contact) → User via `ContactId` |
-| Notice__c | Read | `Tenancy__c.Tenant__c` (Contact) → User via `ContactId` |
-| Case | Read/Create | `Contact` → User via `ContactId` |
+| `Tenancy__c` | Read | `Tenant__c` (Contact) → `User.ContactId` |
+| `Notice__c` | Read | `Tenancy__c.Tenant__c` (Contact) → `User.ContactId` |
 
-**`Tenancy__c.Tenant__c` (Contact lookup) must be populated** — without it, the Sharing Set traversal fails and the tenant sees zero records.
+Applies to profile: `customer community plus user`. Evaluates automatically whenever `Tenant__c` changes — no Apex needed for tenant sharing.
 
-Sharing Sets are configured in Setup → Digital Experiences → Settings → Sharing Sets (not deployable via metadata — must be done in Setup UI).
+`Invoice__c` and `Payment__c` are `ControlledByParent` children of Tenancy and inherit its access automatically.
+
+### Landlord access
+Landlords have `modifyAllRecords: true` on Tenancy__c via the `RentIt_Landlord` permission set — explicit sharing is not required. Apex-managed landlord sharing is deferred.
 
 ---
 
 ## Landlord (`RentIt_Landlord` permission set)
 - Full CRUD + View/Modify All on: Invoice__c, Notice__c, Payment__c, Property__c, Room__c, Tenancy__c
-- Can read/write `Tenancy__c.Community_User__c` — used to link tenants after registration
 - Sharing Rule keyed on Account (Landlord): grants access to all records under their Properties
 
 ---

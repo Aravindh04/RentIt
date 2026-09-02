@@ -142,79 +142,22 @@
                     </div>
                 </template>
 
-            </template>
-
-                <!-- Contract Section -->
+                <!-- View Contract CTA -->
                 <template if:true={hasContract}>
-                    <div class="ri-info-section">
-                        <div class="ri-section-header">
+                    <div class="ri-contract-cta">
+                        <div class="ri-contract-cta__info">
                             <lightning-icon icon-name="utility:contract" size="x-small" alternative-text="Contract"></lightning-icon>
-                            <h3>Contract</h3>
-                            <span class="ri-contract-status" data-status={contractStatus}>{contractStatus}</span>
+                            <span>Contract <strong>{contractNumber}</strong></span>
+                            <span class="ri-contract-cta__status" data-status={contractStatus}>{contractStatus}</span>
                         </div>
-
-                        <!-- Key metrics row -->
-                        <div class="ri-contract-metrics">
-                            <div class="ri-contract-metric">
-                                <span class="ri-detail-label">Contract No.</span>
-                                <span class="ri-contract-number">{contractNumber}</span>
-                            </div>
-                            <div class="ri-contract-metric">
-                                <span class="ri-detail-label">Start Date</span>
-                                <span>
-                                    <lightning-formatted-date-time
-                                        value={contractStart}
-                                        year="numeric" month="short" day="2-digit">
-                                    </lightning-formatted-date-time>
-                                </span>
-                            </div>
-                            <div class="ri-contract-metric">
-                                <span class="ri-detail-label">End Date</span>
-                                <span>
-                                    <lightning-formatted-date-time
-                                        value={contractEnd}
-                                        year="numeric" month="short" day="2-digit">
-                                    </lightning-formatted-date-time>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Rent & Deposit -->
-                        <div class="ri-contract-financials">
-                            <div class="ri-contract-financial">
-                                <span class="ri-detail-label">Rent</span>
-                                <span class="ri-contract-rent">
-                                    <lightning-formatted-number
-                                        value={contractRent}
-                                        format-style="currency"
-                                        currency-code="AUD"
-                                        minimum-fraction-digits="2">
-                                    </lightning-formatted-number>
-                                    <span class="ri-contract-freq">&nbsp;/ {contractFrequency}</span>
-                                </span>
-                            </div>
-                            <div class="ri-contract-financial">
-                                <span class="ri-detail-label">Security Deposit</span>
-                                <span>
-                                    <lightning-formatted-number
-                                        value={contractDeposit}
-                                        format-style="currency"
-                                        currency-code="AUD"
-                                        minimum-fraction-digits="2">
-                                    </lightning-formatted-number>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Special Conditions -->
-                        <template if:true={hasContractConditions}>
-                            <div class="ri-contract-conditions">
-                                <span class="ri-detail-label">Special Conditions</span>
-                                <p class="ri-contract-conditions__text">{contractConditions}</p>
-                            </div>
-                        </template>
+                        <button class="ri-btn-view-contract" onclick={handleViewContract}>
+                            View Contract
+                            <lightning-icon icon-name="utility:chevronright" size="xx-small" alternative-text="Go"></lightning-icon>
+                        </button>
                     </div>
                 </template>
+
+            </template>
 
             <!-- Empty State -->
             <template if:false={hasTenancy}>

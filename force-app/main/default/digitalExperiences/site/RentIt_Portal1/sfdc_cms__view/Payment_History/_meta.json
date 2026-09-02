@@ -1,5 +1,0 @@
-{
-  "apiName" : "Payment_History",
-  "type" : "sfdc_cms__view",
-  "path" : "views"
-}
