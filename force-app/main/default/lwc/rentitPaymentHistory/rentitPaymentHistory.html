@@ -153,7 +153,7 @@
                                     <li key={file.id} class="ri-pmt-file-item">
                                         <lightning-icon icon-name="doctype:attachment" size="small" alternative-text="File"></lightning-icon>
                                         <div class="ri-pmt-file-info">
-                                            <a href={file.downloadUrl} target="_blank" class="ri-pmt-file-name">{file.title}</a>
+                                            <a href="javascript:void(0);"  target="_blank" data-id={file.id} data-name={file.title} onclick={handleOpenPreview} class="ri-pmt-file-name">{file.title}</a>
                                             <span class="ri-pmt-file-meta">{file.fileType} &middot; {file.size}</span>
                                         </div>
                                         <a href={file.downloadUrl} target="_blank" class="ri-pmt-file-download" title="Download">
@@ -162,6 +162,14 @@
                                     </li>
                                 </template>
                             </ul>
+                            
+                            <c-renit-file-preview-modal
+                                is-open={isModalOpen}
+                                file-name={selectedFileName}
+                                version-id={selectedVersionId}
+                                onclose={handleClosePreview}>
+                            ></c-renit-file-preview-modal>
+
                         </template>
                         <template if:false={hasFiles}>
                             <p class="ri-pmt-no-files">No attachments on this payment.</p>

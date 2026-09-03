@@ -13,6 +13,11 @@ export default class RentitPaymentHistory extends LightningElement {
     isAttachmentsOpen = false;
     _tenancyId        = null;
 
+    // Modal Control States
+    isModalOpen = false;
+    selectedVersionId;
+    selectedFileName;
+
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
         if (data) {
@@ -109,5 +114,19 @@ export default class RentitPaymentHistory extends LightningElement {
         if (bytes < 1024)    return `${bytes} B`;
         if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
         return `${(bytes / 1048576).toFixed(1)} MB`;
+    }
+
+    // Handles the link click from the UI, pulling dataset properties to feed to the child
+    handleOpenPreview(event) {
+        this.selectedVersionId = event.currentTarget.dataset.id;
+        this.selectedFileName = event.currentTarget.dataset.name;
+        this.isModalOpen = true;
+    }
+
+    // Listens to the 'onclose' CustomEvent dispatched by the child modal component
+    handleClosePreview() {
+        this.isModalOpen = false;
+        this.selectedVersionId = undefined;
+        this.selectedFileName = undefined;
     }
 }
