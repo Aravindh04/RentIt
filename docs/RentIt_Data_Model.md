@@ -62,8 +62,7 @@ Account (Landlord)
 
 Tenancy__c also links to:
   ├─[Lookup: Room__c]            → Room__c   (filtered to same Property; optional)
-  ├─[Lookup: Tenant__c]          → Contact   (RecordType: Tenant Contact; also drives portal access — see Sharing Set)
-  └─[Lookup: Tenant_Account__c]  → Account   (Person Account; auto-set by Flow)
+  └─[Lookup: Tenant__c]          → Contact   (RecordType: Tenant Contact; also drives 
 
 
 Contract (standard) links to:
@@ -121,10 +120,8 @@ Room `Status__c` is managed by Contract lifecycle Flows: Activated → Occupied;
 | `Property__c` | Lookup → Property__c | deleteConstraint = SetNull; changed from Master-Detail — Tenancy now has its own OWD |
 | `Room__c` | Lookup → Room__c | Optional; filtered to rooms in same Property; populated when `Rent_a_room__c = true` |
 | `Tenant__c` | Lookup → Contact (required) | Filtered to RecordType.DeveloperName = Tenant_Contact |
-| `Tenant_Account__c` | Lookup → Account | Denormalized mirror of Tenant__r.AccountId; auto-set by Flow |
 | `Status__c` | Picklist (required) | Pending, Active (default), Expired, Terminated |
 | `Rent_a_room__c` | Checkbox | When true, Room__c should be populated |
-| `Deposit_Amount__c` | Currency | Security bond |
 | `Available_Credits__c` | Formula Currency | `Total_Credits__c − Total_Credits_Applied__c` |
 | `Total_Credits__c` | Rollup SUM | Payments where Type = Rent Payment AND Status = Received |
 | `Total_Credits_Applied__c` | Rollup SUM | Payments where Type = Credit Applied |
@@ -374,7 +371,7 @@ Assigned to: Experience Cloud community users
 
 **Property field access:** Address__c (compound — grants access to all sub-fields: Street, City, State, PostalCode, Country).
 
-**No access to:** ABN/GST fields on Account; Tenancy rollups beyond Available_Credits__c and Deposit_Amount__c; Notice tracking fields; Contract.Void_Reason__c.
+**No access to:** ABN/GST fields on Account; Tenancy rollups beyond Available_Credits__c; Notice tracking fields; Contract.Void_Reason__c.
 
 **Record Type Visibility:** Case.Complaint, Case.Maintenance_Request
 

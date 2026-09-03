@@ -6,10 +6,8 @@ import submitPayment from '@salesforce/apex/RentItPortalController.submitPayment
 
 const PAYMENT_METHODS = [
     { label: 'Bank Transfer',  value: 'Bank Transfer' },
-    { label: 'Credit Card',    value: 'Credit Card' },
-    { label: 'Debit Card',     value: 'Debit Card' },
-    { label: 'Cash',           value: 'Cash' },
-    { label: 'Other',          value: 'Other' }
+    { label: 'Pay ID',    value: 'Pay ID' },
+    { label: 'Cash',           value: 'Cash' }
 ];
 
 export default class RentitPaymentForm extends NavigationMixin(LightningElement) {

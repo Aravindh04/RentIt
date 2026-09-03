@@ -67,10 +67,8 @@ Case (record types: Complaint, Maintenance_Request)
 | `Property__c` | Lookup → Property__c | deleteConstraint=SetNull; not master-detail (changed from MD) |
 | `Room__c` | Lookup → Room__c | deleteConstraint=SetNull; lookup filter restricts to rooms in same Property; populated when `Rent_a_room__c = true` |
 | `Tenant__c` | Lookup → Contact (required) | Lookup filter: RecordType.DeveloperName = Tenant_Contact |
-| `Tenant_Account__c` | Lookup → Account | Denormalized mirror of Tenant__r.AccountId; auto-set by Flow |
 | `Status__c` | Picklist (required) | Pending, Active (default), Expired, Terminated |
 | `Rent_a_room__c` | Checkbox | When true, Room__c is populated |
-| `Deposit_Amount__c` | Currency | Security bond |
 | `Available_Credits__c` | Formula Currency | `Total_Credits__c - Total_Credits_Applied__c` |
 | `Total_Credits__c` | Summary SUM | Payments where Type = Rent Payment AND Status = Received |
 | `Total_Credits_Applied__c` | Summary SUM | Payments where Type = Credit Applied |

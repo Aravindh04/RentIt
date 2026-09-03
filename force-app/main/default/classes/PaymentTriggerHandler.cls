@@ -57,7 +57,6 @@ public with sharing class PaymentTriggerHandler {
         if (oldPayments != null) collectIds(oldPayments, invoiceIds, tenancyIds);
 
         updateInvoiceTotalPaid(invoiceIds);
-        updateAccountTotalReceived(tenancyIds);
     }
 
     private void collectIds(List<Payment__c> payments, Set<Id> invoiceIds, Set<Id> tenancyIds) {
@@ -91,49 +90,4 @@ public with sharing class PaymentTriggerHandler {
         update toUpdate;
     }
 
-    private void updateAccountTotalReceived(Set<Id> tenancyIds) {
-        if (tenancyIds.isEmpty()) return;
-
-        Map<Id, Id> accountByTenancy = new Map<Id, Id>();
-        for (Tenancy__c t : [
-            SELECT Id, Tenant_Account__c FROM Tenancy__c
-            WHERE Id IN :tenancyIds AND Tenant_Account__c != null
-        ]) {
-            accountByTenancy.put(t.Id, t.Tenant_Account__c);
-        }
-        if (accountByTenancy.isEmpty()) return;
-
-        // Re-aggregate across ALL tenancies per affected account to get accurate totals
-        Set<Id> accountIds = new Set<Id>(accountByTenancy.values());
-        Map<Id, Id> tenancyToAccount = new Map<Id, Id>();
-        Set<Id> allTenancyIds = new Set<Id>();
-        for (Tenancy__c t : [
-            SELECT Id, Tenant_Account__c FROM Tenancy__c
-            WHERE Tenant_Account__c IN :accountIds
-        ]) {
-            tenancyToAccount.put(t.Id, t.Tenant_Account__c);
-            allTenancyIds.add(t.Id);
-        }
-
-        Map<Id, Decimal> totalByAccount = new Map<Id, Decimal>();
-        for (Id aid : accountIds) totalByAccount.put(aid, 0);
-
-        for (AggregateResult ar : [
-            SELECT Tenancy__c tid, SUM(Amount__c) total
-            FROM Payment__c
-            WHERE Tenancy__c IN :allTenancyIds AND Status__c = 'Received'
-            GROUP BY Tenancy__c
-        ]) {
-            Id accId = tenancyToAccount.get((Id) ar.get('tid'));
-            if (accId != null && totalByAccount.containsKey(accId)) {
-                totalByAccount.put(accId, totalByAccount.get(accId) + (Decimal) ar.get('total'));
-            }
-        }
-
-        List<Account> toUpdate = new List<Account>();
-        for (Id aid : accountIds) {
-            toUpdate.add(new Account(Id = aid, Total_Payments_Received__c = totalByAccount.get(aid)));
-        }
-        update toUpdate;
-    }
 }

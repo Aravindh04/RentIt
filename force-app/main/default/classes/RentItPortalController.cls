@@ -31,9 +31,8 @@ public with sharing class RentItPortalController {
                    Room__c, Room__r.Name,
                    Room__r.Room_Size__c, Room__r.Weekly_Rent__c, Room__r.Facilities__c,
                    Available_Credits__c, Total_Arrears__c,
-                   Deposit_Amount__c, Total_Credits__c,
-                   Total_Received__c, Total_Unpaid__c,
-                   Tenant__c
+                   Total_Credits__c, Total_Received__c, 
+                   Total_Unpaid__c, Tenant__c
             FROM   Tenancy__c
             WHERE  Tenant__c IN (SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId())
               AND  Status__c = 'Active'
@@ -134,7 +133,7 @@ public with sharing class RentItPortalController {
 
     /**
      * Submits a new payment on behalf of the tenant.
-     * Status is forced to 'Pending' — tenants cannot set their own approval status.
+     * Status is forced to 'Pending Approval' — tenants cannot set their own approval status.
      */
     @AuraEnabled
     public static Id submitPayment(Id tenancyId, Id invoiceId,
@@ -150,7 +149,7 @@ public with sharing class RentItPortalController {
             Payment_Method__c    = paymentMethod,
             Payment_Reference__c = paymentReference,
             Comment__c           = comment,
-            Status__c            = 'Pending'
+            Status__c            = 'Pending Approval'
         );
         SObjectAccessDecision decision = Security.stripInaccessible(
             AccessType.CREATABLE, new List<Payment__c>{ pmt });
@@ -211,7 +210,7 @@ public with sharing class RentItPortalController {
         }
 
         result.put('pendingPayments', [
-            SELECT COUNT() FROM Payment__c WHERE Status__c = 'Pending' WITH USER_MODE
+            SELECT COUNT() FROM Payment__c WHERE Status__c = 'Pending Approval' WITH USER_MODE
         ]);
         result.put('activeNotices', [
             SELECT COUNT() FROM Notice__c WHERE Status__c = 'Active' WITH USER_MODE
@@ -252,7 +251,7 @@ public with sharing class RentItPortalController {
                    Tenancy__c, Tenancy__r.Name,
                    Invoice__c, Invoice__r.Name
             FROM   Payment__c
-            WHERE  Status__c = 'Pending'
+            WHERE  Status__c = 'Pending Approval'
             WITH USER_MODE
             ORDER BY Payment_Date__c ASC
         ];

@@ -30,7 +30,6 @@ export default class RentitTenancySummary extends NavigationMixin(LightningEleme
     get status()      { return this.tenancy?.Status__c || ''; }
     get arrears()     { return this.tenancy?.Total_Arrears__c || 0; }
     get credits()     { return this.tenancy?.Available_Credits__c || 0; }
-    get deposit()     { return this.tenancy?.Deposit_Amount__c || 0; }
     get received()    { return this.tenancy?.Total_Received__c || 0; }
 
     // ── Property ──────────────────────────────────────────────────

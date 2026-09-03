@@ -33,7 +33,7 @@ Screen flows embedded in LWC via `<lightning-flow>` for tenant portal actions.
 ### Submit Payment (`RentIT_Payment_Screen_SubmitPayment`)
 - Input variables: `invoiceId` (from URL state), pre-populated `tenancyId` via `{!$User.Id}` lookup
 - Tenant-editable fields only: `Amount__c`, `Payment_Date__c`, `Payment_Method__c`, `Payment_Reference__c`, `Comment__c`
-- Sets `Status__c = 'Pending'` on create (never let tenant set Approved/Rejected)
+- Sets `Status__c = 'Paid'` on create (never let tenant set Approved/Rejected)
 - Final screen: confirmation with payment reference
 
 ### Raise a Complaint (`RentIT_Case_Screen_RaiseComplaint`)

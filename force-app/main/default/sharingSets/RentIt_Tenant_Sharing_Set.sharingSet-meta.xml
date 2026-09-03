@@ -7,7 +7,7 @@
         <userField>Contact</userField>
     </accessMappings>
     <accessMappings>
-        <accessLevel>Read</accessLevel>
+        <accessLevel>Edit</accessLevel>
         <object>Tenancy__c</object>
         <objectField>Tenant__c</objectField>
         <userField>Contact</userField>

@@ -65,7 +65,7 @@ Only add non-required fields. Required fields (see table above) are automaticall
 - `Invoice__c`: `Balance_Due__c`, `GST_Amount__c`, `Period_End__c`, `Period_Start__c`, `Total_Amount__c`, `Total_Paid__c`
 - `Notice__c`: `Content__c`, `Expiry_Date__c`
 - `Room__c`: `Description__c`, `Facilities__c`, `Room_Size__c`, `Weekly_Rent__c`
-- `Tenancy__c`: `Available_Credits__c`, `Deposit_Amount__c`, `Property__c`, `Room__c`, `Tenant_Account__c`, `Total_Arrears__c`, `Total_Credits__c`, `Total_Received__c`, `Total_Unpaid__c`
+- `Tenancy__c`: `Available_Credits__c`, `Property__c`, `Room__c`, `Total_Arrears__c`, `Total_Credits__c`, `Total_Received__c`, `Total_Unpaid__c`
 - `Property__c`: `Country__c`, `Description__c`, `Postcode__c`, `State__c`
 - `Account`: `ABN__c`, `GST_Number__c`, `GST_Registered__c`
 - `Case`: `Property__c`, `Room__c`, `Tenancy__c`

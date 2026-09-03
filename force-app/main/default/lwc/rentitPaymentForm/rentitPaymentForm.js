@@ -5,11 +5,9 @@ import getInvoices from '@salesforce/apex/RentItPortalController.getInvoices';
 import submitPayment from '@salesforce/apex/RentItPortalController.submitPayment';
 
 const PAYMENT_METHODS = [
-    { label: 'Bank Transfer',  value: 'Bank Transfer' },
-    { label: 'Credit Card',    value: 'Credit Card' },
-    { label: 'Debit Card',     value: 'Debit Card' },
-    { label: 'Cash',           value: 'Cash' },
-    { label: 'Other',          value: 'Other' }
+    { label: 'Bank Transfer',   value: 'Bank Transfer' },
+    { label: 'Pay ID',          value: 'Pay ID' },
+    { label: 'Cash',            value: 'Cash' }
 ];
 
 const MAX_FILE_BYTES = 3 * 1024 * 1024; // 3 MB
