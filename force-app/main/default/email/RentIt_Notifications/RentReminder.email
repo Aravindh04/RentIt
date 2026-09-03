@@ -31,7 +31,7 @@
     <p>This is a friendly reminder that your rent payment is due <strong>tomorrow</strong>.</p>
     <div class="amount-box">
       <div class="label">Amount Due</div>
-      <div class="value">${!Invoice__c.Amount__c}</div>
+      <div class="value">${!Invoice__c.Total_Amount__c}</div>
     </div>
     <div class="detail-row"><span class="detail-label">Invoice Number</span><span class="detail-value">{!Invoice__c.Name}</span></div>
     <div class="detail-row"><span class="detail-label">Due Date</span><span class="detail-value">{!Invoice__c.Due_Date__c}</span></div>

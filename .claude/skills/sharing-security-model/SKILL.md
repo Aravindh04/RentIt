@@ -44,13 +44,13 @@ Only add **non-required** custom fields that are not automatically visible.
 | Object | Create | Read | Edit | Delete |
 |---|---|---|---|---|
 | Account | — | ✓ | — | — |
-| Contact | — | ✓ | — | — |
-| Invoice__c | — | ✓ | — | — |
+| Contact | — | ✓ | ✓ | — |
+| Invoice__c | — | ✓ | ✓ | — |
 | Notice__c | — | ✓ | — | — |
 | Payment__c | ✓ | ✓ | ✓ | — |
 | Property__c | — | ✓ | — | — |
 | Room__c | — | ✓ | — | — |
-| Tenancy__c | — | ✓ | — | — |
+| Tenancy__c | — | ✓ | ✓ | — |
 | Case | ✓ | ✓ | ✓ | — |
 
 Case record types visible: `Complaint`, `Maintenance_Request`

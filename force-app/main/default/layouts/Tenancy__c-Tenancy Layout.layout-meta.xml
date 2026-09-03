@@ -133,6 +133,7 @@
         <fields>NAME</fields>
         <fields>Invoice_Date__c</fields>
         <fields>Amount__c</fields>
+        <fields>Total_Amount__c</fields>
         <fields>Category__c</fields>
         <fields>Status__c</fields>
         <fields>Due_Date__c</fields>

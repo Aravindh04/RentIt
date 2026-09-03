@@ -32,7 +32,7 @@
     <p>Our records show that a rent invoice on your tenancy is now <strong>overdue</strong>. Please arrange payment immediately to avoid further action.</p>
     <div class="alert-box">
       <div class="label">Overdue Amount</div>
-      <div class="value">${!Invoice__c.Amount__c}</div>
+      <div class="value">${!Invoice__c.Total_Amount__c}</div>
     </div>
     <div class="detail-row"><span class="detail-label">Invoice Number</span><span class="detail-value">{!Invoice__c.Name}</span></div>
     <div class="detail-row"><span class="detail-label">Original Due Date</span><span class="detail-value">{!Invoice__c.Due_Date__c}</span></div>
