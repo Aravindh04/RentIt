@@ -11,12 +11,14 @@
             <!-- Authenticated layout: nav + user avatar + hamburger -->
             <template if:true={isLoggedIn}>
                 <nav class="ri-header__nav" aria-label="Main navigation">
-                    <button class={navMyTenancy} onclick={handleNavMyTenancy}>My Tenancy</button>
-                    <button class={navInvoices}  onclick={handleNavInvoices}>Invoices</button>
-                    <button class={navPayments}  onclick={handleNavPayments}>Payments</button>
-                    <button class={navNotices}   onclick={handleNavNotices}>Notices</button>
-                    <button class={navContract}  onclick={handleNavContract}>Contract</button>
-                    <button class={navSupport}   onclick={handleNavSupport}>Support</button>
+                    <template for:each={navItems} for:item="item">
+                        <button key={item.key}
+                                class={item.className}
+                                data-target={item.target}
+                                onclick={handleNavClick}>
+                            {item.label}
+                        </button>
+                    </template>
                 </nav>
 
                 <!-- User avatar + dropdown -->
@@ -70,12 +72,14 @@
         <!-- Mobile navigation panel — authenticated only -->
         <template if:true={isMobileMenuOpen}>
             <nav class="ri-mobile-nav" aria-label="Mobile navigation">
-                <button class={mobileNavMyTenancy} onclick={handleNavMyTenancy}>My Tenancy</button>
-                <button class={mobileNavInvoices}  onclick={handleNavInvoices}>Invoices</button>
-                <button class={mobileNavPayments}  onclick={handleNavPayments}>Payments</button>
-                <button class={mobileNavNotices}   onclick={handleNavNotices}>Notices</button>
-                <button class={mobileNavContract}  onclick={handleNavContract}>Contract</button>
-                <button class={mobileNavSupport}   onclick={handleNavSupport}>Support</button>
+                <template for:each={navItems} for:item="item">
+                    <button key={item.key}
+                            class={item.mobileClassName}
+                            data-target={item.target}
+                            onclick={handleNavClick}>
+                        {item.label}
+                    </button>
+                </template>
                 <hr class="ri-mobile-nav__divider" />
                 <div class="ri-mobile-nav__user">
                     <div class="ri-mobile-nav__user-name">{userName}</div>

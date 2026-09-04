@@ -18,7 +18,8 @@
       "enableS1EncryptedStoragePref2": false
     },
     "communitiesSettings": {
-      "enableNetworksEnabled": true
+      "enableNetworksEnabled": true,
+      "enableOotbProfExtUserOpsEnable": true
     },
     "orgPreferenceSettings": {
       "s1EncryptedStoragePref2": false

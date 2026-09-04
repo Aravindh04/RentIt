@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "Landlord Home",
+  "contentBody" : {
+    "activeViewId" : "landlordHome",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "home",
+    "urlPrefix" : "landlord"
+  },
+  "urlName" : "landlord-home"
+}

@@ -1,0 +1,71 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Landlord Home",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "dxpStyle" : { },
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"7d931c36-4c4f-48d7-ae84-6df5edc9d3a2\",\"columns\":[{\"UUID\":\"5c7fda21-3d8e-4b09-9dc1-7b07af5ed2b1\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : {
+                "dxpStyle" : { }
+              },
+              "definition" : "c:rentitLandlordDashboard",
+              "id" : "b1f4d77a-01da-4d27-8a53-5b01d4d2a631",
+              "type" : "component"
+            } ],
+            "id" : "5c7fda21-3d8e-4b09-9dc1-7b07af5ed2b1",
+            "name" : "col1",
+            "title" : "Column 1",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "7d931c36-4c4f-48d7-ae84-6df5edc9d3a2",
+          "type" : "component"
+        } ],
+        "id" : "2f4c0b4d-c4b3-4f9a-bc0c-6a4b7aee1f5c",
+        "name" : "content",
+        "title" : "Content",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "customHeadTags" : "",
+            "description" : "",
+            "dxpStyle" : { },
+            "pageTitle" : "Landlord Home",
+            "recordId" : "{!recordId}"
+          },
+          "definition" : "community_builder:seoAssistant",
+          "id" : "e0bb1d7a-7b0f-4f0d-8818-7ce770b7b2e1",
+          "type" : "component"
+        } ],
+        "id" : "1f6e7b12-3d67-4ca2-a2b1-c8f12c7d3f2d",
+        "name" : "sfdcHiddenRegion",
+        "title" : "sfdcHiddenRegion",
+        "type" : "region"
+      } ],
+      "definition" : "community_layout:sldsFlexibleLayout",
+      "id" : "a5b0df23-16eb-46f2-8d0f-68be36a9b1f8",
+      "type" : "component"
+    },
+    "dataProviders" : [ ],
+    "themeLayoutType" : "Inner",
+    "viewType" : "home"
+  },
+  "urlName" : "landlord-home"
+}

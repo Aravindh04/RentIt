@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "Landlord Profile",
+  "contentBody" : {
+    "activeViewId" : "landlordProfile",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "custom-profile",
+    "urlPrefix" : "landlord/profile"
+  },
+  "urlName" : "landlord-profile"
+}
