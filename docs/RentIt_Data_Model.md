@@ -1,7 +1,7 @@
 # RentIt — Data Model & Administration Guide
 
 **API Version:** 62.0  
-**Last Updated:** 2026-09-04  
+**Last Updated:** 2026-09-01  
 **Author:** Aravindhan Vijayakumar
 
 ---
@@ -17,7 +17,6 @@
 8. [Page Layouts](#8-page-layouts)
 9. [Permission Sets](#9-permission-sets)
 10. [Key Application Capabilities](#10-key-application-capabilities)
-11. [Stepwise Delivery Context — Step 1 (Account Separation)](#11-stepwise-delivery-context--step-1-account-separation)
 
 ---
 
@@ -25,8 +24,8 @@
 
 | Object | Type | Purpose |
 |---|---|---|
-| `Account` | Standard | Landlord and Tenant Person Accounts separated by Account record type |
-| `Contact` | Standard | Tenant contacts used by current Tenancy lookup (transition state) |
+| `Account` | Standard | Landlord Person Accounts |
+| `Contact` | Standard | Tenant contacts (record type: Tenant Contact) |
 | `Property__c` | Custom | Rental properties owned by a landlord Account |
 | `Room__c` | Custom | Individual lettable rooms within a Property |
 | `Tenancy__c` | Custom | Central occupancy record linking a Property/Room to a Tenant; parent of Invoices and Payments |
@@ -42,7 +41,7 @@
 ## 2. Object Relationships (ERD)
 
 ```
-Account (Record Type: Landlord_Account / Person Account)
+Account (Landlord)
   └─[Lookup: Landlord__c]──────────────► Property__c
                                               │
                             ┌─────────────────┼─────────────────────┐
@@ -69,7 +68,7 @@ Tenancy__c also links to:
 Contract (standard) links to:
   └─[Lookup: Tenancy__c]         → Tenancy__c (the ONLY custom-object relationship on Contract that related the Account (Landlord) and Contact   (Tenant))
 
-Account (Record Type: Tenant_Account / Person Account)
+Account (Person Account / Tenant)
   └─[MD: Account__c] → Payment_Detail__c
 ```
 
@@ -240,18 +239,9 @@ Record types: `Complaint`, `Maintenance_Request` — both accessible to tenants 
 | `ABN__c` | Text(11) | Australian Business Number (landlords) |
 | `GST_Number__c` | Text(20) | GST registration number |
 | `GST_Registered__c` | Checkbox | When true, InvoiceBatch adds 10% GST to each Invoice |
-| `Is_Landlord_Account__c` | Checkbox | True for landlord Person Accounts; drives partner sharing and access |
 | `Same_as_mailing_address__c` | Checkbox | Triggers Copy_Mailing_to_Billing_Address Flow |
 | `Status__c` | Picklist | Active, Inactive, Pending — tenant Person Account lifecycle |
 | `Total_Payments_Received__c` | Currency | Sum of all Received payments across all tenancies; updated by PaymentTriggerHandler |
-
-### Account Record Types (Step 1 Foundation)
-| Record Type | Account Type | Purpose | Notes |
-|---|---|---|---|
-| `Landlord_Account` | Person Account | Landlord identity that owns properties and manages tenancy lifecycle | Landlord profile used for operational ownership and portal access |
-| `Tenant_Account` | Person Account | Tenant billing and communication profile | Keeps tenant lifecycle and payment profile separate from landlords |
-
-> `Is_Landlord_Account__c` is the operational discriminator for landlord sharing and portal access. Current implementation remains backward-compatible with `Tenancy__c.Tenant__c` lookup to Contact. Migrating tenancy tenant reference from Contact to Account is planned for a later step.
 
 ---
 
@@ -370,38 +360,6 @@ Assigned to: internal users (property managers, landlords)
 
 **Record Type Visibility:** Contract.Rental_Agreement, Case.Complaint, Case.Maintenance_Request, PersonAccount
 
-### RentIt_Landlord_Partner (New — Step 1)
-Assigned to: Partner Community users linked to `Landlord_Account`.
-
-**Business scope enabled in portal:**
-- List and manage `Property__c` records for their landlord account
-- List and update `Room__c` status
-- Create `Contract` (Rental Agreement) records
-- Update related `Contact` information
-- Create and manage `Tenancy__c`
-- Issue `Invoice__c`
-- Approve / reject `Payment__c` submissions
-
-**Object permissions (minimum required):**
-- `Property__c`: Read, Edit
-- `Room__c`: Read, Edit
-- `Contract`: Read, Create, Edit
-- `Contact`: Read, Edit
-- `Tenancy__c`: Read, Create, Edit
-- `Invoice__c`: Read, Create, Edit
-- `Payment__c`: Read, Edit (approval actions)
-- `Account`: Read (landlord account and related context)
-
-**Record type visibility:**
-- Account: `Landlord_Account` only
-- Contract: `Rental_Agreement`
-- Case: `Complaint`, `Maintenance_Request` (optional by support model)
-
-**Field-level security highlights:**
-- Editable landlord operational fields only
-- No tenant-sensitive tax or admin-only fields unless explicitly required
-- Approval outcome fields on `Payment__c` are editable only for partner landlord/internal landlord users
-
 ### RentIt_Tenant (Community)
 Assigned to: Experience Cloud community users
 
@@ -437,45 +395,3 @@ Assigned to: Experience Cloud community users
 | **Multi-channel communication** | All key events (rent due, overdue, payment submitted, approved, rejected, terminated) generate both email and an in-portal Notice record |
 | **GST support** | When landlord Account has GST_Registered__c = true, InvoiceBatch calculates GST_Amount__c (10%) on each Invoice |
 | **Experience Cloud access control** | Sharing Sets match `Tenancy__c.Tenant__c` (Contact) to `User.ContactId`. Tenancy__c has its own OWD (Property__c is now a Lookup, not Master-Detail). Invoice__c and Payment__c are ControlledByParent children of Tenancy__c and inherit sharing. Specific-Tenant notices share via `Notice__c.Tenancy__c.Tenant__c`. Contract does not support community Sharing Sets or manual share records — the only native mechanism is sharing the Contract's **Account** with the external user. Portal access is handled via `RentItPortalDataHelper` (`without sharing`) with tenancy-ownership validation. Activated Contracts are locked (read-only) in Salesforce. All-Tenants notices share via a criteria-based sharing rule to the `RentIt_Community_Tenants` public group. |
-
----
-
-## 11. Stepwise Delivery Context — Step 1 (Account Separation)
-
-### Goal
-Introduce explicit landlord vs tenant account separation as the foundation for a Partner Community landlord portal, without attempting full model migration in one release.
-
-### Step 1 Scope (this update)
-1. Add and document Account record type split:
-   - `Landlord_Account`
-   - `Tenant_Account`
-2. Define Partner landlord permission model (`RentIt_Landlord_Partner`) for:
-   - Property and room visibility/updates
-   - Contract creation
-   - Contact updates
-   - Tenancy lifecycle management
-   - Invoice issuing
-   - Payment approval decisions
-3. Define sharing baseline for Partner Community rollout:
-   - External OWD for core rental objects should remain **Private**
-   - Access granted by landlord-account-aligned sharing rules/Apex sharing strategy
-   - Contract access for external users remains Account-share-driven
-
-### Step 2 Implementation Status
-- `RentIt_Landlord_Partner` permission set is now defined in source metadata.
-- `Is_Landlord_Account__c` now drives the landlord sharing rule.
-- Sharing is currently account-share based through the `RentIt_Landlord_Partners` public group.
-
-### Model Note
-Both landlord and tenant records are modeled as Person Accounts in this step. `Is_Landlord_Account__c` keeps the access model explicit without relying on a tenant-vs-landlord record-type split.
-
-### Out of Scope for Step 1
-- Migrating `Tenancy__c.Tenant__c` from Contact to Account
-- Refactoring existing flows/triggers for new tenant-account linkage
-- Full partner portal UI build
-- Historical data migration scripts
-
-### Next Step Preview (Step 2)
-- Implement metadata for new Account record types and page-layout assignments
-- Add/adjust sharing rules and Apex sharing service for landlord partner users
-- Validate impacted automations with bulk/fault-path checks before activation

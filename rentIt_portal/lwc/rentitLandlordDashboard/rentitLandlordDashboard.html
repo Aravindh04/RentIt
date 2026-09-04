@@ -1,13 +1,6 @@
 <template>
     <div class="slds-box slds-theme_default">
-        <div class="slds-grid slds-wrap slds-grid_align-spread slds-m-bottom_medium">
-            <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-3">
-                <h1 class="slds-text-heading_large">Landlord Dashboard</h1>
-                <p class="slds-text-body_regular slds-text-color_weak slds-m-top_x-small">
-                    Manage properties, rooms, tenancies, tenants, contracts, invoices, payments, discounts, and notices from one place.
-                </p>
-            </div>
-        </div>
+        <h2 class="slds-text-heading_large slds-m-bottom_medium">Landlord Dashboard</h2>
 
         <template if:true={isLoading}>
             <lightning-spinner alternative-text="Loading dashboard" size="medium"></lightning-spinner>
@@ -18,20 +11,20 @@
         </template>
 
         <template if:true={summary}>
-            <div id="overview" class="slds-grid slds-gutters slds-wrap slds-m-bottom_large">
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5 slds-m-bottom_medium">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
                     <div class="slds-box slds-text-align_center">
                         <p class="slds-text-heading_large">{summary.activeTenancies}</p>
                         <p class="slds-text-body_small slds-text-color_weak">Active Tenancies</p>
                     </div>
                 </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5 slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
                     <div class="slds-box slds-text-align_center">
                         <p class="slds-text-heading_large">{summary.pendingPayments}</p>
                         <p class="slds-text-body_small slds-text-color_weak">Payments Pending Approval</p>
                     </div>
                 </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5 slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
                     <div class="slds-box slds-text-align_center">
                         <lightning-formatted-number
                             value={summary.totalArrears}
@@ -42,18 +35,7 @@
                         <p class="slds-text-body_small slds-text-color_weak">Total Arrears</p>
                     </div>
                 </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5 slds-m-bottom_medium">
-                    <div class="slds-box slds-text-align_center">
-                        <lightning-formatted-number
-                            value={summary.totalCredits}
-                            format-style="currency"
-                            currency-code="AUD"
-                            class="slds-text-heading_large">
-                        </lightning-formatted-number>
-                        <p class="slds-text-body_small slds-text-color_weak">Available Credits</p>
-                    </div>
-                </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5 slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
                     <div class="slds-box slds-text-align_center">
                         <p class="slds-text-heading_large">{summary.activeNotices}</p>
                         <p class="slds-text-body_small slds-text-color_weak">Active Notices</p>
@@ -61,52 +43,5 @@
                 </div>
             </div>
         </template>
-
-        <section id="operations" class="slds-m-bottom_large">
-            <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
-                <h2 class="slds-text-heading_medium">Operations</h2>
-                <p class="slds-text-color_weak">Quick links to the Salesforce record pages for each landlord task.</p>
-            </div>
-            <div class="slds-grid slds-gutters slds-wrap">
-                <template for:each={operations} for:item="operation">
-                    <div key={operation.key} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_medium">
-                        <article class="slds-box slds-box_x-small slds-theme_default">
-                            <div class="slds-media slds-media_center slds-m-bottom_small">
-                                <div class="slds-media__figure">
-                                    <lightning-icon icon-name={operation.icon} size="small" alternative-text={operation.label}></lightning-icon>
-                                </div>
-                                <div class="slds-media__body">
-                                    <h3 class="slds-text-heading_small">{operation.label}</h3>
-                                </div>
-                            </div>
-                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
-                                {operation.description}
-                            </p>
-                            <lightning-button
-                                variant="brand"
-                                label={operation.buttonLabel}
-                                data-object-api-name={operation.objectApiName}
-                                onclick={handleOpenOperation}>
-                            </lightning-button>
-                        </article>
-                    </div>
-                </template>
-            </div>
-        </section>
-
-        <section id="tenancies" class="slds-m-bottom_large">
-            <h2 class="slds-text-heading_medium slds-m-bottom_small">Tenancies</h2>
-            <c-rentit-tenant-list></c-rentit-tenant-list>
-        </section>
-
-        <section id="payments" class="slds-m-bottom_large">
-            <h2 class="slds-text-heading_medium slds-m-bottom_small">Payment Approvals</h2>
-            <c-rentit-payment-approval></c-rentit-payment-approval>
-        </section>
-
-        <section id="notices" class="slds-m-bottom_large">
-            <h2 class="slds-text-heading_medium slds-m-bottom_small">Notices</h2>
-            <c-rentit-notice-list landlord-mode></c-rentit-notice-list>
-        </section>
     </div>
 </template>

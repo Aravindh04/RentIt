@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Group xmlns="http://soap.sforce.com/2006/04/metadata">
     <doesIncludeBosses>false</doesIncludeBosses>
-    <name>RentIt Landlord Partners</name>
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <label>RentIt Landlord Partners</label>
+    <name>RentIt_Landlord_Partners</name>
+    <type>Regular</type>
 </Group>
