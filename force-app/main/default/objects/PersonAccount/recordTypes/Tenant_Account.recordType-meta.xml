@@ -3,5 +3,5 @@
     <active>true</active>
     <description>Person Account record type for tenants in the RentIt application.</description>
     <label>Tenant Account</label>
-    <personType>true</personType>
+    <fullName>Tenant_Account</fullName>
 </RecordType>

@@ -3,5 +3,5 @@
     <active>true</active>
     <description>Person Account record type for landlords managing properties and tenancies.</description>
     <label>Landlord Account</label>
-    <personType>true</personType>
+    <fullName>Landlord_Account</fullName>
 </RecordType>
