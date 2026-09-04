@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <accessLevel>Edit</accessLevel>
+        <fullName>Account_Landlord_Accounts_Edit</fullName>
+        <label>Landlord Accounts - Edit</label>
+        <criteriaItems>
+            <field>Is_Landlord_Account__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </criteriaItems>
+        <sharedTo>
+            <group>RentIt_Landlord_Partners</group>
+        </sharedTo>
+    </sharingCriteriaRules>
+</SharingRules>

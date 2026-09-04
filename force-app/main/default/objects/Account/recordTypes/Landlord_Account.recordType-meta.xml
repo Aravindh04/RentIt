@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <description>Person Account record type for landlords managing properties and tenancies.</description>
+    <label>Landlord Account</label>
+    <personType>true</personType>
+</RecordType>
