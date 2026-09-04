@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "My Contract",
+  "contentBody" : {
+    "activeViewId" : "My_Contract",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "custom-my-contract",
+    "urlPrefix" : "my-contract"
+  },
+  "urlName" : "my-contract"
+}

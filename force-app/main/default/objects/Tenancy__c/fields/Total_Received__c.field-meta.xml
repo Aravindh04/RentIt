@@ -3,7 +3,7 @@
     <fullName>Total_Received__c</fullName>
     <description>Sum of all Paid invoice amounts on this tenancy. Updated automatically when an Invoice is marked Paid (via approved Payment).</description>
     <label>Total Received</label>
-    <summarizedField>Invoice__c.Amount__c</summarizedField>
+    <summarizedField>Invoice__c.Total_Amount__c</summarizedField>
     <summaryFilterItems>
         <field>Invoice__c.Status__c</field>
         <operation>equals</operation>

@@ -3,7 +3,7 @@
     <fullName>Total_Scheduled__c</fullName>
     <description>Sum of upcoming invoice amounts in Scheduled status. Represents future rent obligations created by the batch job but not yet due.</description>
     <label>Total Scheduled (Upcoming)</label>
-    <summarizedField>Invoice__c.Amount__c</summarizedField>
+    <summarizedField>Invoice__c.Total_Amount__c</summarizedField>
     <summaryFilterItems>
         <field>Invoice__c.Status__c</field>
         <operation>equals</operation>

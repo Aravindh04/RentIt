@@ -68,11 +68,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Contract.Void_Reason__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Discount__c.Contract__c</field>
         <readable>true</readable>
     </fieldPermissions>

@@ -6,12 +6,12 @@
     <errorConditionFormula>AND(
     NOT(ISNEW()),
     OR(
-        ISPICKVAL(PRIORVALUE(Status__c), "Terminated"),
-        ISPICKVAL(PRIORVALUE(Status__c), "Expired")
+        ISPICKVAL(PRIORVALUE(Status__c), &quot;Terminated&quot;),
+        ISPICKVAL(PRIORVALUE(Status__c), &quot;Expired&quot;)
     ),
     OR(
-        ISPICKVAL(Status__c, "Active"),
-        ISPICKVAL(Status__c, "Pending")
+        ISPICKVAL(Status__c, &quot;Active&quot;),
+        ISPICKVAL(Status__c, &quot;Pending&quot;)
     )
 )</errorConditionFormula>
     <errorMessage>A Terminated or Expired tenancy cannot be reactivated.</errorMessage>

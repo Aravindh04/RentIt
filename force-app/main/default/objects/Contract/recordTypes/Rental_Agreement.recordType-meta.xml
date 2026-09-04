@@ -38,35 +38,4 @@
             <default>false</default>
         </values>
     </picklistValues>
-    <picklistValues>
-        <picklist>Void_Reason__c</picklist>
-        <values>
-            <fullName>Abandonment</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Breach of Contract</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Illegal Activity</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Mutual Agreement</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Non-Payment of Rent</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Other</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Property Damage</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
 </RecordType>

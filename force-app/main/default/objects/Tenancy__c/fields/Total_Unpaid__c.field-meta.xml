@@ -3,7 +3,7 @@
     <fullName>Total_Unpaid__c</fullName>
     <description>Sum of all Unpaid invoice amounts on this tenancy (due but not yet paid, not yet overdue).</description>
     <label>Total Unpaid</label>
-    <summarizedField>Invoice__c.Amount__c</summarizedField>
+    <summarizedField>Invoice__c.Total_Amount__c</summarizedField>
     <summaryFilterItems>
         <field>Invoice__c.Status__c</field>
         <operation>equals</operation>

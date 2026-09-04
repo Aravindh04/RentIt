@@ -1,0 +1,5 @@
+{
+  "apiName" : "Maintenance_Request",
+  "type" : "sfdc_cms__view",
+  "path" : "views"
+}

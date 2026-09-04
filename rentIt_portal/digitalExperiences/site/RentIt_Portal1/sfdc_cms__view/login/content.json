@@ -1,0 +1,103 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Login",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "dxpStyle" : { },
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "0px",
+            "sectionConfig" : "{\"UUID\":\"73c7d55b-a66d-4547-908d-c2f11bdea2b7\",\"columns\":[{\"UUID\":\"69951264-c06d-4924-9eab-9334310a181e\",\"columnName\":\"Branding\",\"columnKey\":\"col1\",\"columnWidth\":\"6\",\"seedComponents\":null},{\"UUID\":\"b0c1d2e3-f4a5-6789-bcde-f01234567890\",\"columnName\":\"Form\",\"columnKey\":\"col2\",\"columnWidth\":\"6\",\"seedComponents\":null}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : {
+                "dxpStyle" : { }
+              },
+              "definition" : "c:rentitLoginBranding",
+              "id" : "c1d2e3f4-a5b6-7890-cdef-012345678901",
+              "type" : "component"
+            } ],
+            "id" : "69951264-c06d-4924-9eab-9334310a181e",
+            "name" : "col1",
+            "title" : "Branding",
+            "type" : "region"
+          }, {
+            "children" : [ {
+              "attributes" : {
+                "alignment" : "center",
+                "dxpStyle" : { },
+                "imageInfo" : "",
+                "imageInfoMobile" : "",
+                "logoWidth" : 200
+              },
+              "definition" : "dxp_content_layout:siteLogo",
+              "id" : "06dfbf0d-d36f-45ea-9744-b3ff637784c5",
+              "type" : "component"
+            }, {
+              "attributes" : {
+                "dxpStyle" : { },
+                "forgotPasswordLabel" : "Forgot your password?",
+                "forgotPasswordUrl" : "/ForgotPassword",
+                "loginButtonLabel" : "Log In",
+                "passwordLabel" : "Password",
+                "selfRegisterLabel" : "",
+                "selfRegisterUrl" : "",
+                "startUrl" : "",
+                "usernameLabel" : "Username"
+              },
+              "definition" : "community_login:loginForm",
+              "id" : "34da40fd-9756-411f-9189-4099b71170e5",
+              "type" : "component"
+            } ],
+            "id" : "b0c1d2e3-f4a5-6789-bcde-f01234567890",
+            "name" : "col2",
+            "title" : "Form",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "73c7d55b-a66d-4547-908d-c2f11bdea2b7",
+          "type" : "component"
+        } ],
+        "id" : "2e9898f5-a0da-4bf8-9743-6fc93fbcc752",
+        "name" : "content",
+        "title" : "Content",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "customHeadTags" : "",
+            "description" : "",
+            "dxpStyle" : { },
+            "pageTitle" : "Login",
+            "recordId" : "{!recordId}"
+          },
+          "definition" : "community_builder:seoAssistant",
+          "id" : "6dc83429-7d02-4ce7-9c27-4a3f1397727d",
+          "type" : "component"
+        } ],
+        "id" : "0b32e615-4d0e-4e3c-9006-473825caafe2",
+        "name" : "sfdcHiddenRegion",
+        "title" : "sfdcHiddenRegion",
+        "type" : "region"
+      } ],
+      "definition" : "community_layout:sldsFlexibleLayout",
+      "id" : "b560a90a-0acc-4a3b-a00d-8422ebacb628",
+      "type" : "component"
+    },
+    "dataProviders" : [ ],
+    "themeLayoutType" : "Inner",
+    "viewType" : "login-main"
+  },
+  "urlName" : "login"
+}

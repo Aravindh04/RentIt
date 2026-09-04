@@ -4,7 +4,6 @@
     <description>Internal notes about why this discount was granted (e.g. tenant out of station, goodwill reduction, partial period concession).</description>
     <label>Description</label>
     <length>32768</length>
-    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>
     <visibleLines>3</visibleLines>

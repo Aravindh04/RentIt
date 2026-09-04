@@ -4,7 +4,6 @@
     <description>How the discount is expressed. Percentage: a % of the daily rent rate. Fixed Amount: a fixed dollar amount per full frequency period, pro-rated over overlapping days.</description>
     <label>Discount Type</label>
     <required>true</required>
-    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Tenancy</fullName>
+    <columns>NAME</columns>
+    <columns>Status__c</columns>
+    <columns>Available_Credits__c</columns>
+    <columns>Total_Arrears__c</columns>
+    <columns>Room__c</columns>
+    <columns>Tenant__c</columns>
+    <filterScope>Mine</filterScope>
+    <label>My Tenancy</label>
+</ListView>

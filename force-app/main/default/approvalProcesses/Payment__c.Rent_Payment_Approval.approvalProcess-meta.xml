@@ -27,8 +27,7 @@
         </approvalActions>
         <assignedApprover>
             <approver>
-                <name>aravindh.apps@home.com.dev</name>
-                <type>user</type>
+                <type>adhoc</type>
             </approver>
             <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
         </assignedApprover>
