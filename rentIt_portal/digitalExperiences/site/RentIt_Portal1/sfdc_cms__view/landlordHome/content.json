@@ -65,7 +65,7 @@
     },
     "dataProviders" : [ ],
     "themeLayoutType" : "Inner",
-    "viewType" : "home"
+    "viewType" : "custom-landlord-home"
   },
   "urlName" : "landlord-home"
 }

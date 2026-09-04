@@ -5,7 +5,7 @@
     "activeViewId" : "landlordProfile",
     "configurationTags" : [ ],
     "pageAccess" : "UseParent",
-    "routeType" : "custom-profile",
+    "routeType" : "custom-landlord-profile",
     "urlPrefix" : "landlord/profile"
   },
   "urlName" : "landlord-profile"
