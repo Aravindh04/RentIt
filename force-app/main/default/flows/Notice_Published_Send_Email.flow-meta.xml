@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Send_Email_All_Tenants</name>
         <label>Send Email to Tenant in Loop</label>
-        <locationX>440</locationX>
-        <locationY>1151</locationY>
+        <locationX>1018</locationX>
+        <locationY>1079</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -33,12 +33,13 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <actionCalls>
         <name>Send_Email_Specific_Tenant</name>
         <label>Send Email to Specific Tenant</label>
-        <locationX>176</locationX>
-        <locationY>827</locationY>
+        <locationX>50</locationX>
+        <locationY>971</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <connector>
@@ -49,6 +50,20 @@
             <name>emailAddresses</name>
             <value>
                 <elementReference>varSpecificContact.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>smarttechie@zohomail.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -70,14 +85,15 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <apiVersion>62.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Build_Email_Subject</name>
         <label>Build Email Subject</label>
-        <locationX>176</locationX>
-        <locationY>287</locationY>
+        <locationX>688</locationX>
+        <locationY>431</locationY>
         <assignmentItems>
             <assignToReference>varEmailSubject</assignToReference>
             <operator>Assign</operator>
@@ -92,8 +108,8 @@
     <decisions>
         <name>Check_Audience</name>
         <label>Audience Type?</label>
-        <locationX>176</locationX>
-        <locationY>395</locationY>
+        <locationX>688</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>All Tenants in Property</defaultConnectorLabel>
         <rules>
             <name>Specific_Tenant</name>
@@ -129,8 +145,8 @@
     <decisions>
         <name>Check_Contact_Has_Email</name>
         <label>Contact Has Email?</label>
-        <locationX>176</locationX>
-        <locationY>719</locationY>
+        <locationX>182</locationX>
+        <locationY>863</locationY>
         <defaultConnectorLabel>No Email - Skip</defaultConnectorLabel>
         <rules>
             <name>Has_Email</name>
@@ -151,8 +167,8 @@
     <decisions>
         <name>Check_Loop_Contact_Has_Email</name>
         <label>Loop Contact Has Email?</label>
-        <locationX>440</locationX>
-        <locationY>1043</locationY>
+        <locationX>1150</locationX>
+        <locationY>971</locationY>
         <defaultConnectorLabel>No Email - Next</defaultConnectorLabel>
         <rules>
             <name>Loop_Contact_Has_Email</name>
@@ -173,8 +189,8 @@
     <decisions>
         <name>Check_Status_Newly_Published</name>
         <label>Status Newly Changed to Published?</label>
-        <locationX>176</locationX>
-        <locationY>179</locationY>
+        <locationX>1073</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Already Published - Skip</defaultConnectorLabel>
         <rules>
             <name>Newly_Published</name>
@@ -199,8 +215,8 @@
     <loops>
         <name>Loop_Through_Tenancies</name>
         <label>Loop Through Active Tenancies</label>
-        <locationX>440</locationX>
-        <locationY>719</locationY>
+        <locationX>930</locationX>
+        <locationY>755</locationY>
         <collectionReference>varAllTenancies</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -226,8 +242,8 @@
     <recordLookups>
         <name>Get_All_Active_Tenancies</name>
         <label>Get All Active Tenancies for Property</label>
-        <locationX>440</locationX>
-        <locationY>611</locationY>
+        <locationX>930</locationX>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_Through_Tenancies</targetReference>
@@ -255,8 +271,8 @@
     <recordLookups>
         <name>Get_Loop_Contact</name>
         <label>Get Tenant Contact in Loop</label>
-        <locationX>440</locationX>
-        <locationY>935</locationY>
+        <locationX>1150</locationX>
+        <locationY>863</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_Loop_Contact_Has_Email</targetReference>
@@ -279,8 +295,8 @@
     <recordLookups>
         <name>Get_Specific_Contact</name>
         <label>Get Specific Tenant Contact</label>
-        <locationX>176</locationX>
-        <locationY>611</locationY>
+        <locationX>182</locationX>
+        <locationY>755</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_Contact_Has_Email</targetReference>
@@ -303,8 +319,8 @@
     <recordLookups>
         <name>Get_Specific_Tenancy</name>
         <label>Get Specific Tenancy and Contact</label>
-        <locationX>176</locationX>
-        <locationY>503</locationY>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Specific_Contact</targetReference>
@@ -325,8 +341,8 @@
     <recordUpdates>
         <name>Mark_Email_Sent</name>
         <label>Mark Notice Email as Sent</label>
-        <locationX>176</locationX>
-        <locationY>935</locationY>
+        <locationX>688</locationX>
+        <locationY>1547</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -350,7 +366,7 @@
         <object>Notice__c</object>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
+        <locationX>947</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_Status_Newly_Published</targetReference>
