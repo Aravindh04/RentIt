@@ -5,8 +5,8 @@
     "activeViewId" : "landlordHome",
     "configurationTags" : [ ],
     "pageAccess" : "UseParent",
-    "routeType" : "custom-landlord-home",
+    "routeType" : "home",
     "urlPrefix" : "landlord"
   },
-  "urlName" : ""
+  "urlName" : "landlord-home"
 }
