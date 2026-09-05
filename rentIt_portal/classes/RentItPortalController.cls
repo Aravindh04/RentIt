@@ -48,7 +48,7 @@ public with sharing class RentItPortalController {
     @AuraEnabled(cacheable=true)
     public static Contact getContactProfile() {
         List<Contact> contacts = [
-            SELECT Id, FirstName, LastName, Email, Phone, MobilePhone,
+            SELECT Id, AccountId, FirstName, LastName, Email, Phone, MobilePhone,
                    MailingStreet, MailingCity, MailingState,
                    MailingPostalCode, MailingCountry,
                    Account.ABN__c, Account.GST_Number__c, Account.GST_Registered__c
@@ -180,8 +180,8 @@ public with sharing class RentItPortalController {
                    Notice_Type__c, Status__c
             FROM   Notice__c
             WHERE  Tenancy__c = :tenancyId
-              AND  Status__c = 'Active'
-              AND  (Expiry_Date__c = null OR Expiry_Date__c >= TODAY)
+              AND  Status__c = 'Published'
+              //AND  (Expiry_Date__c = null OR Expiry_Date__c >= TODAY)
             WITH USER_MODE
             ORDER BY CreatedDate DESC
         ];
