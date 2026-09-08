@@ -110,26 +110,6 @@ public class InvoiceBatch implements Database.Batchable<SObject> {
 
         if (!toCreate.isEmpty()) {
             insert toCreate;
-
-            // Credit Applied payment amount mirrors Total_Amount__c at creation time
-            // (GST is 0 here, so it equals Amount__c - Discount_Amount__c).
-            List<Payment__c> creditApplications = new List<Payment__c>();
-            for (Invoice__c inv : toCreate) {
-                if (inv.Status__c == 'Paid') {
-                    Decimal discountAmt = inv.Discount_Amount__c != null ? inv.Discount_Amount__c : 0;
-                    creditApplications.add(new Payment__c(
-                        Tenancy__c      = inv.Tenancy__c,
-                        Invoice__c      = inv.Id,
-                        Payment_Type__c = 'Credit Applied',
-                        Status__c       = 'Received',
-                        Amount__c       = inv.Amount__c - discountAmt,
-                        Payment_Date__c = today
-                    ));
-                }
-            }
-            if (!creditApplications.isEmpty()) {
-                insert creditApplications;
-            }
         }
     }
 

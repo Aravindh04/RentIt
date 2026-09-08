@@ -187,8 +187,9 @@ Record types: `Complaint`, `Maintenance_Request` — both visible to `RentIt_Ten
 ### Apex
 | Class | Role |
 |---|---|
-| `InvoiceBatch` | Daily batch — queries Activated Contracts with an Active Tenancy; generates Invoice__c records 1 day ahead. Calls `DiscountCalculator` to set `Discount_Amount__c`. Auto-applies `Available_Credits__c` (marks invoice Paid + creates Credit Applied payment for `Amount - Discount`). |
-| `InvoiceBackfillBatch` | One-time backfill — iterates Contract.StartDate → today; creates missing invoices; applies discounts and credits. |
+| `InvoiceBatch` | Daily batch — queries Activated Contracts with an Active Tenancy; generates Invoice__c records 1 day ahead. Calls `DiscountCalculator` to set `Discount_Amount__c`. Auto-applies `Available_Credits__c` (marks invoice Paid; `InvoiceTriggerHandler` creates the matching Credit Applied payment for `Amount - Discount`). |
+| `InvoiceTriggerHandler` | After insert/update on Invoice__c — creates matching Credit Applied payments when Available_Credits__c fully covers the invoice, then marks the invoice Paid so PaymentTriggerHandler can refresh totals. |
+| `InvoiceBackfillBatch` | One-time backfill — iterates Contract.StartDate → today; creates missing invoices; applies discounts. InvoiceTriggerHandler applies matching credits and creates the Payment records. |
 | `InvoiceDiscountBackfillBatch` | Retroactively applies Discount__c records to existing invoices and their Credit Applied payments. Batches over Tenancy__c; queries overlapping invoices; calls `DiscountCalculator` per invoice; updates `Discount_Amount__c` and syncs Credit Applied payment amounts. |
 | `DiscountCalculator` | Stateless service class. `apply(invoiceAmount, periodStart, periodEnd, contractId, discounts)` → `Result{discountAmount, primaryDiscountId}`. Pro-rates discount by calendar-day overlap; accumulates multiple discounts; clamps at invoice amount. Used by all batch classes. |
 | `InvoiceScheduler` | Schedules InvoiceBatch daily at 2 AM (`0 0 2 * * ?`). |
@@ -222,7 +223,7 @@ Payment__c has a landlord approval process:
 - Discount pro-ration: if a discount covers only N of M invoice days, `DiscountCalculator` applies the reduction proportionally (day-level granularity)
 - Multiple `Discount__c` records for the same tenancy accumulate; `Invoice.Discount__c` lookup points to the first contributing discount
 - Credit Applied payment amount = `Invoice.Amount__c - Invoice.Discount_Amount__c` (i.e. matches `Total_Amount__c` when GST = 0)
-- `Available_Credits__c` is a formula: `Total_Credits__c − Total_Credits_Applied__c`; InvoiceBatch auto-applies it when generating invoices
+- `Available_Credits__c` is a formula: `Total_Credits__c − Total_Credits_Applied__c`; InvoiceBatch auto-applies it when generating invoices and InvoiceTriggerHandler creates the matching Credit Applied payment
 - Payment > Balance_Due → excess flows back as a Credit Payment on the Tenancy
 - Notices are system-created (Flows/Apex); tenants cannot create or edit them
 - Room.Status is managed by Contract lifecycle Flows (Activate → Occupied; Expire/Void → Available)

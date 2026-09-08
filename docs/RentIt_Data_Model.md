@@ -255,6 +255,7 @@ Record types: `Complaint`, `Maintenance_Request` — both accessible to tenants 
 | Contract Voided – Terminate Tenancy | Contract | Void_Reason__c newly set | Sets Tenancy = Terminated; Room = Available; sends termination email; creates Contract Termination Notice record |
 | Notice Published – Send Email | Notice__c | Status → Published | Sends email to Specific Tenant or loops all tenants in Property; sets Email_Sent__c = true and Email_Sent_Date__c |
 | Payment Received – Set Invoice Paid | Payment__c | Status → Received | Sets linked Invoice__c.Status = Paid |
+| Invoice Credit Payment Automation | Invoice__c | After Insert / After Update | Creates a Credit Applied Payment__c when Available_Credits__c can fully cover the invoice; marks the invoice Paid and refreshes totals |
 | Rent Invoice Unpaid – Task and Email | Invoice__c | Status newly → Unpaid | Sends "Invoice Now Unpaid" reminder email to tenant; creates a follow-up Task on Tenancy (Priority Normal, ActivityDate = today + 7 days) |
 | Rent Payment Overdue – Create Arrears Notice | Invoice__c | Status newly → Overdue | Creates a Rent Arrears Notice on the Tenancy; sends overdue email to tenant; creates an urgent follow-up Task on Tenancy (Priority High, ActivityDate = today + 3 days) |
 | Copy Mailing to Billing Address | Account | Before Save | When PersonAccount + Same_as_mailing_address__c = true + Mailing populated: copies Mailing → Billing address |
@@ -305,9 +306,11 @@ Record types: `Complaint`, `Maintenance_Request` — both accessible to tenants 
 - Looks 1 day ahead (`LOOKAHEAD_DAYS = 1`) to find the next upcoming period
 - Skips periods where an Invoice with matching `Period_Start__c` already exists (prevents duplicates)
 - Creates `Invoice__c` records with `Status = Scheduled`
-- If `Tenancy__c.Available_Credits__c >= Invoice Amount`: marks invoice as **Paid** immediately and creates a matching `Payment__c` record (`Payment_Type__c = Credit Payment`, `Status = Received`)
+- If `Tenancy__c.Available_Credits__c >= Invoice Amount`: marks invoice as **Paid** immediately; `InvoiceTriggerHandler` creates the matching `Payment__c` record (`Payment_Type__c = Credit Applied`, `Status = Received`)
 
-**Backfill class:** `InvoiceBackfillBatch` — iterates from Contract.StartDate to today, creating any missing invoices as Overdue and applying existing credits against them (creates Credit Applied Payment records). Used for onboarding existing tenancies.
+**Trigger support:** `InvoiceTriggerHandler` — after insert/update, creates the matching Credit Applied `Payment__c` when available credits can cover the invoice and marks the invoice Paid.
+
+**Backfill class:** `InvoiceBackfillBatch` — iterates from Contract.StartDate to today, creating any missing invoices as Overdue. The invoice trigger applies any matching credits and generates the related Payment records.
 
 **Activation (one-time, Execute Anonymous):**
 ```apex

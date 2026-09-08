@@ -83,9 +83,30 @@ public with sharing class PaymentTriggerHandler {
             paidByInvoice.put((Id) ar.get('iid'), (Decimal) ar.get('total'));
         }
 
+        Map<Id, Invoice__c> invoicesById = new Map<Id, Invoice__c>([
+            SELECT Id, Total_Amount__c, Status__c
+            FROM Invoice__c
+            WHERE Id IN :invoiceIds
+        ]);
+
         List<Invoice__c> toUpdate = new List<Invoice__c>();
         for (Id iid : invoiceIds) {
-            toUpdate.add(new Invoice__c(Id = iid, Total_Paid__c = paidByInvoice.get(iid)));
+            Invoice__c invoiceRecord = invoicesById.get(iid);
+            Decimal totalPaid = paidByInvoice.get(iid);
+            Invoice__c invoiceToUpdate = new Invoice__c(
+                Id = iid,
+                Total_Paid__c = totalPaid
+            );
+
+            if (invoiceRecord != null
+                && invoiceRecord.Status__c != 'Void'
+                && invoiceRecord.Total_Amount__c != null
+                && totalPaid >= invoiceRecord.Total_Amount__c
+            ) {
+                invoiceToUpdate.Status__c = 'Paid';
+            }
+
+            toUpdate.add(invoiceToUpdate);
         }
         update toUpdate;
     }
