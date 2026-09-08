@@ -53,6 +53,11 @@
             <operation>equals</operation>
             <value>Paid</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>Payment__c.Payment_Method__c</field>
+            <operation>notEqual</operation>
+            <value>Credit</value>
+        </criteriaItems>
     </entryCriteria>
     <finalApprovalActions>
         <action>

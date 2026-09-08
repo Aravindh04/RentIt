@@ -1,7 +1,6 @@
 .ri-footer {
     background: linear-gradient(135deg, #0a1f4e 0%, #0d2d6b 100%);
     color: rgba(255, 255, 255, 0.85);
-    margin-top: 3rem;
 }
 
 .ri-footer__inner {
