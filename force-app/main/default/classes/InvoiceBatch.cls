@@ -82,8 +82,6 @@ public class InvoiceBatch implements Database.Batchable<SObject> {
                         discountsByTenancy.get(c.Tenancy__c)
                     );
 
-                    // Amount__c holds the original rent; Discount_Amount__c stores the reduction.
-                    // Total_Amount__c formula = (Amount - Discount) + GST — used for credit checks.
                     Decimal netAmount   = (amount - dr.discountAmount).setScale(2);
                     Boolean applyCredit = credits >= netAmount;
 
@@ -96,7 +94,7 @@ public class InvoiceBatch implements Database.Batchable<SObject> {
                         Due_Date__c        = nextDue,
                         Period_Start__c    = nextDue,
                         Period_End__c      = periodEnd,
-                        Status__c          = applyCredit ? 'Paid' : 'Scheduled'
+                        Status__c          = 'Scheduled'
                     ));
                     existingPeriods.add(nextDue);
                     if (applyCredit) {

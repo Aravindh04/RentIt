@@ -268,6 +268,15 @@ Record types: `Complaint`, `Maintenance_Request` — both accessible to tenants 
 | Rent Payment – Scheduled to Unpaid | Daily | Transitions Invoice__c from Scheduled → Unpaid when Due_Date__c ≤ Today |
 | Rent Payment Due Tomorrow – Send Reminder | Daily 8:00 AM | For each Scheduled/Unpaid Invoice due tomorrow: sends reminder email + creates Rent Reminder Notice |
 
+### Apex Trigger Framework
+
+| Object | Trigger | Pattern | Purpose |
+|---|---|---|---|
+| ContentDocumentLink | ContentDocumentLinkTrigger | Handler → Service → Selector | Shares newly attached Contract files to the tenant Contact |
+| Invoice__c | InvoiceTrigger | Handler → Service → Selector | Creates Credit Applied Payments when available credits fully cover an invoice |
+| Payment__c | PaymentTrigger | Handler → Service → Selector | Populates Tenancy__c and recalculates Invoice totals/status after payment changes |
+| User | UserTrigger | Handler → Service → Selector | Enqueues tenant provisioning for newly created community users |
+
 ---
 
 ## 5. Approval Process — Rent Payment
@@ -306,9 +315,9 @@ Record types: `Complaint`, `Maintenance_Request` — both accessible to tenants 
 - Looks 1 day ahead (`LOOKAHEAD_DAYS = 1`) to find the next upcoming period
 - Skips periods where an Invoice with matching `Period_Start__c` already exists (prevents duplicates)
 - Creates `Invoice__c` records with `Status = Scheduled`
-- If `Tenancy__c.Available_Credits__c >= Invoice Amount`: marks invoice as **Paid** immediately; `InvoiceTriggerHandler` creates the matching `Payment__c` record (`Payment_Type__c = Credit Applied`, `Status = Received`)
+- If `Tenancy__c.Available_Credits__c >= Invoice Amount`: keeps the invoice in Scheduled/Overdue state and lets `InvoiceTriggerHandler` create the matching `Payment__c` record (`Payment_Type__c = Credit Applied`, `Status = Received`), after which `PaymentTriggerHandler` marks the invoice Paid
 
-**Trigger support:** `InvoiceTriggerHandler` — after insert/update, creates the matching Credit Applied `Payment__c` when available credits can cover the invoice and marks the invoice Paid.
+**Trigger support:** `InvoiceTriggerHandler` — after insert/update, creates the matching Credit Applied `Payment__c` when available credits can cover the invoice; `PaymentTriggerHandler` then updates the invoice totals and Paid status.
 
 **Backfill class:** `InvoiceBackfillBatch` — iterates from Contract.StartDate to today, creating any missing invoices as Overdue. The invoice trigger applies any matching credits and generates the related Payment records.
 

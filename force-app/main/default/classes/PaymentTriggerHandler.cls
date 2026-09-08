@@ -1,114 +1,26 @@
 public with sharing class PaymentTriggerHandler {
 
-    // ── Before contexts ──────────────────────────────────────────────────────
-
     public void beforeInsert(List<Payment__c> newPayments) {
-        populateTenancyFromInvoice(newPayments);
+        PaymentTriggerService.beforeInsert(newPayments);
     }
 
     public void beforeUpdate(List<Payment__c> newPayments, Map<Id, Payment__c> oldMap) {
-        populateTenancyFromInvoice(newPayments);
+        PaymentTriggerService.beforeUpdate(newPayments, oldMap);
     }
 
-    // ── After contexts ───────────────────────────────────────────────────────
-
     public void afterInsert(List<Payment__c> newPayments) {
-        recalculateRollups(newPayments, null);
+        PaymentTriggerService.afterInsert(newPayments);
     }
 
     public void afterUpdate(List<Payment__c> newPayments, Map<Id, Payment__c> oldMap) {
-        recalculateRollups(newPayments, oldMap.values());
+        PaymentTriggerService.afterUpdate(newPayments, oldMap);
     }
 
     public void afterDelete(List<Payment__c> oldPayments) {
-        recalculateRollups(oldPayments, null);
+        PaymentTriggerService.afterDelete(oldPayments);
     }
 
     public void afterUndelete(List<Payment__c> newPayments) {
-        recalculateRollups(newPayments, null);
+        PaymentTriggerService.afterUndelete(newPayments);
     }
-
-    // ── Private helpers ──────────────────────────────────────────────────────
-
-    private void populateTenancyFromInvoice(List<Payment__c> payments) {
-        Set<Id> invoiceIds = new Set<Id>();
-        for (Payment__c p : payments) {
-            if (p.Invoice__c != null && p.Tenancy__c == null) {
-                invoiceIds.add(p.Invoice__c);
-            }
-        }
-        if (invoiceIds.isEmpty()) return;
-
-        Map<Id, Invoice__c> invoiceMap = new Map<Id, Invoice__c>([
-            SELECT Id, Tenancy__c FROM Invoice__c WHERE Id IN :invoiceIds
-        ]);
-        for (Payment__c p : payments) {
-            if (p.Invoice__c != null && p.Tenancy__c == null && invoiceMap.containsKey(p.Invoice__c)) {
-                p.Tenancy__c = invoiceMap.get(p.Invoice__c).Tenancy__c;
-            }
-        }
-    }
-
-    private void recalculateRollups(List<Payment__c> payments, List<Payment__c> oldPayments) {
-        Set<Id> invoiceIds  = new Set<Id>();
-        Set<Id> tenancyIds  = new Set<Id>();
-
-        collectIds(payments, invoiceIds, tenancyIds);
-        if (oldPayments != null) collectIds(oldPayments, invoiceIds, tenancyIds);
-
-        updateInvoiceTotalPaid(invoiceIds);
-    }
-
-    private void collectIds(List<Payment__c> payments, Set<Id> invoiceIds, Set<Id> tenancyIds) {
-        for (Payment__c p : payments) {
-            if (p.Invoice__c  != null) invoiceIds.add(p.Invoice__c);
-            if (p.Tenancy__c  != null) tenancyIds.add(p.Tenancy__c);
-        }
-    }
-
-    private void updateInvoiceTotalPaid(Set<Id> invoiceIds) {
-        if (invoiceIds.isEmpty()) return;
-
-        Map<Id, Decimal> paidByInvoice = new Map<Id, Decimal>();
-        for (Id iid : invoiceIds) paidByInvoice.put(iid, 0);
-
-        for (AggregateResult ar : [
-            SELECT Invoice__c iid, SUM(Amount__c) total
-            FROM Payment__c
-            WHERE Invoice__c IN :invoiceIds
-              AND Status__c = 'Received'
-              AND Payment_Type__c IN ('Invoice Payment', 'Credit Applied')
-            GROUP BY Invoice__c
-        ]) {
-            paidByInvoice.put((Id) ar.get('iid'), (Decimal) ar.get('total'));
-        }
-
-        Map<Id, Invoice__c> invoicesById = new Map<Id, Invoice__c>([
-            SELECT Id, Total_Amount__c, Status__c
-            FROM Invoice__c
-            WHERE Id IN :invoiceIds
-        ]);
-
-        List<Invoice__c> toUpdate = new List<Invoice__c>();
-        for (Id iid : invoiceIds) {
-            Invoice__c invoiceRecord = invoicesById.get(iid);
-            Decimal totalPaid = paidByInvoice.get(iid);
-            Invoice__c invoiceToUpdate = new Invoice__c(
-                Id = iid,
-                Total_Paid__c = totalPaid
-            );
-
-            if (invoiceRecord != null
-                && invoiceRecord.Status__c != 'Void'
-                && invoiceRecord.Total_Amount__c != null
-                && totalPaid >= invoiceRecord.Total_Amount__c
-            ) {
-                invoiceToUpdate.Status__c = 'Paid';
-            }
-
-            toUpdate.add(invoiceToUpdate);
-        }
-        update toUpdate;
-    }
-
 }

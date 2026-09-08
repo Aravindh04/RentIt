@@ -77,7 +77,7 @@ public with sharing class ContractAttachmentSharingService {
             return;
         }
 
-        Database.SaveResult[] results = Database.insert(contentVersions, false, AccessLevel.USER_MODE);
+        Database.SaveResult[] results = Database.insert(contentVersions, false);
         for (Integer index = 0; index < results.size(); index++) {
             Database.SaveResult result = results[index];
             if (!result.isSuccess()) {
@@ -161,7 +161,7 @@ public with sharing class ContractAttachmentSharingService {
             return;
         }
 
-        for (Database.SaveResult result : Database.insert(links, false, AccessLevel.USER_MODE)) {
+        for (Database.SaveResult result : Database.insert(links, false)) {
             if (!result.isSuccess()) {
                 logErrors(result, 'Could not share File with portal User: ');
             }

@@ -85,9 +85,7 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
                     Decimal netAmount   = (amount - dr.discountAmount).setScale(2);
                     Boolean applyCredit = credits >= netAmount;
                     String  status;
-                    if (applyCredit) {
-                        status = 'Paid';
-                    } else if (periodStart < today) {
+                    if (periodStart < today) {
                         status = 'Overdue';
                     } else {
                         status = 'Unpaid';
@@ -117,24 +115,6 @@ public class InvoiceBackfillBatch implements Database.Batchable<SObject> {
 
         if (!toCreate.isEmpty()) {
             insert toCreate;
-
-            List<Payment__c> creditApplications = new List<Payment__c>();
-            for (Invoice__c inv : toCreate) {
-                if (inv.Status__c == 'Paid') {
-                    Decimal discountAmt = inv.Discount_Amount__c != null ? inv.Discount_Amount__c : 0;
-                    creditApplications.add(new Payment__c(
-                        Tenancy__c      = inv.Tenancy__c,
-                        Invoice__c      = inv.Id,
-                        Payment_Type__c = 'Credit Applied',
-                        Status__c       = 'Received',
-                        Amount__c       = inv.Amount__c - discountAmt,
-                        Payment_Date__c = inv.Invoice_Date__c
-                    ));
-                }
-            }
-            if (!creditApplications.isEmpty()) {
-                insert creditApplications;
-            }
         }
     }
 

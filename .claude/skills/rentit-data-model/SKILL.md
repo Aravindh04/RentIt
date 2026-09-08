@@ -187,13 +187,15 @@ Record types: `Complaint`, `Maintenance_Request` — both visible to `RentIt_Ten
 ### Apex
 | Class | Role |
 |---|---|
-| `InvoiceBatch` | Daily batch — queries Activated Contracts with an Active Tenancy; generates Invoice__c records 1 day ahead. Calls `DiscountCalculator` to set `Discount_Amount__c`. Auto-applies `Available_Credits__c` (marks invoice Paid; `InvoiceTriggerHandler` creates the matching Credit Applied payment for `Amount - Discount`). |
-| `InvoiceTriggerHandler` | After insert/update on Invoice__c — creates matching Credit Applied payments when Available_Credits__c fully covers the invoice, then marks the invoice Paid so PaymentTriggerHandler can refresh totals. |
-| `InvoiceBackfillBatch` | One-time backfill — iterates Contract.StartDate → today; creates missing invoices; applies discounts. InvoiceTriggerHandler applies matching credits and creates the Payment records. |
+| `InvoiceBatch` | Daily batch — queries Activated Contracts with an Active Tenancy; generates Invoice__c records 1 day ahead. Calls `DiscountCalculator` to set `Discount_Amount__c`. Keeps invoices in Scheduled state and lets `InvoiceTriggerHandler` create the matching Credit Applied payment when `Available_Credits__c` fully covers the invoice. |
+| `InvoiceTriggerHandler` | After insert/update on Invoice__c — creates matching Credit Applied payments when Available_Credits__c fully covers the invoice; `PaymentTriggerHandler` refreshes totals and marks the invoice Paid. |
+| `InvoiceBackfillBatch` | One-time backfill — iterates Contract.StartDate → today; creates missing invoices; applies discounts. InvoiceTriggerHandler creates matching credits and PaymentTriggerHandler updates the invoice. |
 | `InvoiceDiscountBackfillBatch` | Retroactively applies Discount__c records to existing invoices and their Credit Applied payments. Batches over Tenancy__c; queries overlapping invoices; calls `DiscountCalculator` per invoice; updates `Discount_Amount__c` and syncs Credit Applied payment amounts. |
+| `ContentDocumentLinkTriggerHandler` | After insert on ContentDocumentLink — shares Contract files to the tenant Contact through `ContentDocumentLinkTriggerService` and `ContentDocumentLinkTriggerSelector`. |
 | `DiscountCalculator` | Stateless service class. `apply(invoiceAmount, periodStart, periodEnd, contractId, discounts)` → `Result{discountAmount, primaryDiscountId}`. Pro-rates discount by calendar-day overlap; accumulates multiple discounts; clamps at invoice amount. Used by all batch classes. |
 | `InvoiceScheduler` | Schedules InvoiceBatch daily at 2 AM (`0 0 2 * * ?`). |
 | `PaymentTriggerHandler` | Before insert/update: populates Payment.Tenancy__c from Invoice.Tenancy__c when missing. After all DML: recalculates Invoice.Total_Paid__c and Account.Total_Payments_Received__c. |
+| `UserTriggerHandler` | After insert on User — enqueues `TenantProvisioningQueueable` for new community users with a ContactId, via `UserTriggerService` and `UserTriggerSelector`. |
 
 ### Flows
 | Flow | Trigger | What It Does |

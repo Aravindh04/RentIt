@@ -7,7 +7,6 @@ public with sharing class ContractAttachmentSharingSelector {
             SELECT Id, ContractNumber, CustomerSignedId
             FROM Contract
             WHERE ContractNumber = :contractNumber
-            WITH USER_MODE
             LIMIT 1
         ];
     }
@@ -17,7 +16,6 @@ public with sharing class ContractAttachmentSharingSelector {
             SELECT Id, ParentId, Name, Body, Description
             FROM Attachment
             WHERE ParentId IN :contractIds
-            WITH USER_MODE
         ];
     }
 
@@ -26,7 +24,6 @@ public with sharing class ContractAttachmentSharingSelector {
             SELECT Id, Description
             FROM ContentVersion
             WHERE Description IN :descriptions
-            WITH USER_MODE
         ];
     }
 
@@ -35,7 +32,6 @@ public with sharing class ContractAttachmentSharingSelector {
             SELECT ContentDocumentId, LinkedEntityId
             FROM ContentDocumentLink
             WHERE LinkedEntityId IN :entityIds
-            WITH USER_MODE
         ];
     }
 
@@ -45,7 +41,6 @@ public with sharing class ContractAttachmentSharingSelector {
             FROM User
             WHERE IsPortalEnabled = TRUE
             AND ContactId IN :contactIds
-            WITH USER_MODE
         ];
     }
 }

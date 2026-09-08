@@ -54,13 +54,19 @@ private class InvoiceBatchTest {
         Test.stopTest();
 
         List<Invoice__c> invoices = [
-            SELECT Id, Status__c
+            SELECT Id, Status__c, Total_Paid__c
             FROM Invoice__c
             WHERE Tenancy__c = :tenancyRecord.Id
         ];
 
         Assert.areEqual(1, invoices.size(), 'InvoiceBatch should create one invoice for the lookahead period.');
         Assert.areEqual('Paid', invoices[0].Status__c, 'The generated invoice should be marked paid.');
+        Assert.areEqual(1000, invoices[0].Total_Paid__c, 'The generated invoice should be fully paid.');
+        Assert.areEqual(
+            1,
+            [SELECT COUNT() FROM Payment__c WHERE Invoice__c = :invoices[0].Id AND Payment_Type__c = 'Credit Applied'],
+            'InvoiceBatch should create one credit applied payment.'
+        );
     }
 
     @IsTest
@@ -86,7 +92,7 @@ private class InvoiceBatchTest {
         Test.stopTest();
 
         List<Invoice__c> invoices = [
-            SELECT Id, Status__c
+            SELECT Id, Status__c, Total_Paid__c
             FROM Invoice__c
             WHERE Tenancy__c = :tenancyRecord.Id
             ORDER BY Period_Start__c
@@ -95,7 +101,13 @@ private class InvoiceBatchTest {
         Assert.areEqual(3, invoices.size(), 'Backfill should create the missing invoice history.');
         for (Invoice__c invoiceRecord : invoices) {
             Assert.areEqual('Paid', invoiceRecord.Status__c, 'Backfilled invoices should be marked paid.');
+            Assert.areEqual(1000, invoiceRecord.Total_Paid__c, 'Each backfilled invoice should be fully paid.');
         }
+        Assert.areEqual(
+            3,
+            [SELECT COUNT() FROM Payment__c WHERE Invoice__c IN :new Map<Id, Invoice__c>(invoices).keySet() AND Payment_Type__c = 'Credit Applied'],
+            'Backfill should create matching credit applied payments.'
+        );
     }
 
     private static Contract createContract(Id tenancyId, Date startDate) {
