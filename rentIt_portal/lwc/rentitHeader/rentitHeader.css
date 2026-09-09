@@ -240,6 +240,51 @@
     text-decoration: none;
 }
 
+/* ── Login button ─────────────────────────────────────────── */
+.ri-login-btn {
+    margin-left: auto;
+    position: relative;
+    min-height: 40px;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.92);
+    color: #0d2d6b;
+    border: none;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition:
+        background 0.15s,
+        box-shadow 0.2s,
+        transform 0.1s;
+}
+
+.ri-login-btn:hover:not(:disabled) {
+    background: #fff;
+    box-shadow:
+        0 0 0 4px rgba(255, 255, 255, 0.18),
+        0 0 24px rgba(255, 255, 255, 0.55);
+}
+
+.ri-login-btn:active:not(:disabled) {
+    transform: scale(0.99);
+}
+
+.ri-login-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.ri-login-btn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
 /* ── Hamburger (mobile only) ────────────────────────────── */
 .ri-hamburger {
     display: none;

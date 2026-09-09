@@ -10,16 +10,34 @@ export default class RentitContractDetail extends LightningElement {
     files    = [];
     isLoading         = true;
     isAttachmentsOpen = false;
+    hasTenancyLoaded = false;
+    hasContractLoaded = false;
 
     @wire(getActiveTenancy)
-    wiredTenancy({ data }) {
-        if (data) { this.tenancy = data; }
-        this.isLoading = false;
+    wiredTenancy(result) {
+        if (result.data !== undefined || result.error) {
+            this.hasTenancyLoaded = true;
+            if (result.data) {
+                this.tenancy = result.data;
+                this.hasContractLoaded = false;
+            } else {
+                this.tenancy = null;
+                this.hasContractLoaded = true;
+            }
+            this.updateLoadingState();
+        }
     }
 
     @wire(getContract, { tenancyId: '$tenancyId' })
-    wiredContract({ data }) {
-        if (data) { this.contract = data; }
+    wiredContract(result) {
+        if (!this.tenancyId) {
+            return;
+        }
+        if (result.data !== undefined || result.error) {
+            this.contract = result.data || null;
+            this.hasContractLoaded = true;
+            this.updateLoadingState();
+        }
     }
 
     @wire(getContractFiles, { contractId: '$contractId', tenancyId: '$tenancyId' })
@@ -33,6 +51,10 @@ export default class RentitContractDetail extends LightningElement {
                 downloadUrl: `/sfc/servlet.shepherd/document/download/${f.ContentDocumentId}`
             }));
         }
+    }
+
+    updateLoadingState() {
+        this.isLoading = !(this.hasTenancyLoaded && this.hasContractLoaded);
     }
 
     // ── Tenancy ───────────────────────────────────────────────────

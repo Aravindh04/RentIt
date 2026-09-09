@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="formTitle" type="String" default="Sign In" label="Form heading" />
+            <property name="usernameLabel" type="String" default="Username or Email" label="Username field label (visually hidden, read by screen readers)" />
+            <property name="passwordLabel" type="String" default="Password" label="Password field label (visually hidden, read by screen readers)" />
+            <property name="loginButtonLabel" type="String" default="Log In" label="Login button label" />
+            <property name="forgotPasswordLabel" type="String" default="Forgot your password?" label="Forgot password link label" />
+            <property name="forgotPasswordUrl" type="String" default="/ForgotPassword" label="Forgot password URL" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -8,19 +8,39 @@ export default class RentitTenancySummary extends NavigationMixin(LightningEleme
     tenancy  = null;
     contract = null;
     isLoading = true;
+    hasTenancyLoaded = false;
+    hasContractLoaded = false;
 
     @wire(getActiveTenancy)
     wiredTenancy(result) {
         // Only hide spinner once data or error has resolved (not on initial {data:undefined, error:undefined} fire)
         if (result.data !== undefined || result.error) {
-            if (result.data) this.tenancy = result.data;
-            this.isLoading = false;
+            this.hasTenancyLoaded = true;
+            if (result.data) {
+                this.tenancy = result.data;
+                this.hasContractLoaded = false;
+            } else {
+                this.tenancy = null;
+                this.hasContractLoaded = true;
+            }
+            this.updateLoadingState();
         }
     }
 
     @wire(getContract, { tenancyId: '$tenancyId' })
-    wiredContract({ data }) {
-        if (data) { this.contract = data; }
+    wiredContract(result) {
+        if (!this.tenancyId) {
+            return;
+        }
+        if (result.data !== undefined || result.error) {
+            this.contract = result.data || null;
+            this.hasContractLoaded = true;
+            this.updateLoadingState();
+        }
+    }
+
+    updateLoadingState() {
+        this.isLoading = !(this.hasTenancyLoaded && this.hasContractLoaded);
     }
 
     // ── Tenancy ───────────────────────────────────────────────────

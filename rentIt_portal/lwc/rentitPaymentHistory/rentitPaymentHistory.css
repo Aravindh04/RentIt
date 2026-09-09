@@ -125,26 +125,7 @@
 .ri-status[data-status="Pending Approval"] { background: #F3E5F5; color: #6A1B9A; }
 .ri-status[data-status="Rejected"]         { background: #FFEBEE; color: #B71C1C; }
 
-/* Custom spinner */
-.ri-spinner-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 160px;
-}
-
-.ri-spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid #dce3ee;
-    border-top-color: #1565C0;
-    border-radius: 50%;
-    animation: ri-spin 0.75s linear infinite;
-}
-
-@keyframes ri-spin {
-    to { transform: rotate(360deg); }
-}
+/* Custom spinner: see shared c-rentit-spinner component */
 
 /* Empty + error */
 .ri-empty-state {

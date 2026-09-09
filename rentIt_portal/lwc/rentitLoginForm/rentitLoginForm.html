@@ -1,0 +1,97 @@
+<template>
+    <template lwc:if={isLoading}>
+        <c-rentit-spinner variant="inverse" size="large"></c-rentit-spinner>
+    </template>
+    <template lwc:else>
+        <div class="ri-login-card">
+            <h2 class="ri-title">{formTitle}</h2>
+
+            <form novalidate onsubmit={handleSubmit}>
+                <div class="ri-field">
+                    <label class="ri-visually-hidden" for="ri-username">{usernameLabel}</label>
+                    <div class="ri-input-wrap">
+                        <lightning-icon icon-name="utility:user" size="x-small" variant="inverse" class="ri-input-icon" alternative-text="" title=""></lightning-icon>
+                        <input
+                            type="text"
+                            id="ri-username"
+                            name="un"
+                            class={usernameInputClass}
+                            data-id="username"
+                            value={username}
+                            oninput={handleUsernameInput}
+                            placeholder="Username or email address"
+                            autocomplete="username"
+                            aria-describedby="ri-username-error"
+                            required
+                        />
+                    </div>
+                    <template lwc:if={usernameError}>
+                        <p id="ri-username-error" class="ri-field-error" role="alert">{usernameError}</p>
+                    </template>
+                </div>
+
+                <div class="ri-field">
+                    <label class="ri-visually-hidden" for="ri-password">{passwordLabel}</label>
+                    <div class="ri-input-wrap">
+                        <lightning-icon icon-name="utility:lock" size="x-small" variant="inverse" class="ri-input-icon" alternative-text="" title=""></lightning-icon>
+                        <input
+                            type={passwordInputType}
+                            id="ri-password"
+                            name="pw"
+                            class={passwordInputClass}
+                            data-id="password"
+                            value={password}
+                            oninput={handlePasswordInput}
+                            placeholder="Password"
+                            autocomplete="current-password"
+                            aria-describedby="ri-password-error"
+                            required
+                        />
+                        <button
+                            type="button"
+                            class="ri-password-toggle"
+                            onclick={toggleShowPassword}
+                            aria-label={showPasswordLabel}
+                            aria-pressed={showPasswordPressed}
+                        >
+                            <lightning-icon
+                                icon-name={showPasswordIconName}
+                                size="x-small"
+                                variant="inverse"
+                                alternative-text={showPasswordLabel}
+                                title={showPasswordLabel}
+                            ></lightning-icon>
+                        </button>
+                    </div>
+                    <template lwc:if={passwordError}>
+                        <p id="ri-password-error" class="ri-field-error" role="alert">{passwordError}</p>
+                    </template>
+                </div>
+
+                <div class="ri-options-row">
+                    <label class="ri-remember">
+                        <input type="checkbox" class="ri-checkbox" checked={rememberMe} onchange={handleRememberChange} />
+                        <span>Remember me</span>
+                    </label>
+                    <a class="ri-forgot-link" href={forgotPasswordUrl}>{forgotPasswordLabel}</a>
+                </div>
+
+                <button type="submit" class="ri-login-btn" disabled={isSubmitting}>
+                    <template lwc:if={isSubmitting}>
+                        <lightning-spinner size="x-small" alternative-text="Logging in"></lightning-spinner>
+                    </template>
+                    <template lwc:else>
+                        <span>{loginButtonLabel}</span>
+                    </template>
+                </button>
+
+                <template lwc:if={hasLoginError}>
+                    <div class="ri-alert" role="alert">
+                        <lightning-icon icon-name="utility:error" size="x-small" variant="inverse" class="ri-alert__icon"></lightning-icon>
+                        <span>{loginError}</span>
+                    </div>
+                </template>
+            </form>
+        </div>
+    </template>
+</template>

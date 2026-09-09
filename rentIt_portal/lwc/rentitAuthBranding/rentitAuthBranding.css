@@ -58,26 +58,6 @@
     min-height: 60vh;
 }
 
-/* Split layout: branding copy on one side, the nested login form on the
-   other — both share this panel's single gradient background/decoration. */
-.ri-panel__inner {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 3rem;
-}
-
-.ri-panel__form-area {
-    flex: 0 1 420px;
-    width: 100%;
-    max-width: 420px;
-}
-
-/* Loading spinner — same technique/sizing/timing as rentitInvoiceList's
-   spinner, recoloured for this panel's dark gradient background. */
 /* Logo row */
 .ri-panel__logo {
     display: flex;
@@ -150,22 +130,14 @@
     margin-top: 2rem;
 }
 
-/* Mobile/tablet: stack branding copy above the nested login form instead of
-   sitting side by side, and relax the forced full-viewport height. */
+/* Mobile/tablet: this panel is a sibling column (branding | auth form) on
+   the pages that use it, stacked via layoutDirectionMobile in the CMS
+   section config. Relax the forced full-viewport height so it doesn't
+   push the sibling column a full screen down. */
 @media (max-width: 768px) {
     .ri-panel {
         min-height: 0;
         padding: 2.5rem 1.5rem 2rem;
-    }
-
-    .ri-panel__inner {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 2.5rem;
-    }
-
-    .ri-panel__form-area {
-        max-width: 100%;
     }
 
     .ri-panel__logo {

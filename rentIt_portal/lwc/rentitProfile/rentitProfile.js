@@ -18,13 +18,23 @@ const USER_FIELDS = [USER_NAME, USER_EMAIL, USER_PHONE,
 
 export default class RentitProfile extends LightningElement {
     contact = null;
+    userRecord = {};
     isEditMode = false;
+    isLoading = true;
     isSaving = false;
     wiredContactResult;
     draftValues = {};
+    hasUserRecordLoaded = false;
+    hasContactLoaded = false;
 
     @wire(getRecord, { recordId: userId, fields: USER_FIELDS })
-    userRecord;
+    wiredUserRecord(result) {
+        this.userRecord = result;
+        if (result.data !== undefined || result.error) {
+            this.hasUserRecordLoaded = true;
+            this.updateLoadingState();
+        }
+    }
 
     @wire(getContactProfile)
     wiredContact(result) {
@@ -32,22 +42,30 @@ export default class RentitProfile extends LightningElement {
         if (result.data) {
             this.contact = result.data;
         }
+        if (result.data !== undefined || result.error) {
+            this.hasContactLoaded = true;
+            this.updateLoadingState();
+        }
+    }
+
+    updateLoadingState() {
+        this.isLoading = !(this.hasUserRecordLoaded && this.hasContactLoaded);
     }
 
     // ── User ──────────────────────────────────────────────────────
-    get userNameRaw()    { return getFieldValue(this.userRecord.data, USER_NAME) || ''; }
-    get userEmailRaw()   { return getFieldValue(this.userRecord.data, USER_EMAIL) || ''; }
-    get userPhoneRaw()   { return getFieldValue(this.userRecord.data, USER_PHONE) || ''; }
-    get userTitleRaw()   { return getFieldValue(this.userRecord.data, USER_TITLE) || ''; }
-    get userDeptRaw()    { return getFieldValue(this.userRecord.data, USER_DEPARTMENT) || ''; }
-    get userName()       { return getFieldValue(this.userRecord.data, USER_NAME)       || ''; }
+    get userNameRaw()    { return getFieldValue(this.userRecord?.data, USER_NAME) || ''; }
+    get userEmailRaw()   { return getFieldValue(this.userRecord?.data, USER_EMAIL) || ''; }
+    get userPhoneRaw()   { return getFieldValue(this.userRecord?.data, USER_PHONE) || ''; }
+    get userTitleRaw()   { return getFieldValue(this.userRecord?.data, USER_TITLE) || ''; }
+    get userDeptRaw()    { return getFieldValue(this.userRecord?.data, USER_DEPARTMENT) || ''; }
+    get userName()       { return getFieldValue(this.userRecord?.data, USER_NAME)       || ''; }
     get userInitial()    { return this.userName ? this.userName.charAt(0).toUpperCase() : '?'; }
-    get userEmail()      { return getFieldValue(this.userRecord.data, USER_EMAIL)      || '—'; }
-    get userPhone()      { return getFieldValue(this.userRecord.data, USER_PHONE)      || '—'; }
-    get userTitle()      { return getFieldValue(this.userRecord.data, USER_TITLE)      || '—'; }
-    get userDepartment() { return getFieldValue(this.userRecord.data, USER_DEPARTMENT) || '—'; }
-    get userPhotoUrl()   { return getFieldValue(this.userRecord.data, USER_PHOTO); }
-    get userLastLogin()  { return getFieldValue(this.userRecord.data, USER_LAST_LOGIN); }
+    get userEmail()      { return getFieldValue(this.userRecord?.data, USER_EMAIL)      || '—'; }
+    get userPhone()      { return getFieldValue(this.userRecord?.data, USER_PHONE)      || '—'; }
+    get userTitle()      { return getFieldValue(this.userRecord?.data, USER_TITLE)      || '—'; }
+    get userDepartment() { return getFieldValue(this.userRecord?.data, USER_DEPARTMENT) || '—'; }
+    get userPhotoUrl()   { return getFieldValue(this.userRecord?.data, USER_PHOTO); }
+    get userLastLogin()  { return getFieldValue(this.userRecord?.data, USER_LAST_LOGIN); }
     get hasPhoto()       { return !!this.userPhotoUrl; }
 
     // ── Contact ───────────────────────────────────────────────────

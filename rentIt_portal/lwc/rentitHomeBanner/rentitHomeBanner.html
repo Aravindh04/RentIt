@@ -107,9 +107,7 @@
     </template>
 
     <template if:true={isLoading}>
-        <div class="ri-loading">
-            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
-        </div>
+        <c-rentit-spinner></c-rentit-spinner>
     </template>
 
     <template if:true={error}>

@@ -1,0 +1,54 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.ri-spinner-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 160px;
+}
+
+.ri-spinner-wrap--small {
+    min-height: 80px;
+}
+
+.ri-spinner-wrap--large {
+    min-height: 320px;
+}
+
+.ri-spinner {
+    border-radius: 50%;
+    animation: ri-spin 0.75s linear infinite;
+}
+
+/* Default: brand blue on light gray — matches the original list/card spinner */
+.ri-spinner--default {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #dce3ee;
+    border-top-color: #1565c0;
+}
+
+/* Inverse: white on transparent — for dark brand-gradient backgrounds */
+.ri-spinner--inverse {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #fff;
+}
+
+.ri-spinner-label {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #5f6b7a;
+}
+
+@keyframes ri-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

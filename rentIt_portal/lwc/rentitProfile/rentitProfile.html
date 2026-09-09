@@ -17,247 +17,253 @@
             </div>
         </div>
 
-        <div class="slds-p-horizontal_large slds-p-top_small">
-            <template if:false={isEditMode}>
-                <lightning-button label="Edit Profile" onclick={handleEditClick}></lightning-button>
-            </template>
-            <template if:true={isEditMode}>
-                <div class="slds-button-group" role="group">
-                    <lightning-button
-                        label="Cancel"
-                        onclick={handleCancelClick}
-                        disabled={isSaving}>
-                    </lightning-button>
-                    <lightning-button
-                        label="Save Changes"
-                        variant="brand"
-                        onclick={handleSaveClick}
-                        disabled={isSaving}>
-                    </lightning-button>
-                </div>
-            </template>
-        </div>
+        <template if:true={isLoading}>
+            <c-rentit-spinner></c-rentit-spinner>
+        </template>
 
-        <!-- Account Details -->
-        <div class="ri-info-section">
-            <div class="ri-section-header">
-                <lightning-icon icon-name="utility:user" size="x-small" alternative-text="Account"></lightning-icon>
-                <h3>Account Details</h3>
+        <template if:false={isLoading}>
+            <div class="slds-p-horizontal_large slds-p-top_small">
+                <template if:false={isEditMode}>
+                    <lightning-button label="Edit Profile" onclick={handleEditClick}></lightning-button>
+                </template>
+                <template if:true={isEditMode}>
+                    <div class="slds-button-group" role="group">
+                        <lightning-button
+                            label="Cancel"
+                            onclick={handleCancelClick}
+                            disabled={isSaving}>
+                        </lightning-button>
+                        <lightning-button
+                            label="Save Changes"
+                            variant="brand"
+                            onclick={handleSaveClick}
+                            disabled={isSaving}>
+                        </lightning-button>
+                    </div>
+                </template>
             </div>
-            <div class="ri-detail-grid">
-                <div class="ri-detail-row">
-                    <span class="ri-detail-label">Title</span>
-                    <template if:true={isEditMode}>
-                        <lightning-input
-                            type="text"
-                            label="Title"
-                            variant="label-hidden"
-                            value={draftUserTitle}
-                            data-field="userTitle"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                    </template>
-                    <template if:false={isEditMode}>
-                        <span class="ri-detail-value">{userTitle}</span>
-                    </template>
-                </div>
-                <div class="ri-detail-row">
-                    <span class="ri-detail-label">Department</span>
-                    <template if:true={isEditMode}>
-                        <lightning-input
-                            type="text"
-                            label="Department"
-                            variant="label-hidden"
-                            value={draftUserDepartment}
-                            data-field="userDepartment"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                    </template>
-                    <template if:false={isEditMode}>
-                        <span class="ri-detail-value">{userDepartment}</span>
-                    </template>
-                </div>
-                <div class="ri-detail-row">
-                    <span class="ri-detail-label">Phone</span>
-                    <template if:true={isEditMode}>
-                        <lightning-input
-                            type="tel"
-                            label="Phone"
-                            variant="label-hidden"
-                            value={draftUserPhone}
-                            data-field="userPhone"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                    </template>
-                    <template if:false={isEditMode}>
-                        <span class="ri-detail-value">{userPhone}</span>
-                    </template>
-                </div>
-                <div class="ri-detail-row">
-                    <span class="ri-detail-label">Last Login</span>
-                    <span class="ri-detail-value">
-                        <template if:true={userLastLogin}>
-                            <lightning-formatted-date-time
-                                value={userLastLogin}
-                                year="numeric" month="short" day="2-digit"
-                                hour="2-digit" minute="2-digit">
-                            </lightning-formatted-date-time>
-                        </template>
-                        <template if:false={userLastLogin}>—</template>
-                    </span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Contact Information -->
-        <template if:true={hasContact}>
+            <!-- Account Details -->
             <div class="ri-info-section">
                 <div class="ri-section-header">
-                    <lightning-icon icon-name="utility:contact" size="x-small" alternative-text="Contact"></lightning-icon>
-                    <h3>Contact Information</h3>
+                    <lightning-icon icon-name="utility:user" size="x-small" alternative-text="Account"></lightning-icon>
+                    <h3>Account Details</h3>
                 </div>
                 <div class="ri-detail-grid">
                     <div class="ri-detail-row">
-                        <span class="ri-detail-label">Full Name</span>
-                        <span class="ri-detail-value">{contactName}</span>
+                        <span class="ri-detail-label">Title</span>
+                        <template if:true={isEditMode}>
+                            <lightning-input
+                                type="text"
+                                label="Title"
+                                variant="label-hidden"
+                                value={draftUserTitle}
+                                data-field="userTitle"
+                                onchange={handleInputChange}>
+                            </lightning-input>
+                        </template>
+                        <template if:false={isEditMode}>
+                            <span class="ri-detail-value">{userTitle}</span>
+                        </template>
                     </div>
                     <div class="ri-detail-row">
-                        <span class="ri-detail-label">Email</span>
-                        <span class="ri-detail-value">{contactEmail}</span>
+                        <span class="ri-detail-label">Department</span>
+                        <template if:true={isEditMode}>
+                            <lightning-input
+                                type="text"
+                                label="Department"
+                                variant="label-hidden"
+                                value={draftUserDepartment}
+                                data-field="userDepartment"
+                                onchange={handleInputChange}>
+                            </lightning-input>
+                        </template>
+                        <template if:false={isEditMode}>
+                            <span class="ri-detail-value">{userDepartment}</span>
+                        </template>
                     </div>
                     <div class="ri-detail-row">
                         <span class="ri-detail-label">Phone</span>
                         <template if:true={isEditMode}>
                             <lightning-input
                                 type="tel"
-                                label="Contact Phone"
+                                label="Phone"
                                 variant="label-hidden"
-                                value={draftContactPhone}
-                                data-field="contactPhone"
+                                value={draftUserPhone}
+                                data-field="userPhone"
                                 onchange={handleInputChange}>
                             </lightning-input>
                         </template>
                         <template if:false={isEditMode}>
-                            <span class="ri-detail-value">{contactPhone}</span>
+                            <span class="ri-detail-value">{userPhone}</span>
                         </template>
                     </div>
                     <div class="ri-detail-row">
-                        <span class="ri-detail-label">Mobile</span>
-                        <span class="ri-detail-value">{contactMobile}</span>
+                        <span class="ri-detail-label">Last Login</span>
+                        <span class="ri-detail-value">
+                            <template if:true={userLastLogin}>
+                                <lightning-formatted-date-time
+                                    value={userLastLogin}
+                                    year="numeric" month="short" day="2-digit"
+                                    hour="2-digit" minute="2-digit">
+                                </lightning-formatted-date-time>
+                            </template>
+                            <template if:false={userLastLogin}>—</template>
+                        </span>
                     </div>
-                </div>
-                <div class="ri-detail-row ri-detail-row--address">
-                    <span class="ri-detail-label">Mailing Address</span>
-                    <template if:true={isEditMode}>
-                        <lightning-input
-                            type="text"
-                            label="Street"
-                            variant="label-hidden"
-                            placeholder="Street"
-                            value={draftMailingStreet}
-                            data-field="mailingStreet"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                        <lightning-input
-                            type="text"
-                            label="City"
-                            variant="label-hidden"
-                            placeholder="City"
-                            value={draftMailingCity}
-                            data-field="mailingCity"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                        <lightning-input
-                            type="text"
-                            label="State"
-                            variant="label-hidden"
-                            placeholder="State"
-                            value={draftMailingState}
-                            data-field="mailingState"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                        <lightning-input
-                            type="text"
-                            label="Postal Code"
-                            variant="label-hidden"
-                            placeholder="Postal Code"
-                            value={draftMailingPost}
-                            data-field="mailingPostalCode"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                        <lightning-input
-                            type="text"
-                            label="Country"
-                            variant="label-hidden"
-                            placeholder="Country"
-                            value={draftMailingCountry}
-                            data-field="mailingCountry"
-                            onchange={handleInputChange}>
-                        </lightning-input>
-                    </template>
-                    <template if:false={isEditMode}>
-                        <span class="ri-detail-value">{contactAddress}</span>
-                    </template>
                 </div>
             </div>
 
-            <!-- Business / Tax Details -->
-            <div class="ri-info-section">
-                <div class="ri-section-header">
-                    <lightning-icon icon-name="utility:company" size="x-small" alternative-text="Business"></lightning-icon>
-                    <h3>Business &amp; Tax Details</h3>
-                </div>
-                <div class="ri-detail-grid ri-detail-grid--3">
-                    <div class="ri-detail-row">
-                        <span class="ri-detail-label">ABN</span>
+            <!-- Contact Information -->
+            <template if:true={hasContact}>
+                <div class="ri-info-section">
+                    <div class="ri-section-header">
+                        <lightning-icon icon-name="utility:contact" size="x-small" alternative-text="Contact"></lightning-icon>
+                        <h3>Contact Information</h3>
+                    </div>
+                    <div class="ri-detail-grid">
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Full Name</span>
+                            <span class="ri-detail-value">{contactName}</span>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Email</span>
+                            <span class="ri-detail-value">{contactEmail}</span>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Phone</span>
+                            <template if:true={isEditMode}>
+                                <lightning-input
+                                    type="tel"
+                                    label="Contact Phone"
+                                    variant="label-hidden"
+                                    value={draftContactPhone}
+                                    data-field="contactPhone"
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </template>
+                            <template if:false={isEditMode}>
+                                <span class="ri-detail-value">{contactPhone}</span>
+                            </template>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Mobile</span>
+                            <span class="ri-detail-value">{contactMobile}</span>
+                        </div>
+                    </div>
+                    <div class="ri-detail-row ri-detail-row--address">
+                        <span class="ri-detail-label">Mailing Address</span>
                         <template if:true={isEditMode}>
                             <lightning-input
                                 type="text"
-                                label="ABN"
+                                label="Street"
                                 variant="label-hidden"
-                                value={draftAbn}
-                                data-field="abn"
+                                placeholder="Street"
+                                value={draftMailingStreet}
+                                data-field="mailingStreet"
                                 onchange={handleInputChange}>
                             </lightning-input>
-                        </template>
-                        <template if:false={isEditMode}>
-                            <span class="ri-detail-value">{abn}</span>
-                        </template>
-                    </div>
-                    <div class="ri-detail-row">
-                        <span class="ri-detail-label">GST Registered</span>
-                        <template if:true={isEditMode}>
-                            <lightning-input
-                                type="checkbox"
-                                label="GST Registered"
-                                variant="label-hidden"
-                                checked={draftGstRegistered}
-                                data-field="gstRegistered"
-                                onchange={handleInputChange}>
-                            </lightning-input>
-                        </template>
-                        <template if:false={isEditMode}>
-                            <span class="ri-detail-value">{gstRegistered}</span>
-                        </template>
-                    </div>
-                    <div class="ri-detail-row">
-                        <span class="ri-detail-label">GST Number</span>
-                        <template if:true={isEditMode}>
                             <lightning-input
                                 type="text"
-                                label="GST Number"
+                                label="City"
                                 variant="label-hidden"
-                                value={draftGstNumber}
-                                data-field="gstNumber"
+                                placeholder="City"
+                                value={draftMailingCity}
+                                data-field="mailingCity"
+                                onchange={handleInputChange}>
+                            </lightning-input>
+                            <lightning-input
+                                type="text"
+                                label="State"
+                                variant="label-hidden"
+                                placeholder="State"
+                                value={draftMailingState}
+                                data-field="mailingState"
+                                onchange={handleInputChange}>
+                            </lightning-input>
+                            <lightning-input
+                                type="text"
+                                label="Postal Code"
+                                variant="label-hidden"
+                                placeholder="Postal Code"
+                                value={draftMailingPost}
+                                data-field="mailingPostalCode"
+                                onchange={handleInputChange}>
+                            </lightning-input>
+                            <lightning-input
+                                type="text"
+                                label="Country"
+                                variant="label-hidden"
+                                placeholder="Country"
+                                value={draftMailingCountry}
+                                data-field="mailingCountry"
                                 onchange={handleInputChange}>
                             </lightning-input>
                         </template>
                         <template if:false={isEditMode}>
-                            <span class="ri-detail-value">{gstNumber}</span>
+                            <span class="ri-detail-value">{contactAddress}</span>
                         </template>
                     </div>
                 </div>
-            </div>
+
+                <!-- Business / Tax Details -->
+                <div class="ri-info-section">
+                    <div class="ri-section-header">
+                        <lightning-icon icon-name="utility:company" size="x-small" alternative-text="Business"></lightning-icon>
+                        <h3>Business &amp; Tax Details</h3>
+                    </div>
+                    <div class="ri-detail-grid ri-detail-grid--3">
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">ABN</span>
+                            <template if:true={isEditMode}>
+                                <lightning-input
+                                    type="text"
+                                    label="ABN"
+                                    variant="label-hidden"
+                                    value={draftAbn}
+                                    data-field="abn"
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </template>
+                            <template if:false={isEditMode}>
+                                <span class="ri-detail-value">{abn}</span>
+                            </template>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">GST Registered</span>
+                            <template if:true={isEditMode}>
+                                <lightning-input
+                                    type="checkbox"
+                                    label="GST Registered"
+                                    variant="label-hidden"
+                                    checked={draftGstRegistered}
+                                    data-field="gstRegistered"
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </template>
+                            <template if:false={isEditMode}>
+                                <span class="ri-detail-value">{gstRegistered}</span>
+                            </template>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">GST Number</span>
+                            <template if:true={isEditMode}>
+                                <lightning-input
+                                    type="text"
+                                    label="GST Number"
+                                    variant="label-hidden"
+                                    value={draftGstNumber}
+                                    data-field="gstNumber"
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </template>
+                            <template if:false={isEditMode}>
+                                <span class="ri-detail-value">{gstNumber}</span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </template>
 
     </div>

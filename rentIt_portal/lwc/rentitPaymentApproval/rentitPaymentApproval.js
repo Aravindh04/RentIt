@@ -58,6 +58,7 @@ export default class RentitPaymentApproval extends LightningElement {
         const paymentId  = e.detail.row.Id;
         const newStatus  = action.name === 'approve' ? 'Approved' : 'Rejected';
 
+        this.isLoading = true;
         updatePaymentStatus({ paymentId, newStatus })
             .then(() => {
                 this.actionMessage      = `Payment ${newStatus} successfully.`;
@@ -66,9 +67,13 @@ export default class RentitPaymentApproval extends LightningElement {
                     : 'slds-notify slds-notify_toast slds-theme_warning slds-m-top_small';
                 return refreshApex(this._wiredResult);
             })
+            .then(() => {
+                this.isLoading = false;
+            })
             .catch(err => {
                 this.actionMessage      = err?.body?.message || 'Action failed.';
                 this.actionMessageClass = 'slds-notify slds-notify_toast slds-theme_error slds-m-top_small';
+                this.isLoading = false;
             });
     }
 }
