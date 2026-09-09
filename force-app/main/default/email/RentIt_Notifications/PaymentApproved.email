@@ -3,39 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f4f6f9; margin:0; padding:0; }
-  .wrapper { max-width:600px; margin:32px auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); }
-  .header { background:#0070d2; padding:28px 32px; }
-  .header h1 { color:#fff; margin:0; font-size:20px; font-weight:600; }
-  .header p { color:#cce4ff; margin:4px 0 0; font-size:13px; }
-  .badge { display:inline-block; background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; border-radius:20px; padding:6px 16px; font-size:13px; font-weight:600; margin-bottom:20px; }
-  .body { padding:32px; }
-  .body p { color:#333; font-size:15px; line-height:1.6; margin:0 0 16px; }
-  .detail-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; font-size:14px; }
-  .detail-row:last-child { border-bottom:none; }
-  .detail-label { color:#666; }
-  .detail-value { color:#111; font-weight:500; }
-  .footer { background:#f4f6f9; padding:20px 32px; text-align:center; font-size:12px; color:#888; }
+  body { margin: 0; padding: 0; background: #f2f6fb; font-family: Arial, sans-serif; color: #1f2937; }
+  .wrapper { max-width: 620px; margin: 24px auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5eaf2; }
+  .header { background: linear-gradient(135deg, #167d3f, #0f5f2f); padding: 28px 32px; color: #ffffff; }
+  .header h1 { margin: 0; font-size: 23px; }
+  .header p { margin: 8px 0 0; font-size: 13px; color: #d6f8e2; }
+  .content { padding: 30px 32px; }
+  .content p { margin: 0 0 16px; font-size: 15px; line-height: 1.6; }
+  .badge { display: inline-block; background: #e8f8ee; color: #166534; border: 1px solid #9ad9b0; border-radius: 999px; padding: 7px 14px; font-size: 12px; font-weight: 700; margin-bottom: 16px; }
+  .context { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 18px 0; }
+  .context table { width: 100%; border-collapse: collapse; }
+  .context td { padding: 8px 0; border-bottom: 1px solid #e8edf4; font-size: 14px; }
+  .context tr:last-child td { border-bottom: none; }
+  .label { color: #64748b; }
+  .value { color: #111827; font-weight: 600; text-align: right; }
+  .btn { display: inline-block; margin: 8px 10px 0 0; text-decoration: none; padding: 11px 18px; border-radius: 8px; font-weight: 700; font-size: 14px; }
+  .btn-primary { background: #167d3f; color: #ffffff !important; }
+  .btn-secondary { background: #eef2f7; color: #0f172a !important; border: 1px solid #d9e2ef; }
+  .footer { padding: 20px 32px; background: #f8fafc; border-top: 1px solid #e8edf4; font-size: 12px; color: #6b7280; text-align: center; }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <div class="header">
     <h1>Payment Confirmed</h1>
-    <p>RentIt Property Management</p>
+    <p>RentIt Property Management &bull; Tenant Notification</p>
   </div>
-  <div class="body">
-    <span class="badge">&#10003; Approved</span>
-    <p>Great news! Your rent payment has been reviewed and approved. Your tenancy account has been updated.</p>
-    <div class="detail-row"><span class="detail-label">Payment Reference</span><span class="detail-value">{!Payment__c.Name}</span></div>
-    <div class="detail-row"><span class="detail-label">Invoice Number</span><span class="detail-value">{!Payment__c.Invoice__r.Name}</span></div>
-    <div class="detail-row"><span class="detail-label">Amount Received</span><span class="detail-value">${!Payment__c.Amount__c}</span></div>
-    <div class="detail-row"><span class="detail-label">Billing Period</span><span class="detail-value">{!Payment__c.Invoice__r.Period_Start__c} – {!Payment__c.Invoice__r.Period_End__c}</span></div>
-    <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value">Received</span></div>
-    <p style="margin-top:24px;">Please keep this email as your payment receipt. Thank you for paying on time!</p>
+  <div class="content">
+    <span class="badge">&#10003; Approved and Posted</span>
+    <p>Thank you for your payment. Your submission has been reviewed and approved, and your tenancy account is now updated.</p>
+    <div class="context">
+      <table>
+        <tr><td class="label">Payment Reference</td><td class="value">{!Payment__c.Name}</td></tr>
+        <tr><td class="label">Invoice Number</td><td class="value">{!Payment__c.Invoice__r.Name}</td></tr>
+        <tr><td class="label">Amount Received</td><td class="value">${!Payment__c.Amount__c}</td></tr>
+        <tr><td class="label">Billing Period</td><td class="value">{!Payment__c.Invoice__r.Period_Start__c} – {!Payment__c.Invoice__r.Period_End__c}</td></tr>
+        <tr><td class="label">Current Status</td><td class="value">Received</td></tr>
+      </table>
+    </div>
+    <p>Please keep this email as your receipt. For your records, you can view both items directly in the portal.</p>
+    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Payment__c.Id}">View Payment</a>
+    <a class="btn btn-secondary" href="{!Community_URL}s/detail/{!Payment__c.Invoice__c}">View Invoice</a>
   </div>
   <div class="footer">
-    RentIt Property Management &bull; This is an automated notification. Please do not reply to this email.
+    RentIt Property Management &bull; Automated email, please do not reply.
   </div>
 </div>
 </body>

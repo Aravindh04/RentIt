@@ -1,12 +1,56 @@
-Hi {!Contact.FirstName},
-
-Welcome to the RentIT Portal! Your account has been created successfully.
-
-You can log in to view your tenancy details, invoices, and make payments using the link below:
-
-{!Community_URL}
-
-If you have any questions, please contact your landlord or property manager.
-
-Regards,
-The RentIT Team
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; padding: 0; background: #f2f6fb; font-family: Arial, sans-serif; color: #1f2937; }
+  .wrapper { max-width: 620px; margin: 24px auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5eaf2; }
+  .header { background: linear-gradient(135deg, #1f6feb, #0e4fb5); padding: 28px 32px; color: #ffffff; }
+  .header h1 { margin: 0; font-size: 24px; }
+  .header p { margin: 8px 0 0; font-size: 13px; color: #dbe9ff; }
+  .content { padding: 30px 32px; }
+  .content p { margin: 0 0 16px; font-size: 15px; line-height: 1.6; }
+  .context { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 18px 0; }
+  .context-title { margin: 0 0 10px; color: #0f4ea8; font-size: 13px; text-transform: uppercase; letter-spacing: .6px; font-weight: 700; }
+  .context table { width: 100%; border-collapse: collapse; }
+  .context td { padding: 8px 0; border-bottom: 1px solid #e8edf4; font-size: 14px; }
+  .context tr:last-child td { border-bottom: none; }
+  .label { color: #64748b; }
+  .value { color: #111827; font-weight: 600; text-align: right; }
+  .btn { display: inline-block; margin-top: 8px; background: #1f6feb; color: #ffffff !important; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; }
+  .link { margin-top: 14px; font-size: 12px; color: #64748b; word-break: break-all; }
+  .footer { padding: 20px 32px; background: #f8fafc; border-top: 1px solid #e8edf4; font-size: 12px; color: #6b7280; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Welcome to RentIt</h1>
+      <p>Your tenant portal access is now active.</p>
+    </div>
+    <div class="content">
+      <p>Hi {!Contact.FirstName},</p>
+      <p>Your RentIt Portal account has been created successfully. You can now manage your tenancy, view invoices, and submit rent payments online.</p>
+      <div class="context">
+        <p class="context-title">Account Summary</p>
+        <table>
+          <tr>
+            <td class="label">Portal</td>
+            <td class="value">RentIt Portal</td>
+          </tr>
+          <tr>
+            <td class="label">Access</td>
+            <td class="value">Self-Service</td>
+          </tr>
+        </table>
+      </div>
+      <a class="btn" href="{!Community_URL}">Open RentIt Portal</a>
+      <p class="link">Direct link: {!Community_URL}</p>
+      <p>If you need help getting started, please contact your landlord or property manager.</p>
+    </div>
+    <div class="footer">
+      RentIt Property Management &bull; Automated email, please do not reply.
+    </div>
+  </div>
+</body>
+</html>

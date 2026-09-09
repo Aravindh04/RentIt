@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
     <available>true</available>
-    <description>Sent to the community user when they request a password reset on the RentIT Portal.</description>
+    <description>Sent to the tenant when their invoice has been paid in full. Includes a PDF invoice receipt attachment. References the Invoice__c record.</description>
     <encodingKey>UTF-8</encodingKey>
-    <name>RentIT Portal - Forgot Password</name>
+    <name>Invoice Paid - Receipt (Tenant)</name>
     <style>none</style>
-    <subject>RentIT Portal: Reset Your Password</subject>
+    <subject>Invoice Paid: Receipt for {!Invoice__c.Name}</subject>
     <textOnly>false</textOnly>
     <type>custom</type>
     <uiType>Aloha</uiType>

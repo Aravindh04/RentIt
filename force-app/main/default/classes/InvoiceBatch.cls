@@ -1,6 +1,7 @@
 public class InvoiceBatch implements Database.Batchable<SObject> {
 
-    private static final Integer LOOKAHEAD_DAYS = 1;
+    // New invoices are scheduled this many days before the rent period start date.
+    private static final Integer LOOKAHEAD_DAYS = 2;
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator([
@@ -111,11 +112,62 @@ public class InvoiceBatch implements Database.Batchable<SObject> {
         }
     }
 
-    public void finish(Database.BatchableContext bc) {}
+    // Runs once after all chunks of invoice creation have completed. Handles the
+    // batch's second responsibility: keeping not-yet-paid invoices' Status__c current, and driving the
+    // Rent Reminder / Rent Arrears notice lifecycle (see NoticeService) for every existing invoice that
+    // is currently Unpaid or Overdue — this is what used to be four separate Flows:
+    //   Rent_Payment_Scheduled_To_Unpaid, Rent_Payment_Due_Tomorrow_Reminder,
+    //   Rent_Invoice_Unpaid_Task_And_Email, Rent_Payment_Overdue_Create_Notice.
+    public void finish(Database.BatchableContext bc) {
+        transitionUnpaidInvoiceStatuses();
+    }
 
     private Date advanceToFuture(Date startDate, Integer intervalDays, Date today) {
         Date d = startDate;
         while (d <= today) { d = d.addDays(intervalDays); }
         return d;
+    }
+
+    // Moves every invoice that is not yet Paid (and not Void) into the correct status for today:
+    //  - Due tomorrow  -> Unpaid   (1 day before Due_Date__c; also replaces Rent_Payment_Scheduled_To_Unpaid)
+    //  - Due date has passed -> Overdue
+    // Also collects the FULL set of invoices whose resulting status is Unpaid/Overdue today (not just
+    // ones that newly transitioned), so NoticeService can issue/reissue the matching Rent Reminder /
+    // Rent Arrears notice for every one of them, every day, until the tenant pays or a property manager
+    // closes the notice's follow-up Task.
+    private void transitionUnpaidInvoiceStatuses() {
+        Date today    = Date.today();
+        Date tomorrow = today.addDays(1);
+        List<Invoice__c> toUpdate = new List<Invoice__c>();
+        Set<Id> unpaidInvoiceIds = new Set<Id>();
+        Set<Id> overdueInvoiceIds = new Set<Id>();
+
+        for (Invoice__c inv : [
+            SELECT Id, Status__c, Due_Date__c
+            FROM Invoice__c
+            WHERE Status__c NOT IN ('Paid', 'Void')
+            AND Due_Date__c != null
+        ]) {
+            if (inv.Due_Date__c < today) {
+                overdueInvoiceIds.add(inv.Id);
+                if (inv.Status__c != 'Overdue') {
+                    toUpdate.add(new Invoice__c(Id = inv.Id, Status__c = 'Overdue'));
+                }
+            } else if (inv.Due_Date__c == tomorrow || inv.Status__c == 'Unpaid') {
+                unpaidInvoiceIds.add(inv.Id);
+                if (inv.Status__c != 'Unpaid') {
+                    toUpdate.add(new Invoice__c(Id = inv.Id, Status__c = 'Unpaid'));
+                }
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            update toUpdate;
+        }
+
+        // Bulk-safe: each call issues one SOQL query, one bulk DML per list, and one bulk email send
+        // (Messaging.sendEmail with the whole batch of messages) — no per-invoice email sends.
+        NoticeService.issueOrReissueRentReminderNotices(unpaidInvoiceIds);
+        NoticeService.issueOrReissueRentArrearsNotices(overdueInvoiceIds);
     }
 }

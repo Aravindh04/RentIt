@@ -1,0 +1,50 @@
+<apex:page standardController="Invoice__c"
+           renderAs="pdf"
+           showHeader="false"
+           sidebar="false"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           cache="false">
+<html>
+<head>
+<style>
+  body { font-family: Arial, sans-serif; color: #1f2937; font-size: 12px; }
+  .receipt { padding: 24px; }
+  .brand { font-size: 20px; font-weight: bold; color: #167d3f; margin-bottom: 2px; }
+  .subtitle { color: #6b7280; margin-bottom: 16px; }
+  .paid-badge { display: inline-block; background: #e8f8ee; color: #166534; border: 1px solid #9ad9b0;
+                padding: 4px 14px; border-radius: 12px; font-weight: bold; margin-bottom: 16px; }
+  table.details { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  table.details td { padding: 7px 8px; border-bottom: 1px solid #e5e7eb; }
+  .label { color: #6b7280; width: 45%; }
+  .value { font-weight: bold; color: #111827; text-align: right; }
+  .total-row td { font-size: 14px; font-weight: bold; border-top: 2px solid #167d3f; padding-top: 10px; }
+  .footer { margin-top: 30px; font-size: 10px; color: #9ca3af; text-align: center; }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <div class="brand">RentIt Property Management</div>
+  <div class="subtitle">Official Rent Invoice Receipt</div>
+  <span class="paid-badge">PAID IN FULL</span>
+  <table class="details">
+    <tr><td class="label">Invoice Number</td><td class="value">{!Invoice__c.Name}</td></tr>
+    <tr><td class="label">Tenant</td><td class="value">{!Invoice__c.Tenancy__r.Tenant__r.Name}</td></tr>
+    <tr><td class="label">Property</td><td class="value">{!Invoice__c.Tenancy__r.Property__r.Name}</td></tr>
+    <tr><td class="label">Billing Period</td><td class="value">{!Invoice__c.Period_Start__c} &#8211; {!Invoice__c.Period_End__c}</td></tr>
+    <tr><td class="label">Invoice Date</td><td class="value">{!Invoice__c.Invoice_Date__c}</td></tr>
+    <tr><td class="label">Due Date</td><td class="value">{!Invoice__c.Due_Date__c}</td></tr>
+    <tr><td class="label">Rent Amount</td><td class="value">${!Invoice__c.Amount__c}</td></tr>
+    <tr><td class="label">Discount Applied</td><td class="value">${!Invoice__c.Discount_Amount__c}</td></tr>
+    <tr><td class="label">GST</td><td class="value">${!Invoice__c.GST_Amount__c}</td></tr>
+    <tr class="total-row"><td class="label">Total Amount</td><td class="value">${!Invoice__c.Total_Amount__c}</td></tr>
+    <tr><td class="label">Total Paid</td><td class="value">${!Invoice__c.Total_Paid__c}</td></tr>
+    <tr><td class="label">Status</td><td class="value">{!Invoice__c.Status__c}</td></tr>
+  </table>
+  <div class="footer">
+    This receipt was generated automatically by RentIt Property Management. Please retain it for your records.
+  </div>
+</div>
+</body>
+</html>
+</apex:page>

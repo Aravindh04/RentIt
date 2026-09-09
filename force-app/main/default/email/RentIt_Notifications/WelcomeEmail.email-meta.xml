@@ -6,6 +6,7 @@
     <name>RentIT Portal - Welcome</name>
     <style>none</style>
     <subject>Welcome to the RentIT Portal</subject>
-    <type>text</type>
+    <textOnly>false</textOnly>
+    <type>custom</type>
     <uiType>Aloha</uiType>
 </EmailTemplate>

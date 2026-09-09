@@ -27,7 +27,7 @@ export default class RentitTenantList extends LightningElement {
     @track editingTenancyId;
     isLoading = true;
     columns = COLUMNS;
-    editFields = ['Community_User__c'];
+    editFields = [''];
     _wiredResult;
 
     @wire(getAllTenancies)
