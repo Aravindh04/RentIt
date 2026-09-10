@@ -14,19 +14,32 @@
             "layoutDirectionMobile" : "column",
             "layoutDirectionTablet" : "column",
             "maxContentWidth" : "",
-            "sectionColumnGutterWidth" : "",
-            "sectionConfig" : "{\"UUID\":\"d4ced826-7756-4e0f-a86a-9fdb54536e5d\",\"columns\":[{\"UUID\":\"4fd4607b-fcbc-4b82-9e7f-a761ad23a306\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+            "sectionColumnGutterWidth" : "0px",
+            "sectionConfig" : "{\"UUID\":\"d4ced826-7756-4e0f-a86a-9fdb54536e5d\",\"columns\":[{\"UUID\":\"4fd4607b-fcbc-4b82-9e7f-a761ad23a306\",\"columnName\":\"Branding\",\"columnKey\":\"col1\",\"columnWidth\":\"6\",\"seedComponents\":null},{\"UUID\":\"7a1b2c3d-4e5f-6789-abcd-ef0123456789\",\"columnName\":\"Form\",\"columnKey\":\"col2\",\"columnWidth\":\"6\",\"seedComponents\":null}]}",
             "sectionMinHeight" : "",
             "sectionVerticalAlign" : "flex-start"
           },
           "children" : [ {
             "children" : [ {
               "attributes" : {
-                "alignment" : "left",
+                "dxpStyle" : { }
+              },
+              "definition" : "c:rentitAuthBranding",
+              "id" : "3f8b2a1c-9d4e-4a6b-8c2d-1e5f7a9b3c6d",
+              "type" : "component"
+            } ],
+            "id" : "4fd4607b-fcbc-4b82-9e7f-a761ad23a306",
+            "name" : "col1",
+            "title" : "Branding",
+            "type" : "region"
+          }, {
+            "children" : [ {
+              "attributes" : {
+                "alignment" : "center",
                 "dxpStyle" : { },
                 "imageInfo" : "",
                 "imageInfoMobile" : "",
-                "logoWidth" : 250
+                "logoWidth" : 200
               },
               "definition" : "dxp_content_layout:siteLogo",
               "id" : "ffacb8a3-d1a0-427a-89c4-8ac1a8e1dd7b",
@@ -45,9 +58,9 @@
               "id" : "91145b9d-b479-471e-870f-0c961a971c08",
               "type" : "component"
             } ],
-            "id" : "4fd4607b-fcbc-4b82-9e7f-a761ad23a306",
-            "name" : "col1",
-            "title" : "Column 1",
+            "id" : "7a1b2c3d-4e5f-6789-abcd-ef0123456789",
+            "name" : "col2",
+            "title" : "Form",
             "type" : "region"
           } ],
           "definition" : "community_layout:section",

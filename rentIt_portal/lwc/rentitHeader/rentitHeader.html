@@ -63,7 +63,10 @@
 
             <!-- Guest: Sign In button -->
             <template if:false={isLoggedIn}>
-                <a class="ri-signin-btn" href={loginUrl}>Sign In</a>
+                <!--a class="ri-signin-btn" href={loginUrl}>Sign In</a-->
+                <button type="submit" class="ri-login-btn" href={loginUrl}>
+                    <span>{loginButtonLabel}</span>
+                </button>
             </template>
         </div>
 

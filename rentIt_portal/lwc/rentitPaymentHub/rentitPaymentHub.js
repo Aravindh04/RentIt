@@ -8,7 +8,9 @@ export default class RentitPaymentHub extends LightningElement {
     handlePageReference(CurrentPageReference) {
         if (CurrentPageReference) {
             const url = CurrentPageReference.attributes?.url || '';
-            if (url.includes('invoiceId=')) {
+            if (url.includes('paymentId=')) {
+                this.activeTab = 'history';
+            } else if (url.includes('invoiceId=')) {
                 this.activeTab = 'make';
             }
         }

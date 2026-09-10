@@ -14,6 +14,7 @@ const FIELDS = [USER_NAME, USER_FIRSTNAME, USER_EMAIL, USER_PHOTO];
 export default class RentitHeader extends NavigationMixin(LightningElement) {
     isDropdownOpen   = false;
     isMobileMenuOpen = false;
+    loginButtonLabel = 'Log In';
 
     @wire(getRecord, { recordId: userId, fields: FIELDS })
     currentUser;
@@ -85,7 +86,22 @@ export default class RentitHeader extends NavigationMixin(LightningElement) {
 
     handleProfile() { this._go('profile'); }
     handleLogout()  {
-        window.location.href = '/secur/logout.jsp?retUrl=' + encodeURIComponent(BasePath + '/login');
+        // retUrl must be a fully-qualified absolute URL. A relative path
+        // (just BasePath + '/login') is silently ignored by logout.jsp on
+        // this site, which then falls back to the org's default/employee
+        // login page instead of RentIt's own custom login page.
+        const absoluteLoginUrl = window.location.origin + BasePath + '/login';
+        /*console.log(`RentItHeader.handleLogout: redirecting to logout.jsp with retUrl=${absoluteLoginUrl}`);
+        console.log('RentItHeader.handleLogout: logout.jsp redirect complete ' + '/secur/logout.jsp?retUrl=' + encodeURIComponent(absoluteLoginUrl));
+        window.location.href = BasePath + '/secur/logout.jsp?retUrl=' + encodeURIComponent(absoluteLoginUrl);
+        */
+        const cleanBasePath = BasePath;
+
+        // Target the core endpoint: [sitePrefix]/secur/logout.jsp
+        const logoutUrl = `${cleanBasePath}/secur/logout.jsp?retUrl=${encodeURIComponent(absoluteLoginUrl)}`;
+
+        // Force browser redirect to end the session
+        window.location.assign(logoutUrl);
     }
 
     // ── Mobile menu ───────────────────────────────────────────────

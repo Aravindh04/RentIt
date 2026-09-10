@@ -108,22 +108,4 @@
     font-weight: 600;
 }
 
-.ri-spinner-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 160px;
-}
-
-.ri-spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid #dce3ee;
-    border-top-color: #1565C0;
-    border-radius: 50%;
-    animation: ri-spin 0.75s linear infinite;
-}
-
-@keyframes ri-spin {
-    to { transform: rotate(360deg); }
-}
+/* Custom spinner: see shared c-rentit-spinner component */

@@ -13,6 +13,11 @@ export default class RentitInvoiceList extends NavigationMixin(LightningElement)
     activeCatTab    = 'all';
     isDiscountOpen  = false;
 
+    // Deep-link support: capture ?invoiceId=... from the URL the component
+    // was loaded with, so a bookmarked/shared/back-navigated link reopens
+    // the same invoice's detail view once the list has loaded.
+    _pendingInvoiceId = new URLSearchParams(window.location.search).get('invoiceId');
+
     @wire(getActiveTenancy)
     wiredTenancy({ data, error }) {
         if (data) {
@@ -28,6 +33,10 @@ export default class RentitInvoiceList extends NavigationMixin(LightningElement)
             .then(data => {
                 this.invoices = data;
                 this.isLoading = false;
+                if (this._pendingInvoiceId) {
+                    this.selectedInvoice = this.invoices.find(inv => inv.Id === this._pendingInvoiceId) || null;
+                    this._pendingInvoiceId = null;
+                }
             })
             .catch(err => {
                 this.error = err?.body?.message || 'Failed to load invoices.';
@@ -83,11 +92,25 @@ export default class RentitInvoiceList extends NavigationMixin(LightningElement)
     handleInvoiceSelect(event) {
         const id = event.currentTarget.dataset.id;
         this.selectedInvoice = this.invoices.find(inv => inv.Id === id) || null;
+        this._updateUrl(id);
     }
 
     handleCloseDetail() {
         this.selectedInvoice = null;
         this.isDiscountOpen = false;
+        this._updateUrl(null);
+    }
+
+    // Reflects the selected invoice in the address bar (?invoiceId=...) so
+    // the detail view is bookmarkable/shareable and survives a refresh or
+    // browser back/forward. Uses pushState-style navigation (no full page
+    // reload) since this stays on the same /invoices route.
+    _updateUrl(invoiceId) {
+        const url = invoiceId ? `${BasePath}/invoices?invoiceId=${invoiceId}` : `${BasePath}/invoices`;
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: { url }
+        });
     }
 
     // ── Invoice detail — dynamic metrics (Feedback 26) ───────────

@@ -193,12 +193,6 @@
 .ri-alert__action:hover { background: #BF360C; }
 
 /* Loading / error states */
-.ri-loading {
-    display: flex;
-    justify-content: center;
-    padding: 3rem;
-}
-
 .ri-error {
     background: #FFEBEE;
     border-left: 4px solid #B71C1C;

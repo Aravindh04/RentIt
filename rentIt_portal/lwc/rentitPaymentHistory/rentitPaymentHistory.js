@@ -1,9 +1,11 @@
 import { LightningElement, wire, track } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+import BasePath from '@salesforce/community/basePath';
 import getActiveTenancy from '@salesforce/apex/RentItPortalController.getActiveTenancy';
 import getPayments from '@salesforce/apex/RentItPortalController.getPayments';
 import getPaymentFiles from '@salesforce/apex/RentItPortalController.getPaymentFiles';
 
-export default class RentitPaymentHistory extends LightningElement {
+export default class RentitPaymentHistory extends NavigationMixin(LightningElement) {
     @track payments = [];
     @track paymentFiles = [];
     @track error;
@@ -12,6 +14,11 @@ export default class RentitPaymentHistory extends LightningElement {
     selectedPayment   = null;
     isAttachmentsOpen = false;
     _tenancyId        = null;
+
+    // Deep-link support: capture ?paymentId=... from the URL the component
+    // was loaded with, so a bookmarked/shared/back-navigated link reopens
+    // the same payment's detail view once the list has loaded.
+    _pendingPaymentId = new URLSearchParams(window.location.search).get('paymentId');
 
     // Modal Control States
     isModalOpen = false;
@@ -50,6 +57,10 @@ export default class RentitPaymentHistory extends LightningElement {
             .then(data => {
                 this.payments = data;
                 this.isLoading = false;
+                if (this._pendingPaymentId) {
+                    this.selectedPayment = this.payments.find(p => p.Id === this._pendingPaymentId) || null;
+                    this._pendingPaymentId = null;
+                }
             })
             .catch(err => {
                 this.error = err?.body?.message || 'Failed to load payments.';
@@ -89,12 +100,26 @@ export default class RentitPaymentHistory extends LightningElement {
         this.selectedPayment   = this.payments.find(p => p.Id === id) || null;
         this.isAttachmentsOpen = false;
         this.paymentFiles      = [];
+        this._updateUrl(id);
     }
 
     handleCloseDetail() {
         this.selectedPayment   = null;
         this.isAttachmentsOpen = false;
         this.paymentFiles      = [];
+        this._updateUrl(null);
+    }
+
+    // Reflects the selected payment in the address bar (?paymentId=...) so
+    // the detail view is bookmarkable/shareable and survives a refresh or
+    // browser back/forward. Uses pushState-style navigation (no full page
+    // reload) since this stays on the same /payments route.
+    _updateUrl(paymentId) {
+        const url = paymentId ? `${BasePath}/payments?paymentId=${paymentId}` : `${BasePath}/payments`;
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: { url }
+        });
     }
 
     // ── Attachments collapsible ───────────────────────────────────

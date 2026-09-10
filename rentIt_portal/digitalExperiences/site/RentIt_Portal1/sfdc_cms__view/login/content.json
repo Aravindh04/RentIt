@@ -15,7 +15,7 @@
             "layoutDirectionTablet" : "column",
             "maxContentWidth" : "",
             "sectionColumnGutterWidth" : "0px",
-            "sectionConfig" : "{\"UUID\":\"73c7d55b-a66d-4547-908d-c2f11bdea2b7\",\"columns\":[{\"UUID\":\"69951264-c06d-4924-9eab-9334310a181e\",\"columnName\":\"Branding\",\"columnKey\":\"col1\",\"columnWidth\":\"6\",\"seedComponents\":null},{\"UUID\":\"b0c1d2e3-f4a5-6789-bcde-f01234567890\",\"columnName\":\"Form\",\"columnKey\":\"col2\",\"columnWidth\":\"6\",\"seedComponents\":null}]}",
+            "sectionConfig" : "{\"UUID\":\"73c7d55b-a66d-4547-908d-c2f11bdea2b7\",\"columns\":[{\"UUID\":\"69951264-c06d-4924-9eab-9334310a181e\",\"columnName\":\"Branding\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
             "sectionMinHeight" : "",
             "sectionVerticalAlign" : "flex-start"
           },
@@ -31,38 +31,6 @@
             "id" : "69951264-c06d-4924-9eab-9334310a181e",
             "name" : "col1",
             "title" : "Branding",
-            "type" : "region"
-          }, {
-            "children" : [ {
-              "attributes" : {
-                "alignment" : "center",
-                "dxpStyle" : { },
-                "imageInfo" : "",
-                "imageInfoMobile" : "",
-                "logoWidth" : 200
-              },
-              "definition" : "dxp_content_layout:siteLogo",
-              "id" : "06dfbf0d-d36f-45ea-9744-b3ff637784c5",
-              "type" : "component"
-            }, {
-              "attributes" : {
-                "dxpStyle" : { },
-                "forgotPasswordLabel" : "Forgot your password?",
-                "forgotPasswordUrl" : "/ForgotPassword",
-                "loginButtonLabel" : "Log In",
-                "passwordLabel" : "Password",
-                "selfRegisterLabel" : "",
-                "selfRegisterUrl" : "",
-                "startUrl" : "",
-                "usernameLabel" : "Username"
-              },
-              "definition" : "community_login:loginForm",
-              "id" : "34da40fd-9756-411f-9189-4099b71170e5",
-              "type" : "component"
-            } ],
-            "id" : "b0c1d2e3-f4a5-6789-bcde-f01234567890",
-            "name" : "col2",
-            "title" : "Form",
             "type" : "region"
           } ],
           "definition" : "community_layout:section",

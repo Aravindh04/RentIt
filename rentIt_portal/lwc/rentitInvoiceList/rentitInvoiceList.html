@@ -32,9 +32,7 @@
 
             <!-- Spinner below TYPE selection (Feedback 27) -->
             <template if:true={isLoading}>
-                <div class="ri-spinner-wrap">
-                    <div class="ri-spinner"></div>
-                </div>
+                <c-rentit-spinner></c-rentit-spinner>
             </template>
 
             <template if:true={hasInvoices}>
