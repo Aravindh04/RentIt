@@ -12,5 +12,6 @@ public with sharing class InvoiceTriggerHandler {
 
     public void afterUpdate(List<Invoice__c> newInvoices, Map<Id, Invoice__c> oldMap) {
         InvoiceTriggerService.applyAvailableCredits(newInvoices);
+        InvoiceTriggerService.notifyNewlyPaidInvoices(newInvoices, oldMap);
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Notice_Comment__c</fullName>
+    <description>Internal landlord/property-manager notes about this notice (e.g. why it was reissued). Not visible to tenants in the community portal.</description>
+    <label>Notice Comment</label>
+    <length>32768</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>5</visibleLines>
+</CustomField>

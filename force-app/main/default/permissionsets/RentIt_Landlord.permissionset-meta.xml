@@ -178,11 +178,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Property__c.Country__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Property__c.Description__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -194,16 +189,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Property__c.Occupied_Rooms__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Property__c.Postcode__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Property__c.State__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

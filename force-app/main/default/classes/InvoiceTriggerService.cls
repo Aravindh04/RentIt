@@ -86,4 +86,37 @@ public with sharing class InvoiceTriggerService {
             insert paymentsToInsert;
         }
     }
+
+    /**
+     * Queues the branded "Invoice Paid" receipt email (with PDF attachment) for every Invoice__c that
+     * newly transitioned into Status__c = 'Paid' on this update (covers both the landlord payment
+     * approval path and the auto-applied credit path, since both ultimately perform an Invoice__c update).
+     * Also closes out the open Rent Reminder/Rent Arrears notice and task for each invoice that has just
+     * been paid.
+     */
+    public static void notifyNewlyPaidInvoices(List<Invoice__c> newInvoices, Map<Id, Invoice__c> oldMap) {
+        if (newInvoices == null || newInvoices.isEmpty() || oldMap == null) {
+            return;
+        }
+
+        Set<Id> newlyPaidInvoiceIds = new Set<Id>();
+        for (Invoice__c invoiceRecord : newInvoices) {
+            if (invoiceRecord == null || invoiceRecord.Id == null) {
+                continue;
+            }
+
+            Invoice__c priorInvoice = oldMap.get(invoiceRecord.Id);
+            Boolean becameNewlyPaid = priorInvoice != null
+                && priorInvoice.Status__c != PAID_STATUS
+                && invoiceRecord.Status__c == PAID_STATUS;
+            if (becameNewlyPaid) {
+                newlyPaidInvoiceIds.add(invoiceRecord.Id);
+            }
+        }
+
+        if (!newlyPaidInvoiceIds.isEmpty()) {
+            InvoiceEmailService.sendInvoicePaidReceipts(newlyPaidInvoiceIds);
+            NoticeService.closeNoticesForPaidInvoices(newlyPaidInvoiceIds);
+        }
+    }
 }

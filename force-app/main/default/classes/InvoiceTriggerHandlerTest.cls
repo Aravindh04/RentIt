@@ -156,6 +156,11 @@ private class InvoiceTriggerHandlerTest {
         ];
         Assert.areEqual(500, updatedInvoice.Total_Paid__c, 'The invoice total paid should be updated after the change.');
         Assert.areEqual('Paid', updatedInvoice.Status__c, 'The invoice should be marked paid after the update.');
+        Assert.areEqual(
+            1,
+            InvoiceEmailService.lastEmailsSentCount,
+            'Transitioning the invoice to Paid should queue the Invoice Paid receipt email.'
+        );
     }
 
     @IsTest
