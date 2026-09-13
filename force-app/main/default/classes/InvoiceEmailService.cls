@@ -34,7 +34,7 @@ public with sharing class InvoiceEmailService {
     }
 
     /** Bulk-safe Queueable that renders and sends the Invoice Paid receipt emails for a set of invoices. */
-    public class InvoicePaidReceiptQueueable implements Queueable {
+    public class InvoicePaidReceiptQueueable implements Queueable, Database.AllowsCallouts {
         private List<Id> invoiceIds;
 
         public InvoicePaidReceiptQueueable(List<Id> invoiceIds) {

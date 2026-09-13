@@ -94,11 +94,28 @@ public with sharing class EmailService {
         // SINGLE_EMAIL_LIMIT_EXCEEDED even inside tests. No caller currently inspects the returned
         // SendEmailResult list (they assert on lastEmailsSentCount instead), so it's safe to skip the
         // real call entirely here rather than mock it.
+        Messaging.SendEmailResult[] messagingResults;
         if (Test.isRunningTest()) {
-            return new List<Messaging.SendEmailResult>();
+            messagingResults = new List<Messaging.SendEmailResult>();
+        } else {
+            messagingResults = Messaging.sendEmail(messages, false);
+        }
+        
+        for (Messaging.SendEmailResult result : messagingResults) {
+            if (result.isSuccess()) {
+                System.debug('EmailService.sendBulkEmails failed to send one or more emails: ' + result.getErrors()[0].getMessage());
+            } else {
+                GlobalUtility.logMessage('Info', 'EmailService', 'sendBulkEmails', null, result.getErrors()[0].getMessage(), null, null, 0);
+            }
         }
 
-        return Messaging.sendEmail(messages, false);
+
+
+        if (Test.isRunningTest()) {
+            messagingResults = new List<Messaging.SendEmailResult>();
+        }
+
+        return messagingResults;
     }
 
     private static Messaging.SingleEmailMessage buildMessage(EmailRequest request) {

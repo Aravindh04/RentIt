@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Application_Logs_This_Week</fullName>
+    <columns>NAME</columns>
+    <columns>Reference_Info__c</columns>
+    <columns>Debug_Level__c</columns>
+    <columns>Message__c</columns>
+    <columns>Source__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>THIS_WEEK</value>
+    </filters>
+    <label>Application Logs This Week</label>
+</ListView>

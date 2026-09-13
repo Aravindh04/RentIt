@@ -1,8 +1,9 @@
 <template>
+    <div class="ri-container">
     <div class="ri-card">
         <div class="ri-card__header">
             <div class="ri-card__header-icon">
-                <lightning-icon icon-name="standard:invoice" size="small" alternative-text="Invoices"></lightning-icon>
+                <lightning-icon icon-name="utility:billing" size="small" alternative-text="Invoices"></lightning-icon>
             </div>
             <h2 class="ri-card__title">My Invoices</h2>
         </div>
@@ -50,7 +51,7 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="ri-table__body">
                             <template for:each={filteredInvoices} for:item="inv">
                                 <tr key={inv.Id}
                                     class="ri-tr--clickable"
@@ -59,7 +60,11 @@
                                     <td class="ri-td--name">
                                         <span class="ri-inv-name-link">{inv.Name}</span>
                                         <template if:true={inv.Discount__c}>
-                                            <span class="ri-discount-badge">Discounted</span>
+                                            <span class="ri-discount-badge">
+                                                <span class="ri-discount_badge-text">Discounted</span>
+                                                <span class="ri-discount_mobile-icon">%</span>
+                                            </span>
+                                            
                                         </template>
                                     </td>
                                     <td>
@@ -76,14 +81,14 @@
                                             year="numeric" month="short" day="2-digit">
                                         </lightning-formatted-date-time>
                                     </td>
-                                    <td>
+                                    <td class="ri-td--total">
                                         <lightning-formatted-number
                                             value={inv.Total_Amount__c}
                                             format-style="currency" currency-code="AUD"
                                             minimum-fraction-digits="2">
                                         </lightning-formatted-number>
                                     </td>
-                                    <td>
+                                    <td class="ri-td--paid">
                                         <lightning-formatted-number
                                             value={inv.Total_Paid__c}
                                             format-style="currency" currency-code="AUD"
@@ -97,13 +102,13 @@
                                             minimum-fraction-digits="2">
                                         </lightning-formatted-number>
                                     </td>
-                                    <td>
+                                    <td class="ri-td--duedate">
                                         <lightning-formatted-date-time
                                             value={inv.Due_Date__c}
                                             year="numeric" month="short" day="2-digit">
                                         </lightning-formatted-date-time>
                                     </td>
-                                    <td>
+                                    <td class="ri-td--status">
                                         <span class="ri-status" data-status={inv.Status__c}>{inv.Status__c}</span>
                                     </td>
                                 </tr>
@@ -310,5 +315,6 @@
                 </template>
             </div>
         </template>
+    </div>
     </div>
 </template>

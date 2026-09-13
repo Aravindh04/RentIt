@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 3.5rem 3rem;
+    padding: 5rem 7rem 3.5rem;
     color: #fff;
 }
 
@@ -60,6 +60,15 @@
 
 /* Split layout: branding copy on one side, the nested login form on the
    other — both share this panel's single gradient background/decoration. */
+.ri-panel__branding {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
 .ri-panel__inner {
     position: relative;
     z-index: 1;
@@ -68,13 +77,18 @@
     flex-direction: row;
     align-items: center;
     gap: 3rem;
+    justify-content: space-between;
 }
+
+
 
 .ri-panel__form-area {
     flex: 0 1 420px;
     width: 100%;
     max-width: 420px;
 }
+
+
 
 /* Loading spinner — same technique/sizing/timing as rentitInvoiceList's
    spinner, recoloured for this panel's dark gradient background. */
@@ -83,7 +97,7 @@
     display: flex;
     align-items: center;
     gap: 0.65rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1.75rem;
 }
 
 .ri-panel__logo-text {
@@ -155,21 +169,25 @@
 @media (max-width: 768px) {
     .ri-panel {
         min-height: 0;
-        padding: 2.5rem 1.5rem 2rem;
+        padding: 3rem 1.5rem 2rem;
+    }
+
+    .ri-panel__branding {
+        align-items: center;
     }
 
     .ri-panel__inner {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: stretch;
         gap: 2.5rem;
     }
 
-    .ri-panel__form-area {
-        max-width: 100%;
+    .ri-panel__content {
+        text-align: center;
     }
 
-    .ri-panel__logo {
-        margin-bottom: 1.75rem;
+    .ri-panel__form-area {
+        max-width: 100%;
     }
 
     .ri-panel__desc {

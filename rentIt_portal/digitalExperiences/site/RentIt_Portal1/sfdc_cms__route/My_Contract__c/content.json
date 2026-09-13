@@ -4,7 +4,7 @@
   "contentBody" : {
     "activeViewId" : "My_Contract",
     "configurationTags" : [ ],
-    "pageAccess" : "UseParent",
+    "pageAccess" : "RequiresLogin",
     "routeType" : "custom-my-contract",
     "urlPrefix" : "my-contract"
   },

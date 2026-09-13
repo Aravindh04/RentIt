@@ -44,8 +44,8 @@
           </tr>
         </table>
       </div>
-      <a class="btn" href="{!Community_URL}">Open RentIt Portal</a>
-      <p class="link">Direct link: {!Community_URL}</p>
+      <a class="btn" href="{!$Label.RentIt_portalURL}">Open RentIt Portal</a>
+      <p class="link">Direct link: {!$Label.RentIt_portalURL}</p>
       <p>If you need help getting started, please contact your landlord or property manager.</p>
     </div>
     <div class="footer">

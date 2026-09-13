@@ -34,4 +34,47 @@ public with sharing class PaymentTriggerSelector {
 
         return paidByInvoice;
     }
+
+    public static Set<Id> selectReceivedPaymentIds(List<Payment__c> payments) {
+        Set<Id> receivedPaymentIds = new Set<Id>();
+        if (payments == null || payments.isEmpty()) {
+            return receivedPaymentIds;
+        }
+
+        for (Payment__c paymentRecord : payments) {
+            if (paymentRecord != null && paymentRecord.Status__c == 'Received') {
+                receivedPaymentIds.add(paymentRecord.Id);
+            }
+        }
+
+        return receivedPaymentIds;
+    }
+
+    public static User[] selectUsersByPayments(List<Payment__c> payments) {
+        Set<Id> tenancyIds = new Set<Id>();
+        if (payments == null || payments.isEmpty()) {
+            return new User[]{};
+        }
+
+        for (Payment__c paymentRecord : payments) {
+            if (paymentRecord != null && paymentRecord.Tenancy__c != null) {
+                tenancyIds.add(paymentRecord.Tenancy__c);
+            }
+        }
+
+        if (tenancyIds.isEmpty()) {
+            return new User[]{};
+        }
+
+        return [
+            SELECT Id, ContactId
+            FROM User
+            WHERE ContactId IN (
+                SELECT Tenant__c
+                FROM Tenancy__c
+                WHERE Id IN :tenancyIds
+                  AND Status__c = 'Active'
+            )
+        ];
+    }
 }

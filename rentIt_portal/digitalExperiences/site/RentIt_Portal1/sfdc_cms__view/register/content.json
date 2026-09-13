@@ -14,35 +14,16 @@
             "layoutDirectionMobile" : "column",
             "layoutDirectionTablet" : "column",
             "maxContentWidth" : "",
-            "sectionColumnGutterWidth" : "0px",
-            "sectionConfig" : "{\"UUID\":\"bc329690-e0e7-4b3f-92c3-6cae3bd2087a\",\"columns\":[{\"UUID\":\"9447c548-b58a-4e16-a1d7-0f1e44adab8a\",\"columnName\":\"Branding\",\"columnKey\":\"col1\",\"columnWidth\":\"6\",\"seedComponents\":null},{\"UUID\":\"2b3c4d5e-6f7a-8901-bcde-f12345678901\",\"columnName\":\"Form\",\"columnKey\":\"col2\",\"columnWidth\":\"6\",\"seedComponents\":null}]}",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"bc329690-e0e7-4b3f-92c3-6cae3bd2087a\",\"columns\":[{\"UUID\":\"9447c548-b58a-4e16-a1d7-0f1e44adab8a\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
             "sectionMinHeight" : "",
             "sectionVerticalAlign" : "flex-start"
           },
           "children" : [ {
             "children" : [ {
-              "attributes" : {
-                "dxpStyle" : { }
-              },
-              "definition" : "c:rentitAuthBranding",
-              "id" : "4a9c3b2d-0e5f-4b7c-9d3e-2f6a8b0c4d7e",
-              "type" : "component"
-            } ],
-            "id" : "9447c548-b58a-4e16-a1d7-0f1e44adab8a",
-            "name" : "col1",
-            "title" : "Branding",
-            "type" : "region"
-          }, {
-            "children" : [ {
-              "attributes" : {
-                "alignment" : "center",
-                "dxpStyle" : { },
-                "imageInfo" : "",
-                "imageInfoMobile" : "",
-                "logoWidth" : 200
-              },
-              "definition" : "dxp_content_layout:siteLogo",
-              "id" : "b69e2d25-5e8c-4a1c-ba73-c5df39d42646",
+              "attributes" : { },
+              "definition" : "c:renitBrandLogo",
+              "id" : "d9ec3208-cbc8-4ba3-a159-3a10233c547e",
               "type" : "component"
             }, {
               "attributes" : {
@@ -61,9 +42,9 @@
               "id" : "25551341-28c8-4792-8a06-b3e36bbc8d36",
               "type" : "component"
             } ],
-            "id" : "2b3c4d5e-6f7a-8901-bcde-f12345678901",
-            "name" : "col2",
-            "title" : "Form",
+            "id" : "9447c548-b58a-4e16-a1d7-0f1e44adab8a",
+            "name" : "col1",
+            "title" : "Column 1",
             "type" : "region"
           } ],
           "definition" : "community_layout:section",

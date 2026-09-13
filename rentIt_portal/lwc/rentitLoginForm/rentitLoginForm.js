@@ -64,7 +64,7 @@ export default class RentitLoginForm extends LightningElement {
 
     get startUrl() {
         const params = new URLSearchParams(window.location.search);
-        return params.get('startURL') || '/';
+        return params.get('startURL') || '/rentitportal/';
     }
 
     get passwordInputType() {

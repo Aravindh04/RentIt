@@ -127,6 +127,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>Notice__c.Notice_Comment__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Notice__c.Email_Sent_Date__c</field>
         <readable>true</readable>
@@ -139,6 +144,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Notice__c.Expiry_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Notice__c.Invoice__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

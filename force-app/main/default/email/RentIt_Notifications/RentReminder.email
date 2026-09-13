@@ -37,7 +37,7 @@
     <p>This is a polite reminder that your rent payment is due <strong>tomorrow</strong>. Please make payment on time to avoid late charges.</p>
     <div class="amount-box">
       <div class="label">Amount Due</div>
-      <div class="value">${!Invoice__c.Total_Amount__c}</div>
+      <div class="value">{!Invoice__c.Total_Amount__c}</div>
     </div>
     <div class="context">
       <table>
@@ -47,8 +47,8 @@
       </table>
     </div>
     <div class="notice">To keep your account in good standing, please complete payment and submit evidence in the portal before the due date.</div>
-    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Invoice__c.Id}">Pay / View Invoice</a>
-    <a class="btn btn-secondary" href="{!Community_URL}">Open Portal</a>
+    <a class="btn btn-primary" href="{!$Label.RentIt_portalURL}/invoices?invoiceId={!Invoice__c.Id}">Pay / View Invoice</a>
+    <a class="btn btn-secondary" href="{!$Label.RentIt_portalURL}">Open Portal</a>
     <p>If you have already paid, please disregard this message.</p>
   </div>
   <div class="footer">

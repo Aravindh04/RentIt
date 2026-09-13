@@ -6,12 +6,14 @@
             </div>
         </template>
         <template lwc:else>
+            <div class="ri-panel__branding">
+                <div class="ri-panel__logo">
+                    <lightning-icon icon-name="standard:home" size="large" alternative-text="RentIt"></lightning-icon>
+                    <span class="ri-panel__logo-text">RentIt</span>
+                </div>
+            </div>
             <div class="ri-panel__inner">
                 <div class="ri-panel__content">
-                    <div class="ri-panel__logo">
-                        <lightning-icon icon-name="standard:home" size="large" alternative-text="RentIt"></lightning-icon>
-                        <span class="ri-panel__logo-text">RentIt</span>
-                    </div>
                     <h1 class="ri-panel__title">Your home,<br/>managed simply.</h1>
                     <p class="ri-panel__desc">
                         Access your tenancy details, invoices, payments and notices &mdash; all in one place.

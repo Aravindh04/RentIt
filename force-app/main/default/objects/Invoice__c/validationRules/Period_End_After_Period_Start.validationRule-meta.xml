@@ -8,6 +8,6 @@
     NOT(ISBLANK(Period_End__c)),
     Period_End__c &lt;= Period_Start__c
 )</errorConditionFormula>
-    <errorMessage>Period End date must be after Period Start date.</errorMessage>
     <errorDisplayField>Period_End__c</errorDisplayField>
+    <errorMessage>Period End date must be after Period Start date.</errorMessage>
 </ValidationRule>

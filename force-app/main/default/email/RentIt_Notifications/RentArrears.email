@@ -37,7 +37,7 @@
     <p>Our records show this invoice is now <strong>overdue</strong>. Please arrange payment immediately to avoid escalation.</p>
     <div class="alert-box">
       <div class="label">Overdue Amount</div>
-      <div class="value">${!Invoice__c.Total_Amount__c}</div>
+      <div class="value">{!Invoice__c.Total_Amount__c}</div>
     </div>
     <div class="context">
       <table>
@@ -49,8 +49,8 @@
     <div class="notice">
       Please make payment and submit your payment details in the portal as soon as possible to prevent further action.
     </div>
-    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Invoice__c.Id}">Settle Invoice</a>
-    <a class="btn btn-secondary" href="{!Community_URL}">Open Portal</a>
+    <a class="btn btn-primary" href="{!$Label.RentIt_PortalURL}/invoices?invoiceId={!Invoice__c.Id}">Settle Invoice</a>
+    <a class="btn btn-secondary" href="{!$Label.RentIt_PortalURL}">Open Portal</a>
     <p>If you are experiencing financial difficulty, please contact your property manager immediately to discuss arrangements.</p>
   </div>
   <div class="footer">

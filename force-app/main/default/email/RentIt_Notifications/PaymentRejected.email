@@ -37,15 +37,15 @@
       <table>
         <tr><td class="label">Payment Reference</td><td class="value">{!Payment__c.Name}</td></tr>
         <tr><td class="label">Invoice Number</td><td class="value">{!Payment__c.Invoice__r.Name}</td></tr>
-        <tr><td class="label">Amount Submitted</td><td class="value">${!Payment__c.Amount__c}</td></tr>
+        <tr><td class="label">Amount Submitted</td><td class="value">{!Payment__c.Amount__c}</td></tr>
         <tr><td class="label">Invoice Due Date</td><td class="value">{!Payment__c.Invoice__r.Due_Date__c}</td></tr>
       </table>
     </div>
     <div class="notice">
       Please review your property manager comments, correct your payment details or attachment, and resubmit as soon as possible.
     </div>
-    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Payment__c.Id}">Update Payment</a>
-    <a class="btn btn-secondary" href="{!Community_URL}s/detail/{!Payment__c.Invoice__c}">View Invoice</a>
+    <a class="btn btn-primary" href="{!$Label.RentIt_portalURL}/payments?paymentId={!Payment__c.Id}">Update Payment</a>
+    <a class="btn btn-secondary" href="{!$Label.RentIt_portalURL}/invoices?invoiceId={!Payment__c.Invoice__c}">View Invoice</a>
     <p>If you need assistance, please contact your property manager.</p>
   </div>
   <div class="footer">

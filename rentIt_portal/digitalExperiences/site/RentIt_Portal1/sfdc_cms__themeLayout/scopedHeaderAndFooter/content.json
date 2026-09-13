@@ -88,6 +88,39 @@
       "definition" : "community_byo:scopedHeaderAndFooter",
       "id" : "eaf755b1-0955-49c4-9895-bdd757ae762d",
       "type" : "component"
+    },
+    "contentOperations" : {
+      "operations" : [ {
+        "targetId" : "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "isHiddenOnOperationSuccess" : true,
+        "isActive" : true,
+        "rule" : {
+          "name" : "b9bda3fe-56d4-4bf2-9ac9-bc2a17ab10ff",
+          "description" : "",
+          "criteriaType" : "AllCriteriaMatch",
+          "expressionCriteria" : [ {
+            "resource" : "User.isGuest",
+            "operator" : "Equal",
+            "value" : true,
+            "criterionNumber" : 1
+          } ]
+        }
+      }, {
+        "targetId" : "f0e1d2c3-b4a5-6789-0fed-cba987654321",
+        "isHiddenOnOperationSuccess" : true,
+        "isActive" : true,
+        "rule" : {
+          "name" : "4aa2d96e-6a71-4d7a-8e82-45dd1638f5db",
+          "description" : "",
+          "criteriaType" : "AllCriteriaMatch",
+          "expressionCriteria" : [ {
+            "resource" : "User.isGuest",
+            "operator" : "Equal",
+            "value" : true,
+            "criterionNumber" : 1
+          } ]
+        }
+      } ]
     }
   },
   "urlName" : "scoped-header-and-footer"

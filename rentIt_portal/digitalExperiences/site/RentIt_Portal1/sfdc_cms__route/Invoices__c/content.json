@@ -4,7 +4,7 @@
   "contentBody" : {
     "activeViewId" : "Invoices",
     "configurationTags" : [ ],
-    "pageAccess" : "UseParent",
+    "pageAccess" : "RequiresLogin",
     "routeType" : "custom-invoices",
     "urlPrefix" : "invoices"
   },

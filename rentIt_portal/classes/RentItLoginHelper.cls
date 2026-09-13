@@ -58,12 +58,18 @@ public with sharing class RentItLoginHelper {
             : resolveLoginIdentifier(trimmedIdentifier);
 
         PageReference loginResult;
+        String errorMessage;
         
         try {
             loginResult = Site.login(username, password, startUrl);
         } catch (Exception ex) {
             loginResult = null;
-            throw buildLoginException( String.valueOf( ex.getMessage() ) );
+            errorMessage = String.valueOf( ex.getMessage() );
+            GlobalUtility.logMessage(GlobalConstants.LOGLEVEL.Error.name(),'RentItLoginHelper','login',null,'Unable to login','',ex, null);
+        }
+
+        if (loginResult == null ) {
+            throw buildLoginException( errorMessage );
         }
 
         return loginResult.getUrl();

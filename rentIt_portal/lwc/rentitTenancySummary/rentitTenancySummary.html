@@ -1,9 +1,10 @@
 <template>
+    <div class="ri_container">
     <div class="ri-tenancy-card">
         <!-- Gradient Header -->
         <div class="ri-tenancy-header">
             <div class="ri-tenancy-header__icon">
-                <lightning-icon icon-name="standard:home" size="medium" alternative-text="Tenancy"></lightning-icon>
+                <lightning-icon icon-name="utility:resource_territory" size="medium" alternative-text="Tenancy"></lightning-icon>
             </div>
             <div class="ri-tenancy-header__info">
                 <h2 class="ri-tenancy-header__title">My Tenancy</h2>
@@ -144,7 +145,7 @@
                 <template if:true={hasContract}>
                     <div class="ri-contract-cta">
                         <div class="ri-contract-cta__info">
-                            <lightning-icon icon-name="utility:contract" size="x-small" alternative-text="Contract"></lightning-icon>
+                            <lightning-icon icon-name="utility:contract_doc" size="x-small" alternative-text="Contract"></lightning-icon>
                             <span>Contract <strong>{contractNumber}</strong></span>
                             <span class="ri-contract-cta__status" data-status={contractStatus}>{contractStatus}</span>
                         </div>
@@ -165,5 +166,6 @@
                 </div>
             </template>
         </template>
+    </div>
     </div>
 </template>

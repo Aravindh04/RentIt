@@ -244,7 +244,8 @@ public with sharing class NoticeService {
                 String landlordEmail = noticeRecord.Property__r?.Landlord__r?.PersonEmail;
                 String subject = buildPublishedNoticeSubject(noticeRecord);
                 String body = buildPublishedNoticeBody(noticeRecord);
-                Id orgWideEmailId = [SELECT Id FROM OrgWideEmailAddress LIMIT 1].Id;
+                OrgWideEmailAddress orgWideEmail = [SELECT Id FROM OrgWideEmailAddress LIMIT 1];
+            
 
                 for (Tenancy__c tenancyRecord : tenancies) {
                     if (tenancyRecord.Tenant__c == null || String.isBlank(tenancyRecord.Tenant__r?.Email)) {
@@ -257,7 +258,9 @@ public with sharing class NoticeService {
                     emailRequest.subject = subject;
                     emailRequest.htmlBody = body;
                     emailRequest.ccAddress = landlordEmail;
-                    emailRequest.orgWideEmailId = orgWideEmailId;
+                    if( orgWideEmail != null ) {
+                        emailRequest.orgWideEmailId = orgWideEmail.Id;
+                    }
                     emailRequests.add(emailRequest);
                 }
             }
@@ -447,7 +450,12 @@ public with sharing class NoticeService {
                 ));
             }
 
+            OrgWideEmailAddress orgWideEmail = [SELECT Id FROM OrgWideEmailAddress LIMIT 1];
+            
             EmailService.EmailRequest emailRequest = new EmailService.EmailRequest();
+            if (orgWideEmail != null) {
+                emailRequest.orgWideEmailId = orgWideEmail.Id;
+            }
             emailRequest.recipientId = tenantContactId;
             emailRequest.templateId = templateId;
             emailRequest.relatedRecordId = invoiceId; // WhatId must be the Invoice for {!Invoice__c.*} merges.

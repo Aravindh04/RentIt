@@ -10,6 +10,9 @@
     }, {
       "layoutId" : "scopedHeaderAndFooter",
       "layoutType" : "Inner"
+    }, {
+      "layoutId" : "Scoped_headerless_and_footerless",
+      "layoutType" : "1Qi7rsb8ckJll2MzHTv1W50UqrRmIL"
     } ]
   },
   "urlName" : "build-your-own-lwr"

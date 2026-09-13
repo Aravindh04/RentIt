@@ -19,7 +19,7 @@ public with sharing class ContactCommunityUserService {
     }
 
     private static final String COMMUNITY_PROFILE_NAME = 'Customer Community Plus User';
-    private static final String USERNAME_SUFFIX = '@rentit.com.dev';
+    private static final String USERNAME_SUFFIX = '@rentit.com';
     
 
    @InvocableMethod(
@@ -87,7 +87,7 @@ public with sharing class ContactCommunityUserService {
             for (User existingUser : [
                 SELECT Username
                 FROM User
-                WHERE Username LIKE '%@rentit.com.dev'
+                WHERE Username LIKE '%@rentit.com%'
                 WITH USER_MODE
             ]) {
                 usernameTaken.put(existingUser.Username.toLowerCase(), true);
@@ -116,8 +116,8 @@ public with sharing class ContactCommunityUserService {
                     FirstName = firstName,
                     LastName = lastName,
                     LanguageLocaleKey = 'en_US',
-                    LocaleSidKey = 'en_US',
-                    TimeZoneSidKey = 'America/Los_Angeles',
+                    LocaleSidKey = 'en_AU',
+                    TimeZoneSidKey = 'Australia/Melbourne',
                     ProfileId = communityProfile.Id,
                     ContactId = contact.Id,
                     Username = username,
@@ -139,16 +139,24 @@ public with sharing class ContactCommunityUserService {
         }
 
         private String buildAlias(String firstName, String lastName) {
+            firstName = shortenName(firstName, 4);
+            lastName = shortenName(lastName, 4);
             String aliasBase = String.isBlank(firstName) ? lastName : firstName.substring(0, 1) + lastName;
             String sanitized = aliasBase.replaceAll('[^a-zA-Z0-9]', '');
-            return sanitized.length() > 8 ? sanitized.substring(0, 8) : sanitized;
+            return sanitized;
         }
 
         private String buildNickname(String firstName, String lastName) {
+            firstName = shortenName(firstName, 10);
+            lastName = shortenName(lastName, 10);
             String baseName = String.isBlank(firstName) ? lastName : firstName + ' ' + lastName;
             String sanitized = baseName.replaceAll('[^a-zA-Z0-9 ]', '');
             sanitized = sanitized.trim();
-            return sanitized.length() > 40 ? sanitized.substring(0, 40) : sanitized;
+            return sanitized;
+        }
+
+        private String shortenName(String name, Integer maxLength) {
+            return  String.isBlank(name) && name.length() > maxLength ? name.substring(0, maxLength) : name;
         }
     }
 }

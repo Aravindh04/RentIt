@@ -36,14 +36,14 @@
       <table>
         <tr><td class="label">Payment Reference</td><td class="value">{!Payment__c.Name}</td></tr>
         <tr><td class="label">Invoice Number</td><td class="value">{!Payment__c.Invoice__r.Name}</td></tr>
-        <tr><td class="label">Amount Received</td><td class="value">${!Payment__c.Amount__c}</td></tr>
+        <tr><td class="label">Amount Received</td><td class="value">{!Payment__c.Amount__c}</td></tr>
         <tr><td class="label">Billing Period</td><td class="value">{!Payment__c.Invoice__r.Period_Start__c} – {!Payment__c.Invoice__r.Period_End__c}</td></tr>
         <tr><td class="label">Current Status</td><td class="value">Received</td></tr>
       </table>
     </div>
     <p>Please keep this email as your receipt. For your records, you can view both items directly in the portal.</p>
-    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Payment__c.Id}">View Payment</a>
-    <a class="btn btn-secondary" href="{!Community_URL}s/detail/{!Payment__c.Invoice__c}">View Invoice</a>
+    <a class="btn btn-primary" href="{!$Label.RentIt_portalURL}/payments?paymentId={!Payment__c.Id}">View Payment</a>
+    <a class="btn btn-secondary" href="{!$Label.RentIt_portalURL}/invoices?invoiceId={!Payment__c.Invoice__c}">View Invoice</a>
   </div>
   <div class="footer">
     RentIt Property Management &bull; Automated email, please do not reply.

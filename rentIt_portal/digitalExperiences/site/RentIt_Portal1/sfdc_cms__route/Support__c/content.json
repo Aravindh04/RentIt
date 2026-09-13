@@ -4,7 +4,7 @@
   "contentBody" : {
     "activeViewId" : "Support",
     "configurationTags" : [ ],
-    "pageAccess" : "UseParent",
+    "pageAccess" : "RequiresLogin",
     "routeType" : "custom-support",
     "urlPrefix" : "support"
   },

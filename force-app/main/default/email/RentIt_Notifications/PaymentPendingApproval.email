@@ -38,15 +38,15 @@
         <tr><td class="label">Payment Reference</td><td class="value">{!Payment__c.Name}</td></tr>
         <tr><td class="label">Invoice Number</td><td class="value">{!Payment__c.Invoice__r.Name}</td></tr>
         <tr><td class="label">Invoice Due Date</td><td class="value">{!Payment__c.Invoice__r.Due_Date__c}</td></tr>
-        <tr><td class="label">Amount Submitted</td><td class="value">${!Payment__c.Amount__c}</td></tr>
+        <tr><td class="label">Amount Submitted</td><td class="value">{!Payment__c.Amount__c}</td></tr>
         <tr><td class="label">Payment Date</td><td class="value">{!Payment__c.Payment_Date__c}</td></tr>
         <tr><td class="label">Payer Reference</td><td class="value">{!Payment__c.Payment_Reference__c}</td></tr>
       </table>
     </div>
     <p><strong>Tenant Comment:</strong></p>
     <div class="comment-box">{!Payment__c.Comment__c}</div>
-    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Payment__c.Id}">Review Payment</a>
-    <a class="btn btn-secondary" href="{!Community_URL}s/detail/{!Payment__c.Invoice__c}">View Invoice</a>
+    <a class="btn btn-primary" href="{!$Label.RentIt_portalURL}/payments?paymentId={!Payment__c.Id}">Review Payment</a>
+    <a class="btn btn-secondary" href="{!$Label.RentIt_portalURL}/invoices?invoiceId={!Payment__c.Invoice__c}">View Invoice</a>
   </div>
   <div class="footer">
     RentIt Property Management &bull; Automated email, please do not reply.

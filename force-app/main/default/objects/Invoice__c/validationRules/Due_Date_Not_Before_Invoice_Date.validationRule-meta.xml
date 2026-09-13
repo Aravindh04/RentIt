@@ -8,6 +8,6 @@
     NOT(ISBLANK(Due_Date__c)),
     Due_Date__c &lt; Invoice_Date__c
 )</errorConditionFormula>
-    <errorMessage>Due Date cannot be before the Invoice Date.</errorMessage>
     <errorDisplayField>Due_Date__c</errorDisplayField>
+    <errorMessage>Due Date cannot be before the Invoice Date.</errorMessage>
 </ValidationRule>

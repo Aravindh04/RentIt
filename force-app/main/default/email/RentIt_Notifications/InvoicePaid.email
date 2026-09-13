@@ -39,15 +39,15 @@
         <tr><td class="label">Invoice Number</td><td class="value">{!Invoice__c.Name}</td></tr>
         <tr><td class="label">Billing Period</td><td class="value">{!Invoice__c.Period_Start__c} – {!Invoice__c.Period_End__c}</td></tr>
         <tr><td class="label">Invoice Date</td><td class="value">{!Invoice__c.Invoice_Date__c}</td></tr>
-        <tr><td class="label">Amount Paid</td><td class="value">${!Invoice__c.Total_Paid__c}</td></tr>
+        <tr><td class="label">Amount Paid</td><td class="value">{!Invoice__c.Total_Paid__c}</td></tr>
         <tr><td class="label">Status</td><td class="value">Paid</td></tr>
       </table>
     </div>
     <div class="attachment-note">
       A PDF copy of your invoice receipt is attached to this email for your records. Please keep it for your files.
     </div>
-    <a class="btn btn-primary" href="{!Community_URL}s/detail/{!Invoice__c.Id}">View Invoice in Portal</a>
-    <a class="btn btn-secondary" href="{!Community_URL}">Open Portal</a>
+    <a class="btn btn-primary" href="{!$Label.RentIt_portalURL}/invoices?invoiceId={!Invoice__c.Id}">View Invoice in Portal</a>
+    <a class="btn btn-secondary" href="{!$Label.RentIt_portalURL}">Open Portal</a>
     <p>Thank you for being a valued RentIt tenant. If you have any questions about this receipt, please contact your property manager.</p>
   </div>
   <div class="footer">

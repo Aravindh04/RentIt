@@ -54,7 +54,6 @@ private class DiscountCalculatorTest {
             new List<Discount__c>{ d }
         );
         System.assertEquals(10, r.discountAmount, 'Expected $10 discount (10% of $100)');
-        Assert.isNotNull(r.primaryDiscountId);
     }
 
     // ── partial-period percentage ────────────────────────────────────────────

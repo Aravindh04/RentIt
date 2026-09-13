@@ -68,7 +68,7 @@ export default class RentitTenancySummary extends NavigationMixin(LightningEleme
     // ── Room ──────────────────────────────────────────────────────
     get hasRoom()  { return !!this.tenancy?.Room__c; }
     get roomName() { return this.tenancy?.Room__r?.Name || ''; }
-    get roomSize() { return this.tenancy?.Room__r?.Room_Size__c || '—'; }
+    get roomSize() { return this.tenancy?.Room__r?.Room_Size__c + ' m²' || '—'; }
 
     get facilityPills() {
         const raw = this.tenancy?.Room__r?.Facilities__c;

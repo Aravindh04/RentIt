@@ -4,7 +4,7 @@
   "contentBody" : {
     "activeViewId" : "Notices",
     "configurationTags" : [ ],
-    "pageAccess" : "UseParent",
+    "pageAccess" : "RequiresLogin",
     "routeType" : "custom-notices",
     "urlPrefix" : "notices"
   },

@@ -89,6 +89,17 @@ public with sharing class PaymentTriggerService {
         update invoicesToUpdate;
     }
 
+    private static void notifyUsers(List<Payment__c> payments) {
+        Set<Id> recevivedPaymentIds = PaymentTriggerSelector.selectReceivedPaymentIds(payments);
+        User[] relatedUsers = PaymentTriggerSelector.selectUsersByPayments(payments);
+        if (relatedUsers.isEmpty()) {
+            return; 
+        }
+
+        NotificationService.notifyUsers(
+
+    }
+
     private static void collectInvoiceIds(List<Payment__c> payments, Set<Id> invoiceIds) {
         if (payments == null || payments.isEmpty()) {
             return;

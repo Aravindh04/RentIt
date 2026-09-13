@@ -1,3 +1,7 @@
+.ri-container {
+    padding: 0.25rem;
+}
+
 .ri-card {
     background: #fff;
     border-radius: 16px;
@@ -136,8 +140,15 @@
 
 /* Table */
 .ri-table-wrap {
-    overflow-x: auto;
-    padding: 1.25rem 1.5rem;
+    margin: 0.75rem;
+    max-height: 60vh;
+    overflow: auto;
+}
+
+.ri-table-wrap th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .ri-table {
@@ -147,6 +158,7 @@
 }
 
 .ri-table thead th {
+    position: sticky;
     text-align: left;
     padding: 0.6rem 0.75rem;
     background: #EEF2F7;
@@ -400,6 +412,14 @@
     white-space: nowrap;
 }
 
+.ri-discount-badge .ri-discount_badge-text {
+    display: inline;
+}
+
+.ri-discount-badge .ri-discount_mobile-icon {
+    display: none;
+}
+
 /* Collapsible section (discount / attachments) */
 .ri-collapsible-section {
     margin: 0 1.5rem;
@@ -484,4 +504,81 @@
     font-weight: 600;
     color: #0d2d6b;
     font-size: 0.875rem;
+}
+
+/* --- Mobile View Transformation (< 768px) --- */
+@media screen and (max-width: 767px) {
+    .ri-table-wrap {
+        padding: 0.5rem;
+        background: #f8f9fa;
+    }
+
+    /* Convert each table row into a structured compact card/pill */
+    .ri-table tbody tr {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between; /* Pushes ID to left, Amount/Status to right */
+        
+        background: #ffffff;
+        border: 1px solid #e1e4e8;
+        border-radius: 20px; /* Clean pill form factor */
+        padding: 0.75rem 1.2rem;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .ri-table td {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        border: none;
+    }
+
+    /* Row Left Side: Main identifier */
+    .ri-td--name {
+        flex-grow: 1;
+        font-weight: bold;
+    }
+
+    .ri-discount-badge .ri-discount_badge-text {
+        display: none;
+    }
+
+    .ri-discount-badge .ri-discount_mobile-icon {
+        display: inline;
+    }
+
+    /* Secondary detail stacked cleanly next to identifier */
+    .ri-td--type {
+        margin-left: 0.5rem;
+    }
+
+    /* Row Right Side: Explicitly position figures & structural balance */
+    .ri-td--balance {
+        font-weight: bold;
+        color: #080808;
+        margin-right: 0.75rem;
+    }
+    /* Prepend small structural descriptor context on mobile balance data */
+    .ri-td--balance::before {
+        content: "Due: ";
+        font-size: 0.75rem;
+        color: #747474;
+        font-weight: normal;
+        margin-right: 0.25rem;
+    }
+
+    .ri-td--status {
+        justify-content: flex-end;
+    }
+
+    .ri-table thead,
+    .ri-td--period,
+    .ri-td--date,
+    .ri-td--total,
+    .ri-td--paid,
+    .ri-td--duedate {
+        display: none !important;
+    }
 }
