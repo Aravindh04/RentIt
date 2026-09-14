@@ -144,12 +144,13 @@ public with sharing class RentItPortalController {
         Payment__c pmt = new Payment__c(
             Tenancy__c           = tenancyId,
             Invoice__c           = invoiceId,
+            Payment_type__c      = invoiceId != null ? 'Invoice Payment' : 'Rent Payment',
             Amount__c            = amount,
             Payment_Date__c      = paymentDate,
             Payment_Method__c    = paymentMethod,
             Payment_Reference__c = paymentReference,
             Comment__c           = comment,
-            Status__c            = 'Pending Approval'
+            Status__c            = 'Paid'
         );
         SObjectAccessDecision decision = Security.stripInaccessible(
             AccessType.CREATABLE, new List<Payment__c>{ pmt });
