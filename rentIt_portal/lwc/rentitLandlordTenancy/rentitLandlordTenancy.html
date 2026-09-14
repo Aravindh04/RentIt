@@ -1,0 +1,370 @@
+<template>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:household" size="small" alternative-text="Tenancy"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">Tenancy Management</h2>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap"><div class="ri-spinner"></div></div>
+        </template>
+
+        <template if:true={missingId}>
+            <div class="ri-empty-state">
+                <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                <p>No tenancy selected. Choose one from My Properties.</p>
+                <button class="ri-btn ri-btn--primary" onclick={handleBack}>Go to Properties</button>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="ri-error-msg">{error}</div>
+        </template>
+        <template if:true={successMessage}>
+            <div class="ri-success-msg">{successMessage}</div>
+        </template>
+
+        <template if:true={hasTenancy}>
+            <button class="ri-back-btn" onclick={handleBack}>
+                <lightning-icon icon-name="utility:chevronleft" size="xx-small" alternative-text="Back"></lightning-icon>
+                Back to Properties
+            </button>
+
+            <div class="ri-detail-header">
+                <div>
+                    <div class="ri-detail-title">{tenancyName}</div>
+                    <div class="ri-detail-sub">{propertyName} &middot; Room {roomName} &middot; {tenantName}</div>
+                </div>
+                <span class="ri-status" data-status={tenancyStatus}>{tenancyStatus}</span>
+            </div>
+
+            <!-- Financial metrics -->
+            <div class="ri-metrics">
+                <div class="ri-metric ri-metric--received">
+                    <span class="ri-metric__label">Received</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={received} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
+                </div>
+                <div class="ri-metric">
+                    <span class="ri-metric__label">Unpaid</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={unpaid} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
+                </div>
+                <div class="ri-metric ri-metric--arrears">
+                    <span class="ri-metric__label">Arrears</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={arrears} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
+                </div>
+                <div class="ri-metric">
+                    <span class="ri-metric__label">Credits</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={credits} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Sub-tabs -->
+            <div class="ri-subtabs">
+                <button class={tabOverview}  data-tab="overview"  onclick={handleTab}>Overview</button>
+                <button class={tabInvoices}  data-tab="invoices"  onclick={handleTab}>Invoices</button>
+                <button class={tabPayments}  data-tab="payments"  onclick={handleTab}>Payments</button>
+                <button class={tabDiscounts} data-tab="discounts" onclick={handleTab}>Discounts</button>
+            </div>
+
+            <!-- OVERVIEW -->
+            <template if:true={isOverview}>
+                <div class="ri-info-grid">
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Tenant</span><span>{tenantName}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Email</span><span>{tenantEmail}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Phone</span><span>{tenantPhone}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Property</span><span>{propertyName}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Room</span><span>{roomName}</span>
+                    </div>
+                    <div class="ri-detail-row">
+                        <span class="ri-detail-label">Deposit</span>
+                        <span>
+                            <lightning-formatted-number value={deposit} format-style="currency"
+                                currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+                    </div>
+                    <template if:true={hasContract}>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Contract</span>
+                            <span>{contractNumber} &middot; {contractStatus}</span>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Rent</span>
+                            <span>
+                                <lightning-formatted-number value={contractRent} format-style="currency"
+                                    currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                                &nbsp;/ {contractFrequency}
+                            </span>
+                        </div>
+                        <div class="ri-detail-row">
+                            <span class="ri-detail-label">Term</span>
+                            <span>
+                                <lightning-formatted-date-time value={contractStart} year="numeric"
+                                    month="short" day="2-digit"></lightning-formatted-date-time>
+                                &nbsp;&ndash;&nbsp;
+                                <lightning-formatted-date-time value={contractEnd} year="numeric"
+                                    month="short" day="2-digit"></lightning-formatted-date-time>
+                            </span>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="ri-section-actions">
+                    <button class="ri-btn ri-btn--primary" onclick={handleToggleTenancyForm}>
+                        Edit Tenancy
+                    </button>
+                </div>
+
+                <template if:true={showTenancyForm}>
+                    <div class="ri-form-panel">
+                        <p class="ri-form-panel__title">Edit Tenancy</p>
+                        <div class="ri-form-grid">
+                            <lightning-combobox label="Status" value={editStatus}
+                                options={tenancyStatusOptions} onchange={handleEditStatus}></lightning-combobox>
+                            <lightning-input type="number" label="Deposit Amount (AUD)"
+                                value={editDeposit} onchange={handleEditDeposit}
+                                step="0.01" min="0"></lightning-input>
+                        </div>
+                        <div class="ri-form-actions">
+                            <button class="ri-btn ri-btn--primary" onclick={handleSaveTenancy}
+                                disabled={isSaving}>Save Changes</button>
+                            <button class="ri-btn ri-btn--secondary" onclick={handleCancel}>Cancel</button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <!-- INVOICES -->
+            <template if:true={isInvoices}>
+                <div class="ri-section-actions">
+                    <button class="ri-btn ri-btn--primary" onclick={handleToggleInvoiceForm}>
+                        Issue Invoice
+                    </button>
+                </div>
+
+                <template if:true={showInvoiceForm}>
+                    <div class="ri-form-panel">
+                        <p class="ri-form-panel__title">Issue New Invoice</p>
+                        <div class="ri-form-grid">
+                            <lightning-combobox label="Category" value={invCategory}
+                                options={invoiceCategoryOptions} onchange={handleInvCategory}></lightning-combobox>
+                            <lightning-input type="number" label="Amount (AUD)" value={invAmount}
+                                onchange={handleInvAmount} step="0.01" min="0.01" required></lightning-input>
+                            <lightning-input type="number" label="GST Amount (AUD)" value={invGst}
+                                onchange={handleInvGst} step="0.01" min="0"></lightning-input>
+                            <lightning-input type="date" label="Invoice Date" value={invDate}
+                                onchange={handleInvDate}></lightning-input>
+                            <lightning-input type="date" label="Due Date" value={invDueDate}
+                                onchange={handleInvDueDate} required></lightning-input>
+                            <lightning-input type="date" label="Period Start" value={invPeriodStart}
+                                onchange={handleInvPeriodStart}></lightning-input>
+                            <lightning-input type="date" label="Period End" value={invPeriodEnd}
+                                onchange={handleInvPeriodEnd}></lightning-input>
+                        </div>
+                        <div class="ri-form-actions">
+                            <button class="ri-btn ri-btn--primary" onclick={handleSaveInvoice}
+                                disabled={isSaving}>Issue Invoice</button>
+                            <button class="ri-btn ri-btn--secondary" onclick={handleCancel}>Cancel</button>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={hasInvoices}>
+                    <div class="ri-table-wrap">
+                        <table class="ri-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice</th><th>Category</th><th>Period</th>
+                                    <th>Total</th><th>Paid</th><th>Balance</th>
+                                    <th>Due</th><th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={invoices} for:item="inv">
+                                    <tr key={inv.Id}>
+                                        <td class="ri-td--name">{inv.Name}</td>
+                                        <td>{inv.Category__c}</td>
+                                        <td>
+                                            <lightning-formatted-date-time value={inv.Period_Start__c}
+                                                year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                            &nbsp;&ndash;&nbsp;
+                                            <lightning-formatted-date-time value={inv.Period_End__c}
+                                                year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-number value={inv.Total_Amount__c}
+                                                format-style="currency" currency-code="AUD"
+                                                minimum-fraction-digits="2"></lightning-formatted-number>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-number value={inv.Total_Paid__c}
+                                                format-style="currency" currency-code="AUD"
+                                                minimum-fraction-digits="2"></lightning-formatted-number>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-number value={inv.Balance_Due__c}
+                                                format-style="currency" currency-code="AUD"
+                                                minimum-fraction-digits="2"></lightning-formatted-number>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-date-time value={inv.Due_Date__c}
+                                                year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                        </td>
+                                        <td><span class="ri-status" data-status={inv.Status__c}>{inv.Status__c}</span></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template if:false={hasInvoices}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        <p>No invoices for this tenancy yet.</p>
+                    </div>
+                </template>
+            </template>
+
+            <!-- PAYMENTS -->
+            <template if:true={isPayments}>
+                <template if:true={hasPayments}>
+                    <div class="ri-table-wrap">
+                        <table class="ri-table">
+                            <thead>
+                                <tr>
+                                    <th>Payment</th><th>Date</th><th>Invoice</th>
+                                    <th>Method</th><th>Type</th><th>Amount</th><th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={payments} for:item="p">
+                                    <tr key={p.Id}>
+                                        <td class="ri-td--name">{p.Name}</td>
+                                        <td>
+                                            <lightning-formatted-date-time value={p.Payment_Date__c}
+                                                year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                        </td>
+                                        <td>{p.Invoice__r.Name}</td>
+                                        <td>{p.Payment_Method__c}</td>
+                                        <td>{p.Payment_Type__c}</td>
+                                        <td>
+                                            <lightning-formatted-number value={p.Amount__c}
+                                                format-style="currency" currency-code="AUD"
+                                                minimum-fraction-digits="2"></lightning-formatted-number>
+                                        </td>
+                                        <td><span class="ri-status" data-status={p.Status__c}>{p.Status__c}</span></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template if:false={hasPayments}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        <p>No payments recorded for this tenancy.</p>
+                    </div>
+                </template>
+            </template>
+
+            <!-- DISCOUNTS -->
+            <template if:true={isDiscounts}>
+                <div class="ri-section-actions">
+                    <button class="ri-btn ri-btn--primary" onclick={handleToggleDiscountForm}>
+                        Add Discount
+                    </button>
+                </div>
+
+                <template if:true={showDiscountForm}>
+                    <div class="ri-form-panel">
+                        <p class="ri-form-panel__title">Add Discount</p>
+                        <div class="ri-form-grid">
+                            <lightning-input type="text" label="Discount Name" value={discName}
+                                onchange={handleDiscName} maxlength="80"
+                                placeholder="e.g. 10% Off — Sept"></lightning-input>
+                            <lightning-combobox label="Discount Type" value={discType}
+                                options={discountTypeOptions} onchange={handleDiscType}></lightning-combobox>
+                            <lightning-input type="number" label="Discount Value" value={discValue}
+                                onchange={handleDiscValue} step="0.01" min="0.01" required></lightning-input>
+                            <lightning-input type="date" label="Start Date" value={discStart}
+                                onchange={handleDiscStart} required></lightning-input>
+                            <lightning-input type="date" label="End Date (optional)" value={discEnd}
+                                onchange={handleDiscEnd}></lightning-input>
+                            <div class="ri-span-all">
+                                <lightning-input type="textarea" label="Description" value={discDescription}
+                                    onchange={handleDiscDescription} max-length="1000"></lightning-input>
+                            </div>
+                        </div>
+                        <div class="ri-form-actions">
+                            <button class="ri-btn ri-btn--primary" onclick={handleSaveDiscount}
+                                disabled={isSaving}>Add Discount</button>
+                            <button class="ri-btn ri-btn--secondary" onclick={handleCancel}>Cancel</button>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={hasDiscounts}>
+                    <div class="ri-table-wrap">
+                        <table class="ri-table">
+                            <thead>
+                                <tr>
+                                    <th>Discount</th><th>Type</th><th>Value</th>
+                                    <th>Start</th><th>End</th><th>Contract</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={discountRows} for:item="d">
+                                    <tr key={d.Id}>
+                                        <td class="ri-td--name">{d.Name}</td>
+                                        <td>{d.Discount_Type__c}</td>
+                                        <td>{d.displayValue}</td>
+                                        <td>
+                                            <lightning-formatted-date-time value={d.Start_Date__c}
+                                                year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                        </td>
+                                        <td>
+                                            <template if:true={d.endLabel}>{d.endLabel}</template>
+                                            <template if:false={d.endLabel}>
+                                                <lightning-formatted-date-time value={d.End_Date__c}
+                                                    year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                            </template>
+                                        </td>
+                                        <td>{d.Contract__r.ContractNumber}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+                <template if:false={hasDiscounts}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        <p>No discounts applied to this tenancy.</p>
+                    </div>
+                </template>
+            </template>
+        </template>
+    </div>
+</template>

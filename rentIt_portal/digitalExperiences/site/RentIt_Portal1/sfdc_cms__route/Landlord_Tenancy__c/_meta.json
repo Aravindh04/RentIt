@@ -1,0 +1,5 @@
+{
+  "apiName": "Landlord_Tenancy__c",
+  "type": "sfdc_cms__route",
+  "path": "routes"
+}

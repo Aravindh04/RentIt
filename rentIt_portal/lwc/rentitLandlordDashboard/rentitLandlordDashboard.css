@@ -1,0 +1,234 @@
+.ri-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 45, 107, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.ri-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.75rem;
+    background: linear-gradient(90deg, #0d2d6b 0%, #1565C0 100%);
+    color: #fff;
+}
+
+.ri-card__header-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ri-card__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+/* KPI tiles */
+.ri-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+@media (max-width: 900px) { .ri-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .ri-kpis { grid-template-columns: 1fr; } }
+
+.ri-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    background: #F7F9FC;
+    border: 1.5px solid #dce3ee;
+    border-radius: 12px;
+    padding: 1rem 1.15rem;
+    text-align: left;
+    font: inherit;
+}
+
+.ri-kpi--clickable {
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.ri-kpi--clickable:hover {
+    border-color: #1565C0;
+    background: #EEF2F7;
+}
+
+.ri-kpi__label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5f6b7a;
+}
+
+.ri-kpi__value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0d2d6b;
+    line-height: 1.1;
+}
+
+.ri-kpi__value[data-alert="true"] { color: #E65100; }
+
+/* Financial metrics */
+.ri-metrics {
+    display: flex;
+    gap: 1rem;
+    padding: 0 1.5rem 1.5rem;
+    flex-wrap: wrap;
+}
+
+.ri-metric {
+    flex: 1;
+    min-width: 150px;
+    background: #F7F9FC;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ri-metric__label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5f6b7a;
+}
+
+.ri-metric__value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0d2d6b;
+}
+
+.ri-metric--received .ri-metric__value { color: #1B5E20; }
+.ri-metric--unpaid   .ri-metric__value { color: #E65100; }
+.ri-metric--arrears  .ri-metric__value { color: #B71C1C; }
+
+/* Section */
+.ri-section {
+    border-top: 1px solid #EEF2F7;
+    padding: 1.25rem 1.5rem 1.75rem;
+}
+
+.ri-section__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.ri-section__header h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0d2d6b;
+    margin: 0;
+}
+
+.ri-section__total {
+    margin-left: auto;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1B5E20;
+}
+
+/* Income bars */
+.ri-income-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ri-income-row__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+.ri-income-row__name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0d2d6b;
+}
+
+.ri-income-row__amount {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #1B5E20;
+    white-space: nowrap;
+}
+
+.ri-income-row__bar-track {
+    height: 8px;
+    background: #EEF2F7;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.ri-income-row__bar {
+    height: 100%;
+    background: linear-gradient(90deg, #1565C0 0%, #00897B 100%);
+    border-radius: 999px;
+}
+
+.ri-income-row__meta {
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    color: #5f6b7a;
+}
+
+/* Shared states */
+.ri-spinner-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 160px;
+}
+
+.ri-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #dce3ee;
+    border-top-color: #1565C0;
+    border-radius: 50%;
+    animation: ri-spin 0.75s linear infinite;
+}
+
+@keyframes ri-spin { to { transform: rotate(360deg); } }
+
+.ri-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    color: #5f6b7a;
+    font-size: 0.875rem;
+}
+
+.ri-error-msg {
+    margin: 1.25rem 1.5rem;
+    padding: 0.85rem 1rem;
+    background: #FFEBEE;
+    border-left: 4px solid #B71C1C;
+    border-radius: 6px;
+    color: #B71C1C;
+    font-size: 0.875rem;
+}

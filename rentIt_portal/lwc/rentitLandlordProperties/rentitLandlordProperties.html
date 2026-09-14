@@ -1,0 +1,132 @@
+<template>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:address" size="small" alternative-text="Properties"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">My Properties</h2>
+        </div>
+
+        <template if:true={error}>
+            <div class="ri-error-msg">{error}</div>
+        </template>
+
+        <!-- Property list -->
+        <template if:true={showList}>
+            <template if:true={isLoading}>
+                <div class="ri-spinner-wrap"><div class="ri-spinner"></div></div>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasProperties}>
+                    <div class="ri-prop-grid">
+                        <template for:each={propertyRows} for:item="prop">
+                            <button key={prop.Id} class="ri-prop-card"
+                                    data-id={prop.Id} onclick={handleSelectProperty}>
+                                <div class="ri-prop-card__top">
+                                    <span class="ri-prop-card__name">{prop.Name}</span>
+                                    <span class="ri-prop-type">{prop.Property_Type__c}</span>
+                                </div>
+                                <p class="ri-prop-card__address">{prop.address}</p>
+                                <div class="ri-prop-card__stats">
+                                    <span class="ri-prop-stat">
+                                        <strong>{prop.occupancy}</strong> rooms occupied
+                                    </span>
+                                    <span class="ri-prop-stat ri-prop-stat--avail">
+                                        <strong>{prop.Available_Rooms__c}</strong> available
+                                    </span>
+                                </div>
+                                <span class="ri-prop-card__cta">
+                                    View tenancies
+                                    <lightning-icon icon-name="utility:chevronright" size="xx-small"></lightning-icon>
+                                </span>
+                            </button>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:false={hasProperties}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        <p>No properties are linked to your landlord account.</p>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <!-- Tenancies for selected property -->
+        <template if:true={showDetail}>
+            <button class="ri-back-btn" onclick={handleBack}>
+                <lightning-icon icon-name="utility:chevronleft" size="xx-small" alternative-text="Back"></lightning-icon>
+                Back to Properties
+            </button>
+
+            <div class="ri-detail-header">
+                <div>
+                    <div class="ri-detail-title">{selectedPropertyName}</div>
+                    <div class="ri-detail-sub">{selectedPropertyAddress}</div>
+                </div>
+                <span class="ri-prop-type">{selectedPropertyType}</span>
+            </div>
+
+            <div class="ri-filter-tabs">
+                <button class={tabAll}        data-status="all"        onclick={handleFilter}>All</button>
+                <button class={tabActive}     data-status="Active"     onclick={handleFilter}>Active</button>
+                <button class={tabPending}    data-status="Pending"    onclick={handleFilter}>Pending</button>
+                <button class={tabExpired}    data-status="Expired"    onclick={handleFilter}>Expired</button>
+                <button class={tabTerminated} data-status="Terminated" onclick={handleFilter}>Terminated</button>
+            </div>
+
+            <template if:true={isTenancyLoading}>
+                <div class="ri-spinner-wrap"><div class="ri-spinner"></div></div>
+            </template>
+
+            <template if:false={isTenancyLoading}>
+                <template if:true={hasTenancies}>
+                    <div class="ri-table-wrap">
+                        <table class="ri-table">
+                            <thead>
+                                <tr>
+                                    <th>Tenancy</th>
+                                    <th>Tenant</th>
+                                    <th>Room</th>
+                                    <th>Arrears</th>
+                                    <th>Received</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={filteredTenancies} for:item="t">
+                                    <tr key={t.Id} class="ri-tr--clickable"
+                                        data-id={t.Id} onclick={handleOpenTenancy}>
+                                        <td class="ri-td--name"><span class="ri-link">{t.Name}</span></td>
+                                        <td>{t.Tenant__r.Name}</td>
+                                        <td>{t.Room__r.Name}</td>
+                                        <td>
+                                            <lightning-formatted-number value={t.Total_Arrears__c}
+                                                format-style="currency" currency-code="AUD"
+                                                minimum-fraction-digits="2"></lightning-formatted-number>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-number value={t.Total_Received__c}
+                                                format-style="currency" currency-code="AUD"
+                                                minimum-fraction-digits="2"></lightning-formatted-number>
+                                        </td>
+                                        <td><span class="ri-status" data-status={t.Status__c}>{t.Status__c}</span></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:false={hasTenancies}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        <p>No tenancies match the selected filter.</p>
+                    </div>
+                </template>
+            </template>
+        </template>
+    </div>
+</template>

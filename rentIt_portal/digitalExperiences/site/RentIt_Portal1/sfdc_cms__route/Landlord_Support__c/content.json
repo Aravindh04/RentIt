@@ -1,0 +1,12 @@
+{
+  "type": "sfdc_cms__route",
+  "title": "Requests and Complaints",
+  "contentBody": {
+    "activeViewId": "Landlord_Support",
+    "configurationTags": [],
+    "pageAccess": "RequiresLogin",
+    "routeType": "custom-landlord-support",
+    "urlPrefix": "landlord-support"
+  },
+  "urlName": "landlord-support"
+}

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>RentItLandlordController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Full access for landlords and property managers. Grants CRUD and View/Modify All on all RentIt objects. Includes Account management for ABN/GST details and full Invoice and Payment management. Assign to internal users.</description>
     <fieldPermissions>
         <editable>true</editable>

@@ -106,19 +106,17 @@
     </layoutSections>
     <relatedLists>
         <fields>CONTRACT.CONTRACT_NUMBER</fields>
-        <fields>CONTRACT.NAME</fields>
-        <fields>SALES.ACCOUNT.NAME</fields>
         <fields>CONTRACT.STATUS</fields>
         <fields>CONTRACT.START_DATE</fields>
         <fields>CONTRACT_TERM</fields>
+        <fields>CUSTOMER_SIGNED.NAME</fields>
         <relatedList>Contract.Tenancy__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
         <fields>Notice_Type__c</fields>
-        <fields>Status__c</fields>
-        <fields>Email_Sent__c</fields>
-        <fields>Expiry_Date__c</fields>
+        <fields>Notice_Iteration__c</fields>
+        <fields>Effective_Date__c</fields>
         <relatedList>Notice__c.Tenancy__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -131,11 +129,9 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Invoice_Date__c</fields>
-        <fields>Amount__c</fields>
         <fields>Total_Amount__c</fields>
-        <fields>Category__c</fields>
         <fields>Status__c</fields>
+        <fields>Category__c</fields>
         <fields>Due_Date__c</fields>
         <relatedList>Invoice__c.Tenancy__c</relatedList>
     </relatedLists>

@@ -264,6 +264,26 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Notice_Iteration__c</fieldItem>
+                <identifier>RecordNotice_Iteration_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Notice_Comment__c</fieldItem>
+                <identifier>RecordNotice_Comment_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-945d3460-993c-47d9-98f5-bcf407e764b4</name>
         <type>Facet</type>
     </flexiPageRegions>
