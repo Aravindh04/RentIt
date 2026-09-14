@@ -1,79 +1,79 @@
 import { LightningElement, wire, track } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
-import getPendingPayments from '@salesforce/apex/RentItPortalController.getPendingPayments';
-import updatePaymentStatus from '@salesforce/apex/RentItPortalController.updatePaymentStatus';
-
-const COLUMNS = [
-    { label: 'Payment',     fieldName: 'Name',                  type: 'text' },
-    { label: 'Tenancy',     fieldName: 'Tenancy__r.Name',       type: 'text' },
-    { label: 'Invoice',     fieldName: 'Invoice__r.Name',       type: 'text' },
-    { label: 'Amount',      fieldName: 'Amount__c',             type: 'currency',
-      typeAttributes: { currencyCode: 'AUD', minimumFractionDigits: 2 } },
-    { label: 'Payment Date', fieldName: 'Payment_Date__c',      type: 'date' },
-    { label: 'Method',      fieldName: 'Payment_Method__c',     type: 'text' },
-    { label: 'Reference',   fieldName: 'Payment_Reference__c',  type: 'text' },
-    { label: 'Comment',     fieldName: 'Comment__c',            type: 'text' },
-    {
-        type: 'action',
-        typeAttributes: {
-            rowActions: [
-                { label: 'Approve', name: 'approve' },
-                { label: 'Reject',  name: 'reject' }
-            ]
-        }
-    }
-];
+import getPendingPayments from '@salesforce/apex/RentItLandlordController.getPendingPayments';
+import processPaymentApproval from '@salesforce/apex/RentItLandlordController.processPaymentApproval';
 
 export default class RentitPaymentApproval extends LightningElement {
-    @track payments;
-    @track error;
-    @track actionMessage;
-    @track actionMessageClass = 'slds-notify slds-notify_toast slds-theme_success slds-m-top_small';
+    @track payments = [];
+    error = null;
+    successMessage = null;
     isLoading = true;
-    columns = COLUMNS;
+    processingId = null;
+
+    /** Per-payment approver comment, keyed by payment Id. */
+    comments = {};
+
     _wiredResult;
 
     @wire(getPendingPayments)
     wiredPayments(result) {
         this._wiredResult = result;
-        if (result.data) {
-            this.payments = result.data.map(p => ({
-                ...p,
-                'Tenancy__r.Name': p.Tenancy__r?.Name,
-                'Invoice__r.Name': p.Invoice__r?.Name
-            }));
-            this.isLoading = false;
-        } else if (result.error) {
-            this.error = result.error?.body?.message || 'Failed to load pending payments.';
+        if (result.data !== undefined || result.error) {
+            if (result.data) this.payments = result.data;
+            if (result.error) {
+                this.error = result.error?.body?.message || 'Unable to load pending payments.';
+            }
             this.isLoading = false;
         }
     }
 
-    get hasPayments() {
-        return this.payments && this.payments.length > 0;
+    get hasPayments() { return this.payments.length > 0; }
+    get pendingCount() { return this.payments.length; }
+
+    get paymentRows() {
+        return this.payments.map(p => ({
+            ...p,
+            tenantName: p.Tenancy__r?.Tenant__r?.Name || '—',
+            propertyName: p.Tenancy__r?.Property__r?.Name || '—',
+            tenancyName: p.Tenancy__r?.Name || '—',
+            invoiceName: p.Invoice__r?.Name || 'General payment',
+            isProcessing: this.processingId === p.Id
+        }));
     }
 
-    handleRowAction(e) {
-        const action     = e.detail.action;
-        const paymentId  = e.detail.row.Id;
-        const newStatus  = action.name === 'approve' ? 'Approved' : 'Rejected';
+    handleComment(event) {
+        this.comments = {
+            ...this.comments,
+            [event.currentTarget.dataset.id]: event.detail.value
+        };
+    }
 
-        this.isLoading = true;
-        updatePaymentStatus({ paymentId, newStatus })
+    handleApprove(event) { this._process(event.currentTarget.dataset.id, 'Approve'); }
+    handleReject(event)  { this._process(event.currentTarget.dataset.id, 'Reject'); }
+
+    _process(paymentId, action) {
+        this.error = null;
+        this.successMessage = null;
+        this.processingId = paymentId;
+
+        processPaymentApproval({
+            paymentId,
+            action,
+            comments: this.comments[paymentId] || ''
+        })
             .then(() => {
-                this.actionMessage      = `Payment ${newStatus} successfully.`;
-                this.actionMessageClass = newStatus === 'Approved'
-                    ? 'slds-notify slds-notify_toast slds-theme_success slds-m-top_small'
-                    : 'slds-notify slds-notify_toast slds-theme_warning slds-m-top_small';
+                this.successMessage = action === 'Approve'
+                    ? 'Payment approved. The tenant has been notified.'
+                    : 'Payment rejected. The tenant has been notified.';
+                this.processingId = null;
+                const next = { ...this.comments };
+                delete next[paymentId];
+                this.comments = next;
                 return refreshApex(this._wiredResult);
             })
-            .then(() => {
-                this.isLoading = false;
-            })
             .catch(err => {
-                this.actionMessage      = err?.body?.message || 'Action failed.';
-                this.actionMessageClass = 'slds-notify slds-notify_toast slds-theme_error slds-m-top_small';
-                this.isLoading = false;
+                this.error = err?.body?.message || `Failed to ${action.toLowerCase()} this payment.`;
+                this.processingId = null;
             });
     }
 }

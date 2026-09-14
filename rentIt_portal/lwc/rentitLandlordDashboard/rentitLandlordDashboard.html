@@ -1,46 +1,105 @@
 <template>
-    <div class="slds-box slds-theme_default">
-        <h2 class="slds-text-heading_large slds-m-bottom_medium">Landlord Dashboard</h2>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:dashboard" size="small" alternative-text="Dashboard"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">Portfolio Overview</h2>
+        </div>
 
         <template if:true={isLoading}>
-            <c-rentit-spinner></c-rentit-spinner>
+            <div class="ri-spinner-wrap"><div class="ri-spinner"></div></div>
         </template>
 
         <template if:true={error}>
-            <p class="slds-text-color_error">{error}</p>
+            <div class="ri-error-msg">{error}</div>
         </template>
 
-        <template if:true={summary}>
-            <div class="slds-grid slds-gutters slds-wrap">
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
-                    <div class="slds-box slds-text-align_center">
-                        <p class="slds-text-heading_large">{summary.activeTenancies}</p>
-                        <p class="slds-text-body_small slds-text-color_weak">Active Tenancies</p>
-                    </div>
+        <template if:false={isLoading}>
+            <!-- KPI tiles -->
+            <div class="ri-kpis">
+                <button class="ri-kpi ri-kpi--clickable" onclick={handleViewProperties}>
+                    <span class="ri-kpi__label">Properties</span>
+                    <span class="ri-kpi__value">{propertyCount}</span>
+                </button>
+                <div class="ri-kpi">
+                    <span class="ri-kpi__label">Active Tenancies</span>
+                    <span class="ri-kpi__value">{tenancyCount}</span>
                 </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
-                    <div class="slds-box slds-text-align_center">
-                        <p class="slds-text-heading_large">{summary.pendingPayments}</p>
-                        <p class="slds-text-body_small slds-text-color_weak">Payments Pending Approval</p>
-                    </div>
+                <button class="ri-kpi ri-kpi--clickable" onclick={handleViewApprovals}>
+                    <span class="ri-kpi__label">Pending Approvals</span>
+                    <span class="ri-kpi__value" data-alert={hasPending}>{pendingCount}</span>
+                </button>
+                <button class="ri-kpi ri-kpi--clickable" onclick={handleViewCases}>
+                    <span class="ri-kpi__label">Open Requests</span>
+                    <span class="ri-kpi__value">{openCaseCount}</span>
+                </button>
+            </div>
+
+            <!-- Financial summary -->
+            <div class="ri-metrics">
+                <div class="ri-metric ri-metric--received">
+                    <span class="ri-metric__label">Total Received</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={totalReceived} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
                 </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
-                    <div class="slds-box slds-text-align_center">
-                        <lightning-formatted-number
-                            value={summary.totalArrears}
-                            format-style="currency"
-                            currency-code="AUD"
-                            class="slds-text-heading_large">
-                        </lightning-formatted-number>
-                        <p class="slds-text-body_small slds-text-color_weak">Total Arrears</p>
-                    </div>
+                <div class="ri-metric ri-metric--unpaid">
+                    <span class="ri-metric__label">Outstanding</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={totalUnpaid} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
                 </div>
-                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
-                    <div class="slds-box slds-text-align_center">
-                        <p class="slds-text-heading_large">{summary.activeNotices}</p>
-                        <p class="slds-text-body_small slds-text-color_weak">Active Notices</p>
-                    </div>
+                <div class="ri-metric ri-metric--arrears">
+                    <span class="ri-metric__label">Arrears</span>
+                    <span class="ri-metric__value">
+                        <lightning-formatted-number value={totalArrears} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
                 </div>
+            </div>
+
+            <!-- Income by property -->
+            <div class="ri-section">
+                <div class="ri-section__header">
+                    <lightning-icon icon-name="utility:chart" size="x-small" alternative-text="Income"></lightning-icon>
+                    <h3>Income by Property</h3>
+                    <span class="ri-section__total">
+                        <lightning-formatted-number value={grandTotal} format-style="currency"
+                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                    </span>
+                </div>
+
+                <template if:true={hasIncome}>
+                    <div class="ri-income-list">
+                        <template for:each={incomeRows} for:item="row">
+                            <div key={row.key} class="ri-income-row">
+                                <div class="ri-income-row__top">
+                                    <span class="ri-income-row__name">{row.propertyName}</span>
+                                    <span class="ri-income-row__amount">
+                                        <lightning-formatted-number value={row.total} format-style="currency"
+                                            currency-code="AUD" minimum-fraction-digits="2"></lightning-formatted-number>
+                                    </span>
+                                </div>
+                                <div class="ri-income-row__bar-track">
+                                    <div class="ri-income-row__bar" style={row.barStyle}></div>
+                                </div>
+                                <div class="ri-income-row__meta">
+                                    {row.pct}% of total &middot; {row.paymentCount} payments
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:false={hasIncome}>
+                    <div class="ri-empty-state">
+                        <lightning-icon icon-name="utility:info" size="small" alternative-text="No data"></lightning-icon>
+                        <p>No received payments yet.</p>
+                    </div>
+                </template>
             </div>
         </template>
     </div>

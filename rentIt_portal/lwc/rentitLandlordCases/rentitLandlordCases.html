@@ -1,0 +1,102 @@
+<template>
+    <div class="ri-card">
+        <div class="ri-card__header">
+            <div class="ri-card__header-icon">
+                <lightning-icon icon-name="standard:case" size="small" alternative-text="Requests"></lightning-icon>
+            </div>
+            <h2 class="ri-card__title">Requests &amp; Complaints</h2>
+        </div>
+
+        <template if:true={error}>
+            <div class="ri-error-msg">{error}</div>
+        </template>
+        <template if:true={successMessage}>
+            <div class="ri-success-msg">{successMessage}</div>
+        </template>
+
+        <template if:true={isLoading}>
+            <div class="ri-spinner-wrap"><div class="ri-spinner"></div></div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Type filter -->
+            <div class="ri-filter-tabs">
+                <button class={tabTypeAll}     data-type="all"                 onclick={handleTypeFilter}>All Types</button>
+                <button class={tabComplaint}   data-type="Complaint"           onclick={handleTypeFilter}>Complaints</button>
+                <button class={tabMaintenance} data-type="Maintenance Request" onclick={handleTypeFilter}>Maintenance</button>
+            </div>
+
+            <!-- Status filter -->
+            <div class="ri-filter-tabs">
+                <button class={tabOpen}      data-status="open"   onclick={handleStatusFilter}>Open</button>
+                <button class={tabClosed}    data-status="closed" onclick={handleStatusFilter}>Closed</button>
+                <button class={tabStatusAll} data-status="all"    onclick={handleStatusFilter}>All</button>
+            </div>
+
+            <template if:true={hasCases}>
+                <div class="ri-table-wrap">
+                    <table class="ri-table">
+                        <thead>
+                            <tr>
+                                <th>Case</th><th>Subject</th><th>Type</th>
+                                <th>Property</th><th>Priority</th><th>Status</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={caseRows} for:item="c">
+                                <tr key={c.Id} class="ri-tr--clickable" data-id={c.Id} onclick={handleToggle}>
+                                    <td class="ri-td--name">{c.CaseNumber}</td>
+                                    <td>{c.Subject}</td>
+                                    <td><span class="ri-case-type">{c.recordTypeName}</span></td>
+                                    <td>{c.propertyName}</td>
+                                    <td><span class="ri-priority" data-priority={c.Priority}>{c.Priority}</span></td>
+                                    <td><span class="ri-status" data-status={c.Status}>{c.Status}</span></td>
+                                    <td>
+                                        <lightning-icon icon-name={c.toggleIcon} size="xx-small"
+                                            alternative-text="Toggle"></lightning-icon>
+                                    </td>
+                                </tr>
+                                <template if:true={c.isExpanded}>
+                                    <tr key={c.detailKey} class="ri-case-detail-row">
+                                        <td colspan="7">
+                                            <div class="ri-detail-row">
+                                                <span class="ri-detail-label">Raised By</span>
+                                                <span>{c.contactName}</span>
+                                            </div>
+                                            <div class="ri-detail-row">
+                                                <span class="ri-detail-label">Tenancy</span>
+                                                <span>{c.tenancyName}</span>
+                                            </div>
+                                            <div class="ri-detail-row">
+                                                <span class="ri-detail-label">Opened</span>
+                                                <span>
+                                                    <lightning-formatted-date-time value={c.CreatedDate}
+                                                        year="numeric" month="short" day="2-digit"
+                                                        hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+                                                </span>
+                                            </div>
+                                            <p class="ri-case-desc">{c.Description}</p>
+                                            <div class="ri-case-actions">
+                                                <lightning-combobox label="Update status" variant="label-hidden"
+                                                    value={c.Status} options={statusOptions}
+                                                    data-id={c.Id} onchange={handleStatusChange}
+                                                    disabled={c.isProcessing}></lightning-combobox>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+
+            <template if:false={hasCases}>
+                <div class="ri-empty-state">
+                    <lightning-icon icon-name="utility:check" size="large" alternative-text="None"></lightning-icon>
+                    <p>No requests match the selected filters.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,127 @@
+{
+  "type" : "sfdc_cms__themeLayout",
+  "title" : "Landlord Header and Footer",
+  "contentBody" : {
+    "component" : {
+      "attributes" : {
+        "hideThemeFooter" : false,
+        "showThemeFooterAtBottom" : true,
+        "stickyThemeHeader" : false
+      },
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "dxpStyle" : { },
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"1a11a111-1111-4111-8111-111111111101\",\"columns\":[{\"UUID\":\"1a11a111-1111-4111-8111-111111111102\",\"columnName\":\"Column 1\",\"columnKey\":\"headerSection\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : {
+                "dxpStyle" : { }
+              },
+              "definition" : "c:rentitLandlordHeader",
+              "id" : "1a11a111-1111-4111-8111-111111111103",
+              "type" : "component"
+            } ],
+            "id" : "1a11a111-1111-4111-8111-111111111102",
+            "name" : "headerSection",
+            "title" : "Theme Header",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "1a11a111-1111-4111-8111-111111111101",
+          "type" : "component"
+        } ],
+        "id" : "1a11a111-1111-4111-8111-111111111104",
+        "name" : "header",
+        "title" : "Theme Header",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "dxpStyle" : { },
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"1a11a111-1111-4111-8111-111111111105\",\"columns\":[{\"UUID\":\"1a11a111-1111-4111-8111-111111111106\",\"columnName\":\"Column 1\",\"columnKey\":\"footerSection\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : {
+                "dxpStyle" : { }
+              },
+              "definition" : "c:rentitFooter",
+              "id" : "1a11a111-1111-4111-8111-111111111107",
+              "type" : "component"
+            } ],
+            "id" : "1a11a111-1111-4111-8111-111111111106",
+            "name" : "footerSection",
+            "title" : "Theme Footer",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "1a11a111-1111-4111-8111-111111111105",
+          "type" : "component"
+        } ],
+        "id" : "1a11a111-1111-4111-8111-111111111108",
+        "name" : "footer",
+        "title" : "Theme Footer",
+        "type" : "region"
+      } ],
+      "definition" : "community_byo:scopedHeaderAndFooter",
+      "id" : "1a11a111-1111-4111-8111-111111111109",
+      "type" : "component"
+    },
+    "contentOperations" : {
+      "operations" : [ {
+        "targetId" : "1a11a111-1111-4111-8111-111111111107",
+        "isHiddenOnOperationSuccess" : true,
+        "isActive" : true,
+        "rule" : {
+          "name" : "1a11a111-1111-4111-8111-111111111110",
+          "description" : "",
+          "criteriaType" : "AllCriteriaMatch",
+          "expressionCriteria" : [ {
+            "resource" : "User.isGuest",
+            "operator" : "Equal",
+            "value" : true,
+            "criterionNumber" : 1
+          } ]
+        }
+      }, {
+        "targetId" : "1a11a111-1111-4111-8111-111111111103",
+        "isHiddenOnOperationSuccess" : true,
+        "isActive" : true,
+        "rule" : {
+          "name" : "1a11a111-1111-4111-8111-111111111111",
+          "description" : "",
+          "criteriaType" : "AllCriteriaMatch",
+          "expressionCriteria" : [ {
+            "resource" : "User.isGuest",
+            "operator" : "Equal",
+            "value" : true,
+            "criterionNumber" : 1
+          } ]
+        }
+      } ]
+    }
+  },
+  "urlName" : "landlord-header-and-footer"
+}

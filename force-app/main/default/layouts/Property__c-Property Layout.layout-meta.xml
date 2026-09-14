@@ -44,10 +44,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Total_Rooms__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
                 <field>Occupied_Rooms__c</field>
             </layoutItems>
         </layoutColumns>

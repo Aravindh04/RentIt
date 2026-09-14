@@ -1,0 +1,25 @@
+{
+  "type" : "sfdc_cms__themeLayout",
+  "title" : "Scoped Header and Footer",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "attributes" : {
+          "spaceBetweenSlots" : "8px"
+        },
+        "id" : "0831641d-21b0-4105-9396-c9cd2fd17bfa"
+      }, {
+        "attributes" : {
+          "logoWidth" : "100"
+        },
+        "id" : "3fa7fb93-b93c-420c-84d0-5728032269a7"
+      }, {
+        "attributes" : {
+          "size" : "small"
+        },
+        "id" : "03056e14-2a0d-45b4-a895-24dff7b62f3b"
+      } ]
+    }
+  },
+  "urlName" : "scoped-header-and-footer"
+}

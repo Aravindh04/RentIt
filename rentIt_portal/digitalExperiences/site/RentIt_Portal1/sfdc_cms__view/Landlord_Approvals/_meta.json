@@ -1,0 +1,5 @@
+{
+  "apiName": "Landlord_Approvals",
+  "type": "sfdc_cms__view",
+  "path": "views"
+}

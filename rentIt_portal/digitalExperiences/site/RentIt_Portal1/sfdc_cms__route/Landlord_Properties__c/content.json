@@ -1,0 +1,12 @@
+{
+  "type": "sfdc_cms__route",
+  "title": "My Properties",
+  "contentBody": {
+    "activeViewId": "Landlord_Properties",
+    "configurationTags": [],
+    "pageAccess": "RequiresLogin",
+    "routeType": "custom-landlord-properties",
+    "urlPrefix": "landlord-properties"
+  },
+  "urlName": "landlord-properties"
+}

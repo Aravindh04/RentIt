@@ -8,6 +8,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
+                <field>Notice_Iteration__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
@@ -124,10 +128,17 @@
         <fields>Status__c</fields>
         <fields>Audience__c</fields>
         <fields>Effective_Date__c</fields>
+        <fields>Notice_Iteration__c</fields>
     </miniLayout>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
+    <summaryLayout>
+        <masterLabel>00hfj00000NXgHH</masterLabel>
+        <sizeX>4</sizeX>
+        <sizeY>0</sizeY>
+        <summaryLayoutStyle>Default</summaryLayoutStyle>
+    </summaryLayout>
 </Layout>

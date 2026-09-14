@@ -1,0 +1,12 @@
+{
+  "type": "sfdc_cms__route",
+  "title": "Tenancy Management",
+  "contentBody": {
+    "activeViewId": "Landlord_Tenancy",
+    "configurationTags": [],
+    "pageAccess": "RequiresLogin",
+    "routeType": "custom-landlord-tenancy",
+    "urlPrefix": "landlord-tenancy"
+  },
+  "urlName": "landlord-tenancy"
+}

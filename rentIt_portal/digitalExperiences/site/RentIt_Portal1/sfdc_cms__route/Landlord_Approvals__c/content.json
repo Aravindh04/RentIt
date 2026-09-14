@@ -1,0 +1,12 @@
+{
+  "type": "sfdc_cms__route",
+  "title": "Payment Approvals",
+  "contentBody": {
+    "activeViewId": "Landlord_Approvals",
+    "configurationTags": [],
+    "pageAccess": "RequiresLogin",
+    "routeType": "custom-landlord-approvals",
+    "urlPrefix": "landlord-approvals"
+  },
+  "urlName": "landlord-approvals"
+}

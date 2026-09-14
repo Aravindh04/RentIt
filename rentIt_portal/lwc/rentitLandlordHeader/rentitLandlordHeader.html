@@ -1,0 +1,75 @@
+<template>
+    <header class="ri-header">
+        <div class="ri-header__inner">
+            <!-- Brand -->
+            <button class="ri-brand" onclick={handleNavDashboard}>
+                <span class="ri-brand__mark">R</span>
+                <span class="ri-brand__text">
+                    RentIt
+                    <span class="ri-brand__badge">Landlord</span>
+                </span>
+            </button>
+
+            <!-- Desktop nav -->
+            <nav class="ri-nav">
+                <button class={navDashboard}  onclick={handleNavDashboard}>Dashboard</button>
+                <button class={navProperties} onclick={handleNavProperties}>Properties</button>
+                <button class={navApprovals}  onclick={handleNavApprovals}>Approvals</button>
+                <button class={navRequests}   onclick={handleNavRequests}>Requests</button>
+            </nav>
+
+            <!-- User area -->
+            <div class="ri-header__right">
+                <template if:true={isLoggedIn}>
+                    <div class="ri-user">
+                        <button class="ri-user__trigger" onclick={toggleDropdown}>
+                            <template if:true={hasPhoto}>
+                                <img src={userPhotoUrl} alt="Profile" class="ri-user__avatar">
+                            </template>
+                            <template if:false={hasPhoto}>
+                                <span class="ri-user__initial">{userInitial}</span>
+                            </template>
+                            <span class="ri-user__name">{userName}</span>
+                            <lightning-icon icon-name="utility:chevrondown" size="xx-small"
+                                alternative-text="Menu"></lightning-icon>
+                        </button>
+
+                        <template if:true={isDropdownOpen}>
+                            <div class="ri-dropdown">
+                                <div class="ri-dropdown__head">
+                                    <span class="ri-dropdown__name">{userName}</span>
+                                    <span class="ri-dropdown__email">{userEmail}</span>
+                                </div>
+                                <button class="ri-dropdown__item" onclick={handleLogout}>
+                                    <lightning-icon icon-name="utility:logout" size="xx-small"
+                                        alternative-text="Log out"></lightning-icon>
+                                    Log Out
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:false={isLoggedIn}>
+                    <a href={loginUrl} class="ri-login-link">Log In</a>
+                </template>
+
+                <!-- Mobile toggle -->
+                <button class="ri-burger" onclick={toggleMobileMenu}>
+                    <lightning-icon icon-name="utility:rows" size="small"
+                        alternative-text="Menu"></lightning-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile nav -->
+        <template if:true={isMobileMenuOpen}>
+            <nav class="ri-mobile-nav">
+                <button class={mobileNavDashboard}  onclick={handleNavDashboard}>Dashboard</button>
+                <button class={mobileNavProperties} onclick={handleNavProperties}>Properties</button>
+                <button class={mobileNavApprovals}  onclick={handleNavApprovals}>Approvals</button>
+                <button class={mobileNavRequests}   onclick={handleNavRequests}>Requests</button>
+            </nav>
+        </template>
+    </header>
+</template>
